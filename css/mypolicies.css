@@ -1,0 +1,11 @@
+.clickable {
+    cursor: pointer;
+}
+
+#policySummary {
+    max-height: 600px;
+}
+
+tr {
+    cursor: pointer;
+}

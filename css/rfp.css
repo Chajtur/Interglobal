@@ -1,0 +1,41 @@
+.nav-tabs .nav-link.active {
+	color: white !important;
+	border: none;
+	text-decoration: underline;
+	font-weight: bold;
+	background-color: var(--bs-secondary);
+}
+
+.pair {
+	padding-left: 0 !important;
+}
+
+@media (min-height: 1016px) {
+	.footer {
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1030;
+	}
+}
+
+@media (max-width: 768px) {
+	/* For mobile phones: */
+	[class*='col-'] {
+		width: 100%;
+	}
+
+	div,
+	input {
+		text-align: center;
+		border-radius: 0.25rem !important;
+		padding-left: 0.25rem !important;
+		padding-right: 0.25rem !important;
+	}
+
+	.pair {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}

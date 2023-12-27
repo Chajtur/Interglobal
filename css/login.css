@@ -1,0 +1,27 @@
+html, body {
+    height : 100%;
+}
+
+.gradient-custom-2 {
+    /* fallback for old browsers */
+    background: #023559;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    /*background: -webkit-linear-gradient(to right, #919090, #023559); */
+    background: #023559;
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ 
+    background: linear-gradient(to right, #919090, #023559);*/
+    background: #023559;
+}
+
+section {
+    background-color: #919090;
+    color: #023559;
+}
+
+body {
+    background-image: url('../assets/slide-03-2048x1039.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }

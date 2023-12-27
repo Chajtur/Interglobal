@@ -1,0 +1,163 @@
+.spinner-border {
+	display: inline-block;
+}
+
+body,
+html {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: white;
+}
+
+.header-row {
+	max-height: 100px;
+	background-color: white;
+	border-bottom: 1px solid #919090;
+	width: 100%;
+}
+
+.navbar-menu {
+	background-color: #505050 !important;
+}
+
+.row {
+	margin: 0;
+}
+
+content {
+	background-color: white;
+}
+
+.btn-orange {
+	color: #fff;
+	background-color: var(--bs-orange);
+}
+
+.btn-orange:focus {
+	border: none;
+	outline: rgba(255, 132, 0, 0.3) solid 5px !important;
+	color: #fff !important;
+}
+
+.btn-outline-warning.active {
+	color: white !important;
+}
+
+.footer {
+	color: white;
+	text-align: center;
+}
+
+.overlay {
+	display: none;
+	position: fixed;
+	/* full screen */
+	width: 100vw;
+	height: 100vh;
+	/* transparent black */
+	background: rgba(0, 0, 0, 0.7);
+	/* middle layer, i.e. appears below the sidebar */
+	z-index: 0;
+	opacity: 0;
+	/* animate the transition */
+	transition: all 0.5s ease-in-out;
+}
+
+/* display .overlay when it has the .active class */
+.overlay.active {
+	display: block;
+	opacity: 1;
+}
+
+sidebar {
+	width: 300px !important;
+	z-index: 1;
+}
+
+#contenido {
+	/*background-image: url('../assets/just-laser-truck.gif');
+	background-repeat: no-repeat;
+	background-position: bottom;
+	background-size: 400px 150px;*/
+}
+
+@media all and (max-width: 600px) {
+	#contenido {
+		background-image: none;
+	}
+}
+
+.switchToggle input[type='checkbox'] {
+	height: 0;
+	width: 0;
+	visibility: hidden;
+	position: absolute;
+}
+.switchToggle label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 70px;
+	max-width: 70px;
+	height: 30px;
+	background: rgb(130, 4, 4);
+	display: block;
+	border-radius: 100px;
+	position: relative;
+	border: 1px solid var(--bs-primary);
+}
+.switchToggle label:after {
+	content: '';
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	width: 26px;
+	height: 26px;
+	background: var(--bs-white);
+	border-radius: 90px;
+	transition: 0.3s;
+}
+.switchToggle input:checked + label,
+.switchToggle input:checked + input + label {
+	background-color: rgb(9, 82, 9);
+	border: 1px solid var(--bs-primary);
+}
+.switchToggle input + label:before,
+.switchToggle input + input + label:before {
+	content: 'No';
+	position: absolute;
+	top: 3px;
+	left: 35px;
+	width: 26px;
+	height: 26px;
+	border-radius: 90px;
+	transition: 0.3s;
+	text-indent: 0;
+	color: var(--bs-white);
+}
+.switchToggle input:checked + label:before,
+.switchToggle input:checked + input + label:before {
+	content: 'Yes';
+	position: absolute;
+	top: 3px;
+	left: 10px;
+	width: 26px;
+	height: 26px;
+	border-radius: 90px;
+	transition: 0.3s;
+	text-indent: 0;
+	color: var(--bs-white);
+}
+
+.switchToggle input:checked + label:after,
+.switchToggle input:checked + input + label:after {
+	left: calc(100% - 2px);
+	transform: translateX(-100%);
+}
+.switchToggle label:active:after {
+	width: 60px;
+}
+.toggle-switchArea {
+	margin: 10px 0 10px 0;
+}

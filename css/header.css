@@ -1,0 +1,60 @@
+header h3 {
+	color: #023559 !important;
+}
+
+header img {
+	max-height: 10vh;
+}
+
+.header-icon {
+	font-size: 2rem;
+	color: #023559;
+}
+
+header .container {
+	max-width: 1024px;
+}
+
+/** SPINNER CREATION **/
+
+.loader {
+	position: relative;
+	text-align: center;
+	margin: 15px auto 35px auto;
+	z-index: 9999;
+	display: block;
+	width: 80px;
+	height: 80px;
+	border: 10px solid #023559;
+	border-radius: 50%;
+	border-top-color: #0371c0c7;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
+}
+
+.loader-txt {
+	p {
+		font-size: 13px;
+		color: #666;
+		small {
+			font-size: 11.5px;
+			color: #999;
+		}
+	}
+}
+
+.modal-backdrop.show {
+	opacity: 0.90;
+}
+
+@keyframes spin {
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@-webkit-keyframes spin {
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}

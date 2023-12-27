@@ -1,0 +1,4 @@
+sidebar .active {
+  background-color: rgb(189, 189, 189) !important;
+  border-radius: 5px;
+}

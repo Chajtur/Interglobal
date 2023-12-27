@@ -1,0 +1,20 @@
+.dia {
+    border-radius: 50% !important;
+}
+
+.fa-forward-fast:hover {
+    cursor: pointer;
+}
+
+.fa-backward-fast:hover {
+    cursor: pointer;
+}
+
+.clickableCallHistory tr {
+    cursor: pointer;
+}
+
+.table-spaced {
+    border-collapse: separate !important;
+    border-spacing: 0 2px !important;
+}

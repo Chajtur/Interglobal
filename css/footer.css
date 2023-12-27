@@ -1,0 +1,5 @@
+@media only screen and (max-height: 770px) {
+    footer {
+            display: none;
+        }
+    }
