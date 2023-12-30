@@ -2,7 +2,7 @@
 include_once '../models/Transaction.php';
 include_once '../models/User.php';
 
-$agente = $_POST['agente'] ?? 'all';
+$agente = $_POST['agente'] ?? getUser();
 $year = date('Y');
 $data = getPolicyStats($year, $agente);
 $yearToDate = $data['generalStats'];

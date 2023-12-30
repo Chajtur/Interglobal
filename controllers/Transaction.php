@@ -23,6 +23,9 @@ switch ($action) {
     case 'exportTransactions':
         exportTransactions();
         break;
+    case 'editTransaction':
+        editTransaction();
+        break;
     default:
         break;
 }
@@ -89,7 +92,7 @@ function listTransactions() {
  * Function controller to save a transaction
  */
 function saveTransaction() {
-    $user = getUser();
+    $user = $_POST['agent'] ?? getUser();
     $date = $_POST['date'];
     $insured = $_POST['insured'];
     $carrier = $_POST['carrier'];
@@ -97,4 +100,19 @@ function saveTransaction() {
     $type = $_POST['type'];
     $premium = $_POST['premium'];
     echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $user));
+}
+
+/**
+ * Function controller to edit a transaction
+ */
+function editTransaction() {
+    $id = $_POST['id'];
+    $user = $_POST['agent'] ?? getUser();
+    $date = $_POST['date'];
+    $insured = $_POST['insured'];
+    $carrier = $_POST['carrier'];
+    $policyNumber = $_POST['policyNumber'];
+    $type = $_POST['type'];
+    $premium = $_POST['premium'];
+    echo json_encode(updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $user));
 }

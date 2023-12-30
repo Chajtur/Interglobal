@@ -34,7 +34,7 @@ checkActivity();
             <div class="my-1 col-md-6 col-lg-2 text-center" id="agenteSelectDiv">
                 <span for='agenteSelect' id="agenteSelectSpan">Select Agent</span>
                 <select class="form-select my-1 pb-1" id='agenteSelect'>
-                    <option value="all">Interglobal US</option>
+                    <option value="all">All</option>
                     <?php foreach (listInsuranceAgents() as $agent) { ?>
                         <option value="<?= $agent['id'] ?>"><?= $agent['firstName'] . ' ' . $agent['lastName'] ?></option>
                     <?php } ?>
@@ -62,12 +62,12 @@ checkActivity();
             <button class="rounded text-white btn btn-success w-100 mt-2" id="refreshPolicyTable">Search</button>
         </div>
         <div class="my-1 col-md-6 col-lg-2 text-end my-auto">
-            <button class="rounded text-white btn btn-primary w-100 mt-2"><span class="fa-solid fa-plus fa-lg p-1"></span>New Transaction</button>
+            <button id="btnNewTransaction" class="rounded text-white btn btn-primary w-100 mt-2"><span class="fa-solid fa-plus fa-lg p-1"></span>New Transaction</button>
         </div>
     </div>
 </div>
 <div id="policyTable" class="mt-2 ms-lg-3">
 </div>
 
-<script type="text/javascript" src="../js/mypolicies.js"></script>
-<link rel="stylesheet" href="../css/mypolicies.css">
+<script type="text/javascript" src="../js/myPolicies.js"></script>
+<link rel="stylesheet" href="../css/myPolicies.css">

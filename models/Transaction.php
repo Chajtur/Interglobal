@@ -1,5 +1,6 @@
 <?php
 include "../helpers/db.php";
+include_once '../models/User.php';
 
 $transactionTypes = [
     'NEW BUSINESS' => 1,
@@ -10,6 +11,32 @@ $transactionTypes = [
     'RETURN PREMIUM' => 6,
     'OTHER' => 7
 ];
+
+/**
+ * Función que actualiza una transacción en la base de datos
+ * @id int - El id de la transacción
+ * @date date - La fecha de la transacción
+ * @insured string - El nombre del asegurado
+ * @carrier string - El nombre de la compañía
+ * @policyNumber string - El número de póliza
+ * @type string - El tipo de transacción
+ * @agent int - El agente que está insertando la transacción
+ * 
+ * @return array - El resultado de la actualización
+ */
+function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $agent)
+{
+    global $conn;
+    $user = getUser();
+    $query = "Update Transactions set date = '$date', insured = '$insured', carrier = '$carrier', policyNumber = '$policyNumber', type = '$type', premium = $premium, agent = $agent, updatedOn = now(), updatedBy = $user where id = $id";
+    $resp = $conn->query($query);
+    if ($resp) {
+        return 1;
+    } else {
+        return $conn->error;
+    }
+}
+
 /**
  * Función que inserta una Transacción en la base de datos
  * @date date - La fecha de la transacción
@@ -25,7 +52,7 @@ $transactionTypes = [
  function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $user)
  {
      global $conn;
-     $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, now(), $user)";
+     $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $user,  now(), $user)";
      $resp = $conn->query($query);
      if ($resp) {
          return $conn->insert_id;
@@ -96,7 +123,7 @@ $transactionTypes = [
       if ($keyword != null) {
           $query .= " and (insured like '%$keyword%' or policyNumber like '%$keyword%' or carrier like '%$keyword%')";
       }
-      $query .= " order by date ASC limit $page, 10";
+      $query .= " order by date, id ASC limit $page, 10";
       $resp = $conn->query($query);
       $data = $resp->fetch_all(MYSQLI_ASSOC);
       $query = "Select count(*) as totalRows, sum(premium) as totalPremium from Transactions where deletedOn is null and year(date) = " . date('Y');
@@ -144,7 +171,11 @@ function getPolicyStats($year, $agente)
     $query = "Select month(date), count(*) as total, round(sum(premium),2) as premium, round(sum(premium * 0.04),2) as commission 
         from Transactions 
         where deletedOn is null 
-        and year(date) = $year
+        and year(date) = $year";
+        if ($agente != 'all') {
+            $query .= " and agent = $agente";
+        };
+        $query .= "
         group by month(date)
         order by month(date) ASC";
     $resp = $conn->query($query);

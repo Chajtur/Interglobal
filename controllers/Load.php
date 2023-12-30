@@ -1,13 +1,10 @@
 <?php
 
 require_once('../controllers/Login.php');
+require_once('../helpers/db.php');
 
 startSession();
 checkActivity();
-
-$webKey = "?webKey=5a6f85d3d2a12d1f5c7f2566a2c75d9a751f4d79";
-$apiBaseURL = "https://mobile.fmcsa.dot.gov/qc/services/";
-$googleMapsApiKey = "AIzaSyAvoz1u2dRSfyimsYnF7bnbekygaulzZj8";
 
 $action = $_GET['action'];
 
@@ -29,7 +26,8 @@ switch ($action) {
         break;
 }
 
-function searchVIN() {
+function searchVIN()
+{
     $VIN = $_GET['VIN'];
     $URL = 'https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/' . $VIN . '?format=json';
     $ch = curl_init();
@@ -43,9 +41,6 @@ function searchVIN() {
 
 function getDOT($docketNumber)
 {
-
-    https: //mobile.fmcsa.dot.gov/qc/services/carriers/3249789/docket-numbers
-
     global $apiBaseURL;
     global $webKey;
     $ch = curl_init();
@@ -95,5 +90,3 @@ function queryGeneralMc()
         echo null;
     }
 }
-
-//https://mobile.fmcsa.dot.gov/qc/services/carriers/3249789/cargo-carried?webKey=5a6f85d3d2a12d1f5c7f2566a2c75d9a751f4d79

@@ -10,7 +10,6 @@
     <script src="https://kit.fontawesome.com/55b2ee1815.js" crossorigin="anonymous"></script>
     <script src="../js/index.js"></script>
     <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
-    <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/index.css">

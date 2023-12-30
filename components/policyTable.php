@@ -3,7 +3,7 @@ include "../models/User.php";
 include "../models/Transaction.php";
 
 $mes = $_POST['mes'] ?? 'all';
-$agente = $_POST['agente'] ?? 'all';
+$agente = $_POST['agente'] ?? getUser();
 $tipo = $_POST['tipo'] ?? 'all';
 $keyword = $_POST['keyword'] ?? null;
 $page = $_POST['page'] ?? 1;
@@ -41,7 +41,7 @@ $data = getTransactions($mes, $agente, $tipo, $keyword, $page);
                 $agent = $employee['firstName'] . ' ' . $employee['lastName'];
                 $id = $row['id'];
                 $class = '';
-                if ($type == 'NEW BUSINESS' || $type == 'RENEWAL' || $type == 'REINSTATEMENT' || $type == 'ADDITIONAL PREMIUM') {
+                if ($premium >= 0) {
                     $class = 'text-success fw-bold';
                 } else {
                     $class = 'text-danger fw-bold';
@@ -83,7 +83,7 @@ $data = getTransactions($mes, $agente, $tipo, $keyword, $page);
                 <li class="page-item"><a id="middlePage" class="page-link pageNumber <?php echo $page != 1 ? 'bg-primary text-white' : 'text-primary' ?>" href="#"><?php echo $page == 1 ? '2' : ($page) ?></a></li>
                 <li class="page-item"><a id="lastPage" class="page-link pageNumber text-primary" href="#"><?php echo $page == 1 ? '3' : ($page + 1) ?></a></li>
                 <li class="page-item">
-                    <a class="page-link text-primary lastPage" href="#" aria-label="Next" data-page=<?php echo number_format(($data['stats']['totalRows'] / 10), 0) ?>>
+                    <a class="page-link text-primary lastPage" href="#" aria-label="Next" data-page=<?php echo number_format($data['stats']['totalRows'] % 10 == 0 ? ($data['stats']['totalRows'] / 10) : ($data['stats']['totalRows'] / 10) + 1, 0) ?>>
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

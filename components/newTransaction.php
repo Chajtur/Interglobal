@@ -1,7 +1,9 @@
 <?php
 include_once '../models/Transaction.php';
+include_once '../models/User.php';
 
 $id = $_POST['id'] ?? 0;
+$agent = $_POST['agent'] ?? getUser();
 
 if ($id != 0) {
     $transaction = getTransaction($id);
@@ -12,6 +14,7 @@ if ($id != 0) {
     $policyNumber = $transaction['policyNumber'];
     $type = $transactionTypes[$transaction['type']];
     $premium = $transaction['premium'];
+    $agent = $transaction['agent'];
 } else {
     $date = date('Y-m-d');
     $insured = '';
@@ -22,7 +25,17 @@ if ($id != 0) {
 }
 ?>
 
-<form id='newTransactionForm' class="text-primary">
+<form id='newTransactionForm' class="text-primary" data-id=<?= $id ?> data-agent=<?= $agent ?>>
+    <?php if (hasPermission('listarPolizas') && $id == 0) { ?>
+        <div class="row">
+            <label for="newTransactionAgent">Agent:</label>
+            <select name="agent" class="form-select rounded border-primary" id="newTransactionAgent">
+                <?php foreach (listInsuranceAgents() as $agent) { ?>
+                    <option value="<?= $agent['id'] ?>"><?= $agent['firstName'] . ' ' . $agent['lastName'] ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    <?php } ?>
     <div class="row">
         <label for="newTransactionDate">Date:</label>
         <input name="date" id="newTransactionDate" class="datepicker form-control rounded border-primary" value=<?= $date ?>>
@@ -41,12 +54,12 @@ if ($id != 0) {
     </div>
     <div class="row">
         <label for="transaction">Transaction:</label>
-        <select name="type" class="form-select rounded border-primary" id="transaction" value=<?= $type ?>>
+        <select name="type" class="form-select rounded border-primary" id="transactionType" value=<?= $type ?>>
             <?php
-            $options = array("New Business", "Renewal", "Cancellation", "Reinstatement", "Additional Premium", "Return Premium", "Other");
+            $options = array("NEW BUSINESS", "RENEWAL", "CANCELLATION", "REINSTATEMENT", "ADDITIONAL PREMIUM", "RETURN PREMIUM", "OTHER");
             foreach ($options as $key => $value) {
                 $selected = ($type == $key + 1) ? "selected" : "";
-                echo "<option value='" . ($key + 1) . "' $selected>$value</option>";
+                echo "<option value='" . ($value) . "' $selected>$value</option>";
             }
             ?>
         </select>
