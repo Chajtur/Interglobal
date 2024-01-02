@@ -1,14 +1,28 @@
 $('#spinner').modal('show');
 
 $('#btnNewTransaction').on('click', function () {
-	$('#infoModalTitle').text('New Transaction');
-	$modalContent = "<div id='newTransaction'></div>";
-	$('#infoModalText').html($modalContent);
-	$('#newTransaction').load('../components/newTransaction.php');
-	$modalContent =
-		'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnSaveTransaction">Save</button>';
-	$('#infoModalButtons').html($modalContent);
-	$('#infoModal').modal('show');
+	if ($('#agenteSelect').val() == 'all') {
+		$('#infoModalTitle').text('Error');
+		$('#infoModalText').html('Please select an agent to add a new transaction');
+		$('#infoModalButtons').html('<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>');
+		$('#infoModal').modal('show');
+	} else {
+		$('#infoModalTitle').text('New Transaction');
+		$modalContent = "<div id='newTransaction'></div>";
+		$('#infoModalText').html($modalContent);
+		$('#newTransaction').load(
+			'../components/newTransaction.php',
+			{
+				agent: $('#agenteSelect').val(),
+			},
+			function () {
+				$('#infoModal').modal('show');
+			}
+		);
+		$modalContent =
+			'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnSaveTransaction">Save</button>';
+		$('#infoModalButtons').html($modalContent);
+	}
 });
 
 $(document).ready(function () {
@@ -49,13 +63,13 @@ $(document).ready(function () {
 	$('body').on('click', '#btnSavePolicy', function () {
 		$.post('../controllers/Transaction.php', {
 			action: 'editTransaction',
-			agent: $("#newTransactionForm").data('agent'),
+			agent: $('#newTransactionForm').data('agent'),
 			insured: $('#insured').val(),
 			carrier: $('#carrier').val(),
 			policyNumber: $('#policyNumber').val(),
 			premium: $('#premium').val(),
 			date: $('#newTransactionDate').val(),
-			id: $("#newTransactionForm").data('id'),
+			id: $('#newTransactionForm').data('id'),
 			type: $('#transactionType').val(),
 		}).done(function (resp) {
 			console.log(resp);
@@ -83,9 +97,12 @@ $(document).ready(function () {
 	});
 });
 
-function loadPolicySummary() {
+function loadPolicySummary($quarter) {
+	$quarter = $quarter || 'fullYear';
 	$('#policySummary').load('../components/policySummary.php', {
+		year: $('#yearSelect').val(),
 		agente: $('#agenteSelect').val(),
+		quarter: $quarter,
 	});
 }
 
@@ -94,6 +111,7 @@ function loadPolicyTable() {
 	$('#policyTable').load(
 		'../components/policyTable.php',
 		{
+			year: $('#yearSelect').val(),
 			mes: $('#mesSelect').val(),
 			agente: $('#agenteSelect').val(),
 			tipo: $('#typeSelect').val(),
@@ -110,6 +128,11 @@ loadPolicySummary();
 loadPolicyTable();
 
 $('#refreshPolicyTable').on('click', function () {
-	loadPolicySummary();
-	loadPolicyTable();
+    var checkedButtonId = $('input[name="quarters"]:checked').attr('id');
+    loadPolicySummary(checkedButtonId);
+    loadPolicyTable();
+});
+
+$('body').on('click', '.btn-check', function () {
+	loadPolicySummary($(this).attr('id'));
 });

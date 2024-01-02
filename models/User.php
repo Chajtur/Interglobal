@@ -191,7 +191,7 @@ function hasRole($agent, $role)
 function listInsuranceAgents()
 {
     global $conn;
-    $query = "SELECT *
+    $query = "SELECT e.id, concat(e.firstName, ' ', e.lastName) as name
     FROM Employees e
     WHERE active = 1";
     $resp = $conn->query($query);

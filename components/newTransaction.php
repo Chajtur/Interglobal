@@ -23,19 +23,14 @@ if ($id != 0) {
     $type = 1;
     $premium = 0;
 }
+$agentName = getAgent($agent);
 ?>
 
 <form id='newTransactionForm' class="text-primary" data-id=<?= $id ?> data-agent=<?= $agent ?>>
-    <?php if (hasPermission('listarPolizas') && $id == 0) { ?>
-        <div class="row">
-            <label for="newTransactionAgent">Agent:</label>
-            <select name="agent" class="form-select rounded border-primary" id="newTransactionAgent">
-                <?php foreach (listInsuranceAgents() as $agent) { ?>
-                    <option value="<?= $agent['id'] ?>"><?= $agent['firstName'] . ' ' . $agent['lastName'] ?></option>
-                <?php } ?>
-            </select>
-        </div>
-    <?php } ?>
+    <div class="row">
+        <label for="newTransactionAgent">Agent:</label>
+        <input type="text" class="form-control input rounded border-primary" id="agent" value="<?php echo $agentName['firstName'] . ' ' . $agentName['lastName']; ?>" disabled>
+    </div>
     <div class="row">
         <label for="newTransactionDate">Date:</label>
         <input name="date" id="newTransactionDate" class="datepicker form-control rounded border-primary" value=<?= $date ?>>

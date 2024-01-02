@@ -2,15 +2,16 @@
 include "../models/User.php";
 include "../models/Transaction.php";
 
+$year = $_POST['year'] ?? date('Y');
 $mes = $_POST['mes'] ?? 'all';
 $agente = $_POST['agente'] ?? getUser();
 $tipo = $_POST['tipo'] ?? 'all';
 $keyword = $_POST['keyword'] ?? null;
 $page = $_POST['page'] ?? 1;
-$data = getTransactions($mes, $agente, $tipo, $keyword, $page);
+$data = getTransactions($year, $mes, $agente, $tipo, $keyword, $page);
 ?>
 
-<div class="mx-auto px-2">
+<div class="mx-auto px-2 mt-4">
     <table class="table table-responsive-sm text-center" id="tblTransactions">
         <thead>
             <td>Date</td>
