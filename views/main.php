@@ -9,14 +9,16 @@ checkActivity();
 ?>
 
 <body class="d-flex vh-100 vw-100">
-    <sidebar class="col-lg-auto d-lg-inline-block d-none min-vh-100">
+    <sidebar class="col-lg-auto d-none min-vh-100 shadow-lg">
         <?php include 'sidebar.php'; ?>
     </sidebar>
     <content class="d-flex flex-column h-100 w-100">
-        <header class="mx-auto">
-            <?php include 'header.php'; ?>
-        </header>
-        <content class="h-100" id="contenido"></content>
+        <div>
+            <?php include '../components/menu.php'; ?>
+            <content class="h-100" id="contenido">
+                <?php include 'dashboardAgent.php'; ?>
+            </content>
+        </div>
         <footer class="footer mt-auto w-100 d-none">
             <?php include 'footer.php'; ?>
         </footer>

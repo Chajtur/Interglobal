@@ -67,7 +67,8 @@ function login()
     if (isset($_POST['user']) && isset($_POST['pass'])) {
         $user = $_POST['user'];
         $pass = $_POST['pass'];
-        $User = getEmployee($user);
+        $employee = new User();
+        $User = $employee->getEmployee($user);
         if (isset($User['password'])) {
             if (password_verify($pass, $User['password'])) {
                 $_SESSION['isLoggedIn'] = true;

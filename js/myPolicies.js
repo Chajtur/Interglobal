@@ -29,7 +29,7 @@ $(document).ready(function () {
 	$('body').on('click', '#btnSaveTransaction', function () {
 		$.post('../controllers/Transaction.php', {
 			action: 'saveTransaction',
-			agent: $('#newTransactionAgent').val(),
+			agent: $('#newTransactionForm').data('agent'),
 			insured: $('#insured').val(),
 			carrier: $('#carrier').val(),
 			policyNumber: $('#policyNumber').val(),

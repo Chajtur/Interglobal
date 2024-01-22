@@ -5,14 +5,14 @@ require_once '../models/User.php';
 startSession();
 checkActivity();
 
+$user = new User();
+
 ?>
-<div class="row text-center mt-2">
-    <h2>My Portfolio</h2>
-</div>
-<div class="row px-4 px-md-0" id="policySummary">
+<h2 class="text-center">My Portfolio</h2>
+<div class="row px-4 px-md-0 w-100" id="policySummary">
 </div>
 <div class="row px-4 px-md-0">
-    <div class="border shadow rounded p-4 col-11 mt-2 mx-auto">
+    <div class="border shadow rounded p-4 mt-2 mx-auto">
         <div class="p-2 h6 row justify-content-center">
             <div class="my-1 col-md-6 col-lg-1 text-center" id="yearSelectDiv">
                 <span for='yearSelect' id="yearSelectSpan">Select Year</span>
@@ -43,12 +43,12 @@ checkActivity();
                     <option value="12">December</option>
                 </select>
             </div>
-            <?php if (hasPermission('listarPolizas')) { ?>
+            <?php if ($user->hasPermission('listarPolizas')) { ?>
                 <div class="my-1 col-md-6 col-lg-2 text-center" id="agenteSelectDiv">
                     <span for='agenteSelect' id="agenteSelectSpan">Select Agent</span>
                     <select class="form-select my-1 pb-1" id='agenteSelect'>
                         <option value="all" selected>All</option>
-                        <?php foreach (listInsuranceAgents() as $agent) { ?>
+                        <?php foreach ($user->listInsuranceAgents() as $agent) { ?>
                             <option value="<?= $agent['id'] ?>"><?= $agent['name'] ?></option>
                         <?php } ?>
                     </select>

@@ -1,0 +1,1 @@
+<div>Aquí van los tickets cerrados</div>

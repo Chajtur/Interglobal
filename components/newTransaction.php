@@ -29,11 +29,11 @@ $agentName = getAgent($agent);
 <form id='newTransactionForm' class="text-primary" data-id=<?= $id ?> data-agent=<?= $agent ?>>
     <div class="row">
         <label for="newTransactionAgent">Agent:</label>
-        <input type="text" class="form-control input rounded border-primary" id="agent" value="<?php echo $agentName['firstName'] . ' ' . $agentName['lastName']; ?>" disabled>
+        <input type="text" class="form-control input rounded border-primary" id="newTransactionAgent" value="<?php echo $agentName['firstName'] . ' ' . $agentName['lastName']; ?>" disabled data-agent=<?= $agent ?>>
     </div>
     <div class="row">
-        <label for="newTransactionDate">Date:</label>
-        <input name="date" id="newTransactionDate" class="datepicker form-control rounded border-primary" value=<?= $date ?>>
+        <label for="newTransactionDate">Effective Date:</label>
+        <input name="date" id="newTransactionDate" class="datepicker form-control rounded border-primary" value="">
     </div>
     <div class="row">
         <label for="insured">Insured:</label>

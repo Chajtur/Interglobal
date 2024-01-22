@@ -3,6 +3,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 include '../models/User.php';
+$user = new User();
 ?>
 <main>
     <div class="row">
@@ -16,7 +17,7 @@ include '../models/User.php';
             <form class="form-control">
                 <div class="row my-1" id="empleadoSelectDiv">
                     <span for='empleadoSelect' id="empleadoSelectSpan">Seleccione el Empleado</span>
-                    <select class="form-select my-1 pb-1" id='empleadoSelect' data-show='<?php echo hasPermission('listarMarcacionesPersonal'); ?>' data-employee='<?php echo $_SESSION['user']['id']; ?>'></select>
+                    <select class="form-select my-1 pb-1" id='empleadoSelect' data-show='<?php echo $user->hasPermission('listarMarcacionesPersonal'); ?>' data-employee='<?php echo $_SESSION['user']['id']; ?>'></select>
                 </div>
                 <div class="row">
                     <div class="col-12 col-lg-6">

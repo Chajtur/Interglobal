@@ -49,10 +49,10 @@ function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type,
  * 
  * @return array - El resultado de la inserción
  */
-function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $user)
+function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $agent, $user)
 {
     global $conn;
-    $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $user,  now(), $user)";
+    $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $agent,  now(), $user)";
     $resp = $conn->query($query);
     if ($resp) {
         return $conn->insert_id;

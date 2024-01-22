@@ -1,3 +1,18 @@
+var $months = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+];
+
 $(document).ready(function () {
 	var $states = [
 		{ All: 'All' },
@@ -63,20 +78,6 @@ $(document).ready(function () {
 	$('#filterCallState').html($html);
 
 	getNewCall();
-	var $months = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
 
 	var $today = new Date();
 	sessionStorage.setItem('year', $today.getFullYear());
@@ -234,7 +235,7 @@ function getNewCall($state, $status, $type) {
 
 function drawCalendar($month) {
 	console.log($month);
-	var $year = 2023;
+	var $year = new Date().getFullYear();
 	var $htmlString = '';
 	$htmlString += '<div class="row p-0">';
 	$day = 1;
@@ -244,6 +245,7 @@ function drawCalendar($month) {
 	//$firstDay = $firstDay == 0 ? 7 : $firstDay;
 	$totalDays = new Date($year, parseInt($month) + 1, 0).getDate();
 	console.log('First Day ' + $firstDay);
+	$('#monthLookup').html($months[$month]);
 	while ($contador <= $firstDay) {
 		$htmlString += '<div class="dia col bg-white p-1"></div>';
 		$contador++;
@@ -265,7 +267,7 @@ function drawCalendar($month) {
 	}
 	$contador--;
 	while ($contador % 7 != 0) {
-		$htmlString += '<div class="col dia"></div>';
+		$htmlString += '<div class="col dia p-1"></div>';
 		$contador++;
 	}
 	$htmlString += '</div>';

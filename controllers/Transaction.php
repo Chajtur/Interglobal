@@ -92,14 +92,15 @@ function listTransactions() {
  * Function controller to save a transaction
  */
 function saveTransaction() {
-    $user = $_POST['agent'] ?? getUser();
+    $agent = $_POST['agent'] ?? getUser();
     $date = $_POST['date'];
     $insured = $_POST['insured'];
     $carrier = $_POST['carrier'];
     $policyNumber = $_POST['policyNumber'];
     $type = $_POST['type'];
     $premium = $_POST['premium'];
-    echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $user));
+    $user = getUser();
+    echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $agent, $user));
 }
 
 /**

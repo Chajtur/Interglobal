@@ -6,6 +6,7 @@ $(document)
 			'../components/policyTable.php',
 			{
 				page: $(this).html(),
+                year: $('#yearSelect').val(),
 				mes: $('#mesSelect').val(),
 				agente: $('#agenteSelect').val(),
 				tipo: $('#typeSelect').val(),
@@ -23,6 +24,7 @@ $(document).on('click', '.firstPage', function () {
         '../components/policyTable.php',
         {
             page: 1,
+            year: $('#yearSelect').val(),
             mes: $('#mesSelect').val(),
             agente: $('#agenteSelect').val(),
             tipo: $('#typeSelect').val(),
@@ -39,6 +41,7 @@ $(document).on('click', '.lastPage', function () {
     $('#policyTable').load(
         '../components/policyTable.php',
         {
+            year: $('#yearSelect').val(),
             page: $(this).data('page'),
             mes: $('#mesSelect').val(),
             agente: $('#agenteSelect').val(),

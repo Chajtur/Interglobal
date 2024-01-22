@@ -9,6 +9,7 @@ $tipo = $_POST['tipo'] ?? 'all';
 $keyword = $_POST['keyword'] ?? null;
 $page = $_POST['page'] ?? 1;
 $data = getTransactions($year, $mes, $agente, $tipo, $keyword, $page);
+$user = new User();
 ?>
 
 <div class="mx-auto px-2 mt-4">
@@ -21,7 +22,7 @@ $data = getTransactions($year, $mes, $agente, $tipo, $keyword, $page);
             <td class="text-end">Transaction</td>
             <td class="text-end">Premium</td>
             <td class="text-end">Commission</td>
-            <?php if (hasPermission('listarPolizas')) { ?>
+            <?php if ($user->hasPermission('listarPolizas')) { ?>
                 <td>Agent</td>
             <?php } ?>
             <td>Actions</td>
@@ -38,7 +39,7 @@ $data = getTransactions($year, $mes, $agente, $tipo, $keyword, $page);
                 $carrier = $row['carrier'];
                 $policyNumber = $row['policyNumber'];
                 $agent = $row['agent'];
-                $employee = getAgent($agent);
+                $employee = $user->getAgent($agent);
                 $agent = $employee['firstName'] . ' ' . $employee['lastName'];
                 $id = $row['id'];
                 $class = '';
@@ -55,7 +56,7 @@ $data = getTransactions($year, $mes, $agente, $tipo, $keyword, $page);
                         <td class='text-end'>$type</td>
                         <td class='text-end $class'>$$premium</td>
                         <td class='text-end $class'>$$commission</td>";
-                if (hasPermission('listarPolizas')) {
+                if ($user->hasPermission('listarPolizas')) {
                     echo "<td>$agent</td>";
                 }
                 echo "<td><span class='fa-solid fa-pencil fa-lg text-warning'></span><span class='clickable text-danger ms-2 fa-solid fa-trash-can fa-lg'></span></button></td>

@@ -5,12 +5,9 @@ startSession();
 checkActivity();
 
 ?>
-<div class="row text-center">
-    <h2>Call Center</h2>
-</div>
-<div class="row">
+<h2 class="text-center">Call Center</h2>
+<div class="row w-100">
     <div class="col-md-3 col-sm-12 text-center">
-        <h4>Menu</h4>
         <div class="btn-group-vertical" role="group" aria-label="Elije el tipo de indicador">
             <button type="button" class="btnMenu btn btn-outline-primary active">Calls</button>
             <button type="button" class="btnMenu btn btn-outline-primary">Call Log</button>
@@ -50,7 +47,7 @@ checkActivity();
             <div class="modal-body">
                 <div class="row">
                     <h5>Search for the business</h5>
-                    
+
                 </div>
                 <hr>
                 <div class="row">

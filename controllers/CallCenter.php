@@ -7,6 +7,10 @@ include_once '../models/Call.php';
 startSession();
 checkActivity();
 
+global $business, $call;
+$business = new Business();
+//$call = new Call();
+
 $action = $_POST['action'];
 
 // Controlador de solicitudes
@@ -61,18 +65,19 @@ function getStatistics()
  */
 function checkIfExists()
 {
+    global $business;
     $param = $_POST['param'];
     $param = str_replace('-', '', $param);
     $param = str_replace(' ', '', $param);
     $param = str_replace('(', '', $param);
     $param = str_replace(')', '', $param);
     $param = str_replace('+1', '', $param);
-    $dot = getNewBusinessByDot($param);
+    $dot = $business->getNewBusinessByDot($param);
     if ($dot != null) {
         echo $dot['DOT'];
         die();
     } else {
-        $dot = getNewBusinessByPhone($param);
+        $dot = $business->getNewBusinessByPhone($param);
         if ($dot != null) {
             echo $dot['DOT'];
             die();
@@ -97,16 +102,17 @@ function getCallHistory()
  */
 function getNewCall()
 {
+    $business = new Business();
     $type = $_POST['type'];
     $status = $_POST['status'];
     $state = isset($_POST['state']) ? $_POST['state'] : 'All';
     if (is_numeric($state)) {
-        echo json_encode(getNewBusinessByDot($state));
+        echo json_encode($business->getNewBusinessByDot($state));
     } else {
         if ($type == 1) {
-            echo json_encode(getNewBusiness($state, $status));
+            echo json_encode($business->getNewBusiness($state, $status));
         } else {
-            echo json_encode(getRenewBusiness($state, $status));
+            echo json_encode($business->getRenewBusiness($state, $status));
         }
     }
 

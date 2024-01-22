@@ -31,7 +31,7 @@ foreach ($monthlyStats as $row) {
 
     });
 </script>
-<div class="border shadow rounded p-4 col-md-11 mt-2 mx-auto">
+<div class="border shadow rounded p-4 mt-2">
     <div class="row">
         <div class="col-xs-12 col-lg-6">
             <input type="radio" class="btn-check" name="quarters" id="fullYear" autocomplete="off" <?= $quarter == "fullYear" ? 'checked' : '' ?>>

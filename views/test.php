@@ -1,136 +1,170 @@
-<div class="position-relative navbar-menu d-none">
-  <div class="position-fixed top-0 start-0 bottom-0 w-75 mw-sm-xs pt-6 overflow-auto">
-    <div class="px-6 pb-0 position-relative d-inline-flex">
-      <div class="d-inline-flex align-items-center">
-        <a class="navbar-brand w-75" href="#" data-config-id="brand">
-          <img class="img-fluid" src="../assets/icon-nobg.png" alt="" width="auto">
+<?php
+
+$styles = file_get_contents('../css/bootstrap.css');
+
+?>
+
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/55b2ee1815.js" crossorigin="anonymous"></script>
+  <script src="../js/index.js"></script>
+  <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+  <!-- <link rel="stylesheet" href="../css/bootstrap.css"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <!-- <link rel="stylesheet" href="../css/index.css"> -->
+
+  <title>
+    INTERGLOBAL INSURANCE CO. | US TRUCKING FOR HIRE
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link rel="icon" href="https://app.interglobalus.com/assets/logo-tiny-removebg-preview.png">
+</head>
+
+<body class="p-10 text-primary d-flex row justify-content-between">
+  <div>
+    <table class="table shadow-lg">
+      <thead>
+        <tr>
+        <th>
+        <a class="navbar-brand align-self-start" href="#" data-config-id="brand">
+          <img class="img-fluid" src="../assets/logo-tiny-removebg-preview.png" alt="" width="auto">
         </a>
-      </div>
-      <button type="button" id="btnCloseSidebar" class="btn-close border border-1 d-sm-inline-flex d-lg-none" aria-label="Close"></button>
+      </th>
+      <th>
+        <div class="text-end">
+          <div class="h5">Quote Number: {QuoteNumber}</div>
+        </div>
+        <div class="text-end">
+          <div class="h5">Quote Date: {Date}</div>
+        </div>
+      </th>
+        </tr>
+      </thead>
+    </table>
+    <div class="row text-center">
+      <div class="h2 text-primary pt-8">Commercial Quote Proposal</div>
+      <div class="h3">Client: {Client Name}</div>
     </div>
-    <div class="py-0 px-6">
-      <ul class="nav flex-column mb-8">
-        <li class="nav-item nav-pills" data-module='Dashboard'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-chart-line fa-lg mt-2"></span>
-            <span class="mx-4 small d-none">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item nav-pills" data-module='Calendario'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-calendar-days fa-lg mt-2"></span>
-            <span class="mx-4 small d-none" data-bs-custom-class="custom-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Marcación, Feriados, Vacaciones, Permisos...">Calendar</span>
-          </a>
-        </li>
-        <li class="nav-item nav-pills" data-module='VIN'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-car-side fa-lg mt-2"></span>
-            <span class="mx-4 small ms-2 d-none">Search VIN</span>
-          </a>
-        </li>
-      </ul>
-      <hr>
-      <?php if (hasPermission('interglobal')) { ?>
-        <div>
-          <h3 class="btn border-0 ps-0 text-primary mb-2 text-uppercase small fw-bold" id="interglobalUlBtn">Interglobal</h3>
-        </div>
-      <?php } ?>
-      <ul class="nav flex-column mb-8" id="interglobalUl">
-        <?php if (hasPermission('callCenter')) { ?>
-          <li class="nav-item nav-pills" data-module='CallCenterInter'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-headset fa-lg"></span>
-              <span class="mx-4 small d-none" data-config-id="link3">Call Center</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('polizas')) { ?>
-          <li class="nav-item nav-pills" data-module='MyPolicies'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-briefcase fa-lg"></span>
-              <span class="mx-4 small d-none" data-config-id="link3">My Portfolio</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('cotizaciones')) { ?>
-          <li class="nav-item nav-pills" data-module='Quotes'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa fa-pen-to-square fa-lg" aria-hidden="true"></span>
-              <span class="small mx-4" data-config-id="link5">Quotes</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('rfp')) { ?>
-          <li class="nav-item nav-pills" data-module='RFP'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa fa-file-contract fa-lg" aria-hidden="true"></span>
-              <span class="small mx-4 d-none" data-config-id="link5">RFP</span>
-            </a>
-          </li>
-        <?php } ?>
-      </ul>
-      <?php if (hasPermission('usTrucking')) { ?>
-        <div>
-          <h3 class="btn border-0 ps-0 text-primary mb-2 text-uppercase small fw-bold" id="usTruckingUlBtn">US Trucking</h3>
-        </div>
-      <?php } ?>
-      <ul class="nav flex-column" id="usTruckingUl">
-        <?php if (hasPermission('cargas')) { ?>
-          <li class="nav-item nav-pills" data-module="load">
-            <a class="nav-link p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-route fa-lg mt-2"></span>
-              <span class="mx-4 small d-none" data-config-id="link7">Loads</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('camiones')) { ?>
-          <li class="nav-item nav-pills" data-module="truck">
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-truck-moving fa-lg"></span>
-              <span class="mx-4 small d-none" data-config-id="link8">Trucks</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('conductores')) { ?>
-          <li class="nav-item nav-pills" data-module="driver">
-            <a class="nav-link p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-users fa-lg"></span>
-              <span class="mx-4 small d-none" data-config-id="link9">Drivers</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('callCenter')) { ?>
-          <li class="nav-item nav-pills" data-module='CallCenter'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-headset fa-lg"></span>
-              <span class="mx-4 small d-none" data-config-id="link3">Call Center</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if (hasPermission('safer')) { ?>
-          <li class="nav-item nav-pills" data-module="safer">
-            <a class="nav-link p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-s fa-lg"></span>
-              <span class="small mx-4 d-none" data-config-id="link10">Safer</span>
-            </a>
-          </li>
-        <?php } ?>
-      </ul>
-      <hr>
-      <ul class="nav flex-column mb-1">
-        <li class="nav-item nav-pills" data-module='eticket'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-list-check fa-lg"></span>
-            <span class="mx-4 small d-none" data-config-id="link11">E-Tickets</span>
-          </a>
-        </li>
-        <li class="nav-item nav-pills" id="liCerrarSesion">
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-power-off fa-lg"></span>
-            <span class="mx-4 small d-none" data-config-id="link12">Logout</span>
-          </a>
-        </li>
-      </ul>
+    <div class="mt-5">
+      <p>
+        Interglobal Insurance Company is pleased to offer you the following Insurance Quote:
+      </p>
     </div>
   </div>
-</div>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>
+          <div>
+            {Coverage 1}
+          </div>
+          <div>
+            {Carrier}
+          </div>
+          <div>
+            {Coverage Info and Notes}
+          </div>
+        </td>
+        <td>
+          Base Premium: {Base Premium}
+        </td>
+        <td>
+          Taxes & Fees: {Taxes & Fees}
+        </td>
+        <td>
+          Total Premium: {Total Coverage Premium}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div>
+            {Coverage 2}
+          </div>
+          <div>
+            {Carrier}
+          </div>
+          <div>
+            {Coverage Info and Notes}
+          </div>
+        </td>
+        <td>
+          Base Premium: {Base Premium}
+        </td>
+        <td>
+          Taxes & Fees: {Taxes & Fees}
+        </td>
+        <td>
+          Total Premium: {Total Coverage Premium}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div>
+            {Coverage 3}
+          </div>
+          <div>
+            {Carrier}
+          </div>
+          <div>
+            {Coverage Info and Notes}
+          </div>
+        </td>
+        <td>
+          Base Premium: {Base Premium}
+        </td>
+        <td>
+          Taxes & Fees: {Taxes & Fees}
+        </td>
+        <td>
+          Total Premium: {Total Coverage Premium}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"></td>
+        <td>
+          <div>
+            BILL PLAN
+          </div>
+          <div>
+            12 Months
+          </div>
+        </td>
+        <td class="text-end">{Total Premium}</td>
+      </tr>
+      <tr>
+        <td colspan="2"></td>
+        <td>Down Payment</td>
+        <td class="text-end">{Down Payment}</td>
+      </tr>
+      <tr>
+        <td colspan="2"></td>
+        <td>{installments} Installments</td>
+        <td class="text-end">{installmentAmount}</td>
+      </tr>
+    </tfoot>
+  </table>
+  <footer class="d-flex bg-primary justify-content-center align-items-center w-100">
+    <div class="text-white text-center">
+      <div>
+        172 NE 23rd Terrace, Homestead, Fl 33033
+        Office: 305-884-4080 / Mobile: 305-742-6203
+      </div>
+      <div>
+        Office Hours: Mon - Fri 9:00 a.m. - 6:00 p.m. E.S.T.
+        Saturday from 10 a.m. to 2 p.m / Sunday closed
+      </div>
+    </div>
+  </footer>
+</body>
+<style>
+  <?php echo $styles; ?>
+</style>
