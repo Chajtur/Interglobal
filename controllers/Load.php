@@ -6,7 +6,7 @@ require_once('../helpers/db.php');
 startSession();
 checkActivity();
 
-$action = $_GET['action'];
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 // Controlador de solicitudes
 switch ($action) {
@@ -56,21 +56,24 @@ function getDOT($docketNumber)
     }
 }
 
-function queryGeneralDot()
+function queryGeneralDot($dot)
 {
     global $apiBaseURL;
     global $webKey;
     $ch = curl_init();
+    //var_dump($webKey);
+    //var_dump($apiBaseURL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, $apiBaseURL . "carriers/" . $_GET['dot'] . $webKey);
+    curl_setopt($ch, CURLOPT_URL, $apiBaseURL . "carriers/" . $dot . $webKey);
     curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
     $result = curl_exec($ch);
     $result = json_decode($result);
     if ($result->content != NULL) {
-        $result->content->carrier->mcNumber = getDOT($_GET['dot']);
-        echo json_encode($result->content->carrier);
+        $result->content->carrier->mcNumber = $dot;
+        //echo json_encode($result->content->carrier);
+        return $result->content->carrier;
     } else {
-        echo null;
+        return null;
     }
 }
 

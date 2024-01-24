@@ -36,7 +36,7 @@ class User
     private $phone;
     private $mobile;
     private $picture;
-    private $workEmail;
+    public $workEmail;
     private $personalEmail;
     private $roles;
     private $permissions;
@@ -65,7 +65,6 @@ class User
         $this->workExtension = $workExtension;
 
     }
-
 
     /**
      * Función que devuelve los datos del empleado seleccionado
@@ -123,6 +122,7 @@ and active = 1 limit 1";
         $this->active = $usuario['active'];
         $this->workPhone = $usuario['workPhone'];
         $this->workExtension = $usuario['workExtension'];
+        $this->workEmail = $usuario['workEmail'];
     }
 
     /**

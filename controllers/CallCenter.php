@@ -9,7 +9,7 @@ checkActivity();
 
 global $business, $call;
 $business = new Business();
-//$call = new Call();
+$call = new Call();
 
 $action = $_POST['action'];
 
@@ -48,13 +48,14 @@ switch ($action) {
  */
 function getStatistics()
 {
+    global $call;
     $user = getUser();
     $role = getRole();
     switch ($role) {
         case 'agent':
-            $resp['dailyCalls'] = countDailyCalls($user);
-            $resp['monthlyCalls'] = countMonthlyCalls($user);
-            $resp['yearlyCalls'] = countYearlyCalls($user);
+            $resp['dailyCalls'] = $call::countDailyCalls($user);
+            $resp['monthlyCalls'] = $call::countMonthlyCalls($user);
+            $resp['yearlyCalls'] = $call::countYearlyCalls($user);
             echo json_encode($resp);
             break;
     }

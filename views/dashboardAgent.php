@@ -1,12 +1,13 @@
-<div class="row">
+<h3 class="text-center">My Dashboard</h3>
+<div class="row mt-5">
     <div class="col-sm-12 col-md-4">
-        <canvas id="callsDaily">Chart1</canvas>
+        <canvas id="callsDaily"></canvas>
     </div>
     <div class="col-sm-12 col-md-4">
-        <canvas id="callsMonthly">Chart2</canvas>
+        <div id="callsMonthly"></div>
     </div>
     <div class="col-sm-12 col-md-4">
-        <canvas id="callsYearly">Chart3</canvas>
+        <div id="callsYearly"></div>
     </div>
 </div>
 <script type="text/javascript" src="../js/dashboardAgent.js"></script>

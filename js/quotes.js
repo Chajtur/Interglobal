@@ -13,3 +13,10 @@ $('body').on('click', '#btnGenerateProposal', function () {
 		id: $id,
 	});
 });
+
+$('body').on('click', '#btnSearchDot', function () {
+	$dot = $('#dotSearch').val();
+	$('#quoteDetail').load('../components/clientDetail.php', {
+		dot: $dot,
+	});
+});

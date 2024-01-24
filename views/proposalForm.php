@@ -1,10 +1,13 @@
 <?php
 
 include "../models/Quote.php";
+include "../controllers/Load.php";
 $id = $_POST['id'];
 
-$quote = new Quote();
-$quoteDetail = $quote->getQuoteDetail($id);
+$quoteDetail = queryGeneralDot($id);
+
+//$quote = new Quote();
+//$quoteDetail = $quote->getQuoteDetail($id);
 
 
 include "../models/LoB.php";
@@ -13,7 +16,7 @@ $coverage = new LoB();
 $coverages = $coverage->getAll();
 
 ?>
-<h3 class="text-center" id="clientDiv" data-name="<?= $quoteDetail['name'] ?>">Proposal For : <?= $quoteDetail['name'] ?></h3>
+<h3 class="text-center" id="clientDiv" data-name="<?= $quoteDetail->legalName ?>">Proposal For : <?= $quoteDetail->legalName ?></h3>
 <hr>
 <div class="row w-100">
     <div class="col">
@@ -80,7 +83,7 @@ $coverages = $coverage->getAll();
 <hr>
 <div class="row">
     <div class="col-auto ms-auto">
-        <button class="btn btn-primary" id="btnPreviewProposal" data-dot=<?= $quoteDetail['dot'] ?>>Preview Proposal</button>
+        <button class="btn btn-primary" id="btnPreviewProposal" data-dot=<?= $quoteDetail->dotNumber ?>>Preview Proposal</button>
         <button class="btn btn-success" id="btnSaveProposal" data-id=<?= $id ?>>Save Proposal</button>
     </div>
 </div>

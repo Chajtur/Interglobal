@@ -1,8 +1,20 @@
 <?php
 include "../models/Quote.php";
-$id = $_POST['id'];
+include "../controllers/Load.php";
+
+$id = $_POST['id'] ?? 0;
+$dot = $_POST['dot'] ?? 0;
+
 $quote = new Quote();
-$quoteDetail = $quote->getQuoteDetail($id);
+
+if ($id != 0) {
+    $quoteDetail = $quote->getQuoteDetail($id);
+}
+
+if ($dot != 0) {
+    $quoteDetail = queryGeneralDot($dot);
+    //var_dump($quoteDetail);
+}
 ?>
 
 <div class="shadow-lg">
@@ -10,17 +22,17 @@ $quoteDetail = $quote->getQuoteDetail($id);
         <h4 class="text-white">Quote Details</h4>
     </div>
     <div class="p-4 border-start border-end border-bottom border-1 rounded-bottom">
-        <div class="border-bottom">DOT : <?= $quoteDetail['dot'] ?></div>
-        <div class="border-bottom">MC : <?= $quoteDetail['mc'] ?></div>
-        <div class="border-bottom">Address : <?= $quoteDetail['address'] ?></div>
-        <div class="border-bottom">City : <?= $quoteDetail['city'] ?></div>
-        <div class="border-bottom">State : <?= $quoteDetail['state'] ?></div>
-        <div class="border-bottom">Zip : <?= $quoteDetail['zip'] ?></div>
-        <div class="border-bottom">Email : <?= $quoteDetail['email'] ?></div>
-        <div class="border-bottom">Phone : <?= $quoteDetail['phone'] ?></div>
-        <div class="border-bottom">Proposed Date : <?= $quoteDetail['proposedDate'] ?></div>
-        <div class="border-bottom">Driver License : <?= $quoteDetail['driverLicense'] ?></div>
-        <div class="">Status : <?= $quoteDetail['status'] ?></div>
-        <div class="text-end mt-2"><button class="btn btn-primary" id="btnGenerateRFP">Generate RFP</button><button class="btn btn-success ms-2" id="btnGenerateProposal" data-id=<?= $id ?>>Generate Proposal</button></div>
+        <div class="border-bottom">DOT : <?= $quoteDetail->dotNumber ?></div>
+        <div class="border-bottom">MC : <?= $quoteDetail->mcNumber ?></div>
+        <div class="border-bottom">Address : <?= $quoteDetail->phyStreet ?></div>
+        <div class="border-bottom">City : <?= $quoteDetail->phyCity ?></div>
+        <div class="border-bottom">State : <?= $quoteDetail->phyState ?></div>
+        <div class="border-bottom">Zip : <?= $quoteDetail->phyZipcode ?></div>
+        <div class="border-bottom">Email : <?= '' ?></div>
+        <div class="border-bottom">Phone : <?= '' ?></div>
+        <div class="border-bottom">Proposed Date : <?= '' ?></div>
+        <div class="border-bottom">Driver License : <?= '' ?></div>
+        <div class="">Status : <?= 'Pending' ?></div>
+        <div class="text-end mt-2"><button class="btn btn-primary" id="btnGenerateRFP">Generate RFP</button><button class="btn btn-success ms-2" id="btnGenerateProposal" data-id=<?= $dot ?>>Generate Proposal</button></div>
     </div>
 </div>

@@ -1,17 +1,20 @@
 <?php
 $user = new User();
+$user->load($_SESSION['user']['id']);
 ?>
 <link rel="stylesheet" href="../css/sidebar.css">
 <script src="../js/sidebar.js"></script>
 <div class="position-relative navbar-menu">
   <div class="position-fixed top-0 start-0 bottom-0 w-75 mw-sm-xs pt-6 overflow-auto">
     <div class="px-6 pb-0 position-relative d-flex justify-content-center">
-      <div class="d-inline-flex align-items-center">
-        <a class="navbar-brand" href="#" data-config-id="brand">
-          <i class="fas fa-user fa-4x text-primary"></i>
+      <div class="d-inline-flex align-items-center text-center">
+        <a class="" href="#" data-config-id="brand">
+          <i class="fas fa-user fa-6x text-primary"></i>
         </a>
       </div>
     </div>
+    <h5 class="text-primary text-center"><?= $user->firstName?></h5>
+    <h5 class="text-primary text-center"><?= $user->lastName?></h5>
     <div class="py-0 px-6">
       <ul class="nav flex-column mb-8">
         <li class="nav-item nav-pills" data-module='Dashboard'>

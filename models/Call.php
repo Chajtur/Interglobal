@@ -25,7 +25,7 @@ class Call
      * 
      * @return integer - Devuelve el número de llamadas que hizo el agente
      */
-    function countDailyCalls($user)
+    static function countDailyCalls($user)
     {
         global $conn;
         $query = "Select count(*) as count
@@ -46,7 +46,7 @@ class Call
      * 
      * @return integer - Devuelve el número de llamadas que hizo el agente
      */
-    function countMonthlyCalls($user)
+    static function countMonthlyCalls($user)
     {
         global $conn;
         $query = "Select count(*) as count
@@ -65,7 +65,7 @@ class Call
      * 
      * @return integer - Devuelve el número de llamadas que hizo el agente
      */
-    function countYearlyCalls($user)
+    static function countYearlyCalls($user)
     {
         global $conn;
         $query = "Select month(c.date) as month, count(*) as monthCount

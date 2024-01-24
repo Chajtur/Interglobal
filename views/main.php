@@ -16,7 +16,7 @@ checkActivity();
         <div>
             <?php include '../components/menu.php'; ?>
             <content class="h-100" id="contenido">
-                <?php include 'dashboardAgent.php'; ?>
+                <!-- <?php include 'dashboardAgent.php'; ?> -->
             </content>
         </div>
         <footer class="footer mt-auto w-100 d-none">
