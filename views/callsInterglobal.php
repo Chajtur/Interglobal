@@ -56,10 +56,10 @@
         <div class="mt-1 p-1 border rounded">
             <h4 class="text-center">Call this Company</h4>
             <h4 class=" mb-2 text-center">
-                <button class="btn btn-success pe-none rounded p-2">
+                <div class="btn btn-success pe-none rounded p-2">
                     <!-- <span class="fa-solid fa-phone fa-lg"></span> -->
                     <span class="user-select-all text-decoration-none text-white" id="businessPhone"></span>
-                </button>
+                </div>
             </h4>
         </div>
     </div>

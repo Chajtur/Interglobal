@@ -65,7 +65,7 @@ $(document).ready(function () {
 	$('#insuredDOT').on('focusout', function () {
 		$('#spinner').modal('show');
 		$.get('../controllers/Load.php', {
-			action: 'generalDot',
+			action: 'generalDotWeb',
 			dot: $(this).val(),
 		}).done(function (resp) {
 			if (resp) {
@@ -105,6 +105,14 @@ $(document).ready(function () {
 			$('#spinner').modal('hide');
 		});
 	});
+
+	$('#sameAddress').on('change', function() {
+		if ($(this).is(':checked')) {
+			$('#parkingAddress').addClass('d-none');
+		} else {
+			$('#parkingAddress').removeClass('d-none');
+		}
+	})
 
 	$('#requestQuote').on('click', function () {
         $proposedDate = $('#rfpProposedDate').val();

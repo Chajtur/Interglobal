@@ -40,7 +40,8 @@ $dompdf->setPaper('Letter', 'portrait');
 //$html = str_replace('{QuoteNumber}', $_POST['quoteNumber'], $html);
 $html = str_replace('{logo}', $logo, $html);
 $html = str_replace('{Date}', date('Y-m-d'), $html);
-$html = str_replace('{agentName}', $user->firstName . ' ' . $user->lastName . ', ' . $user->workEmail, $html);
+$html = str_replace('{agentName}', $user->firstName . ' ' . $user->lastName, $html);
+$html = str_replace('{email}', $user->workEmail, $html);
 $html = str_replace('{QuoteNumber}', $_POST['dot'], $html);
 
 $phoneNumber = $user->workPhone;

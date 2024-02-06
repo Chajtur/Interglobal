@@ -1,12 +1,16 @@
 <?php
 
 include_once('../models/User.php');
+include_once('../controllers/Login.php');
+
+$user = new User();
+$user->load($_SESSION['user']['id']);
 
 $year = isset($_POST['year']) ? $_POST['year'] : date("Y");
 $month = isset($_POST['month']) ? $_POST['month'] : date("n");
 $months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 $employee = isset($_POST['employee']) ? $_POST['employee'] : getUser();
-$marcaciones = (object)getMonthPunches($year, $month, $employee);
+$marcaciones = $user->getMonthPunches($year, $month, $employee);
 
 echo "<script>console.log('Procesando marcaciones de $employee para el mes de $month del año $year esta es la lista" . json_encode($marcaciones) . "');</script>";
 ?>

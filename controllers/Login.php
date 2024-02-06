@@ -1,6 +1,7 @@
 <?php
 
 include_once '../models/User.php';
+$user = new User();
 
 $isLoggedIn = false;
 
@@ -41,7 +42,8 @@ if (isset($_GET['action']) || isset($_POST['action'])) {
 
 function getEmployeeList()
 {
-    $users = getActiveUsers();
+    global $user;
+    $users = $user::getActiveUsers();
     $resp = [];
     foreach ($users as $User) {
         $line['id'] = $User['id'];

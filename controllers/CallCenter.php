@@ -94,8 +94,9 @@ function checkIfExists()
  */
 function getCallHistory()
 {
+    global $call;
     $dot = $_POST['dot'];
-    echo json_encode(callHistoryByDot($dot));
+    echo json_encode($call::callHistoryByDot($dot));
 }
 
 /**
@@ -124,19 +125,20 @@ function getNewCall()
  */
 function saveCall()
 {
+    global $call;
     $Dot = $_POST['DOT'];
     $status = $_POST['status'];
     $user = getUser();
     $callAgain = isset($_POST['callAgain']) ? $_POST['callAgain'] : 0;
     $notes = $_POST['notes'];
     $sentMessage = $_POST['sentMessage'];
-    $idCall = insertCall($Dot, $status, $user, $sentMessage);
+    $idCall = $call::insertCall($Dot, $status, $user, $sentMessage);
     if ($idCall) {
         if ($callAgain) {
-            callAgain($idCall, $callAgain);
+            $call::callAgain($idCall, $callAgain);
         }
         if ($notes) {
-            saveNote($idCall, $notes);
+            $call::saveNote($idCall, $notes);
         }
     }
     echo $idCall;
@@ -147,7 +149,8 @@ function saveCall()
  */
 function getAgents()
 {
-    $agents = listAgents();
+    global $business;
+    $agents = $business::listAgents();
     echo json_encode($agents);
 }
 
@@ -156,10 +159,11 @@ function getAgents()
  */
 function getCalls()
 {
+    global $call;
     $agent = isset($_POST['agent']) ? $_POST['agent'] : 0;
     $status = isset($_POST['status']) ? $_POST['status'] : 'Any';
     $state = isset($_POST['state']) ? $_POST['state'] : 'All';
-    $calls = listCalls($agent, $status, $state);
+    $calls = $call::listCalls($agent, $status, $state);
     echo json_encode($calls);
 }
 
@@ -168,9 +172,10 @@ function getCalls()
  */
 function getReminders()
 {
+    global $call;
     if (isset($_SESSION['employeeId'])) {
         $agent = $_SESSION['employeeId'];
-        $reminders = listReminders($agent);
+        $reminders = $call::listReminders($agent);
         echo json_encode($reminders);
     }
 }

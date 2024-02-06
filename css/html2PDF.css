@@ -80,7 +80,7 @@
 	--bs-body-font-size: 1rem;
 	--bs-body-font-weight: 400;
 	--bs-body-line-height: 1.5;
-	--bs-body-color: #15181c;
+	/*--bs-body-color: #15181c;*/
 	--bs-body-bg: #f1f5fb;
 }
 
@@ -158,6 +158,10 @@ h5,
 	font-size: 1.25rem;
 }
 
+h4, .h4 {
+	font-size: 1.5rem;
+}
+
 h6,
 .h6,
 h5,
@@ -177,7 +181,7 @@ h1,
 		'Noto Color Emoji';
 	font-weight: 700;
 	line-height: 1;
-	color: #023559;
+	/*color: #023559;*/
 }
 
 table {
@@ -191,15 +195,44 @@ table {
 	color: #212529;
 }
 
-.table th,
 .table td {
 	padding: 0.75rem;
 	vertical-align: top;
 	border-top: 1px solid #dee2e6;
 }
 
+/*.bg-success {
+	--bs-bg-opacity: 1;
+	background-color: #17bb84 !important;
+}
+
+.bg-success-light {
+	--bs-bg-opacity: 1;
+	background-color: #e8f8f3 !important;
+}*/
+
+body, td, th, div {
+	color: #023559;
+}
+
 .table-striped tbody tr:nth-of-type(odd) {
 	background-color: rgba(0, 0, 0, 0.05);
+}
+
+.font-bold {
+	font-weight: 900 !important;
+    font-size: larger !important;
+}
+
+.text-danger {
+	--bs-text-opacity: 1;
+	color: rgb(145, 0, 0)
+}
+
+.text-black {
+	--bs-text-opacity: 1;
+	color: black !important;
+
 }
 
 thead,
@@ -242,6 +275,11 @@ th {
 .text-end {
 	text-align: right !important;
 }
+
+.text-justify {
+	text-align: justify !important;
+}
+
 .bg-primary {
 	--bs-bg-opacity: 1;
 	background-color: #023559 !important;
@@ -324,7 +362,7 @@ th {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 70px;
+    height: 20px;
     text-align: center;
     line-height: auto;
 }
@@ -337,6 +375,12 @@ th {
     text-align: center;
     line-height: auto;
 }
+
+/*.bg-warning-light {
+	--bs-bg-opacity: 1;
+	background-color: #fef2ea !important;
+}*/
+
 .page-break {
 	page-break-before: always;
 }
@@ -352,6 +396,29 @@ th {
     max-height: 120px;
 }
 
+.border-0 {
+	border: 0 !important;
+}
+
+.footerImg {
+	max-width: 100%;
+	height: auto;
+	max-height: 200px;
+}
+
 .mt-2 {
     margin-top: 0.5rem !important;
 }
+
+.mt-5 {
+	margin-top: 1.25rem !important;
+}
+
+.mb-5 {
+	margin-bottom: 1.25rem !important;
+}
+
+/*.bg-info {
+	--bs-bg-opacity: 1;
+	background-color: #247ba9 !important;
+}/*

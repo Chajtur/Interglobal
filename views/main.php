@@ -16,7 +16,13 @@ checkActivity();
         <div>
             <?php include '../components/menu.php'; ?>
             <content class="h-100" id="contenido">
-                <!-- <?php include 'dashboardAgent.php'; ?> -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="text-center">Welcome to Interglobal Insurance</h1>
+                        </div>
+                    </div>
+                </div>
             </content>
         </div>
         <footer class="footer mt-auto w-100 d-none">

@@ -10,7 +10,7 @@ class holiday
     public $fullDay;
     public $active;
 
-    public function __construct($id = null, $date = null, $name = null, $holidayDetail = null, $fullDay = null, $active = null)
+    public function __construct($date = null, $id = null, $name = null, $holidayDetail = null, $fullDay = null, $active = null)
     {
         $this->id = $id;
         $this->date = $date;
@@ -25,7 +25,7 @@ class holiday
      * 
      * @return array - Listado de fechas de feriados
      */
-    function getHolidayDates()
+    static function getHolidayDates()
     {
         global $conn;
         $query = "Select date from Holidays where active = 1";
@@ -38,10 +38,10 @@ class holiday
      * Función que devuelve la información de la fecha si es feriado
      * $date date = La fecha a buscar
      */
-    function getHolidays($date)
+    function getHolidays()
     {
         global $conn;
-        $query = "Select name as holidayName, active as holidayActive, holidayDetail from Holidays where date = '$date'";
+        $query = "Select name as holidayName, active as holidayActive, holidayDetail from Holidays where date = '$this->date'";
         $resp = $conn->query($query);
         $holiday = $resp->fetch_assoc();
         if ($holiday) {
@@ -171,7 +171,7 @@ class holiday
         $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
         // best stored as array, so you can add more than one
-        $holidays = getHolidayDates();
+        $holidays = $this->getHolidayDates();
 
         foreach ($period as $dt) {
             $curr = $dt->format('D');

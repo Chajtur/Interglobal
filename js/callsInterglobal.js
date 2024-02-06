@@ -88,7 +88,11 @@ $(document).ready(function () {
 	$(document)
 		.off()
 		.on('click', '#btnNextBusiness', function () {
-			getNewCall($('#filterCallState option:selected').val(), $('#filterCallStatus option:selected').val(), $('#filterCallType option:selected').val());
+			getNewCall(
+				$('#filterCallState option:selected').val(),
+				$('#filterCallStatus option:selected').val(),
+				$('#filterCallType option:selected').val()
+			);
 			$('.callAgain').removeClass('bg-success');
 			$('.btnStatus').removeClass('active');
 			$('#callNotes').val('');
@@ -164,7 +168,11 @@ $(document).ready(function () {
 			$('#infoModalTitle').html('Call Saved!');
 			$('#infoModalText').html('Call was saved successfully!!');
 			$('#infoModal').modal('show');
-			getNewCall($('#filterCallState option:selected').val(), $('#filterCallStatus option:selected').val(), $('#filterCallType option:selected').val());
+			getNewCall(
+				$('#filterCallState option:selected').val(),
+				$('#filterCallStatus option:selected').val(),
+				$('#filterCallType option:selected').val()
+			);
 			updateReminders();
 		});
 	});
@@ -207,16 +215,27 @@ function getNewCall($state, $status, $type) {
 				$('#businessPhone').html(
 					'+1 (' + resp.Phone.substr(0, 3) + ') ' + resp.Phone.substr(3, 3) + '-' + resp.Phone.substr(6, 4)
 				);
+				navigator.clipboard
+					.writeText(resp.Phone)
+					.then(() => {
+						console.log('Phone number copied to clipboard');
+					})
+					.catch((err) => {
+						console.error('Could not copy phone number: ', err);
+					});
 				$('#businessPhone').attr('data-phone', resp.Phone);
 				$('#listDate').html('List Date: ' + resp.Upload_Date);
 				$('#insuranceName').html('Insurer: ' + resp.Insurer);
 				$('#insurancePolicy').html('Policy Number: ' + resp.Policy_Number);
 				$('#insuranceType').html('Type: ' + resp.Insurance_Type);
-				$('#insuranceExpirationDate').html('Expiration Date: ' + shortDate('0000-' + resp.Policy_Expiration_Month + '-' + resp.Policy_Expiration_Day));
+				$('#insuranceExpirationDate').html(
+					'Expiration Date: ' +
+						shortDate('0000-' + resp.Policy_Expiration_Month + '-' + resp.Policy_Expiration_Day)
+				);
 				if (resp.Insurer != null) {
-					$("#insuranceDetails").removeClass('d-none');
+					$('#insuranceDetails').removeClass('d-none');
 				} else {
-					$("#insuranceDetails").addClass('d-none');
+					$('#insuranceDetails').addClass('d-none');
 				}
 				$('#spinner').modal('hide');
 				callHistory(resp.DOT);
@@ -353,7 +372,8 @@ function callHistory($dot) {
 				$string += ' data-notes="' + call.notes + '"';
 				$string += ' >';
 				$string += '<td class="rounded-start border-0">' + shortDate(call.date) + '</td>';
-				$string += '<td class="rounded-end border-0">' + (call.notes == null ? 'No notes' : call.notes) + '</td>';
+				$string +=
+					'<td class="rounded-end border-0">' + (call.notes == null ? 'No notes' : call.notes) + '</td>';
 				$string += '</tr>';
 				$('#tableCallHistory').append($string);
 			});
@@ -388,41 +408,47 @@ $('.clickableCalls').on('click', 'tr', function () {
 });
 
 $('.clickableCallHistory').on('click', 'tr', function () {
-	$("#infoModalTitle").html('Call Details');
+	$('#infoModalTitle').html('Call Details');
 	$string = "<table class='table table-borderless border rounded'>";
-	$string += "<tbody>";
-	$string += "<tr>";
-	$string += "<td>Date:</td>";
-	$string += "<td>" + shortDate($(this).data('date')) + "</td>";
-	$string += "</tr>";
-	$string += "<tr>";
-	$string += "<td>Caller:</td>";
-	$string += "<td>" + $(this).data('agentname') + "</td>";
-	$string += "</tr>";
-	$string += "<tr>";
-	$string += "<td>Status:</td>";
-	$string += "<td>" + $(this).data('status') + "</td>";
-	$string += "</tr>";
-	$string += "<tr>";
-	$string += "<td>Notes:</td>";
-	$string += "<td>" + ($(this).data('notes') == null ? 'No notes' : $(this).data('notes')) + "</td>";
-	$string += "</tr>";
-	$string += "<tr>";
-	$string += "<td>Sent Message:</td>";
-	$string += "<td>" + ($(this).data('sentmessage') == 'f' ? 'No' : 'Yes') + "</td>";
-	$string += "</tr>";
-	$string += "<tr>";
-	$string += "<td>Call Again:</td>";
-	$string += "<td>" + ($(this).data('callagaindate') == '0000-00-00' ? 'No' : shortDate($(this).data('callagaindate'))) + "</td>";
-	$string += "</tr>";
-	$string += "</tbody>";
-	$string += "</table>";
-	$("#infoModalText").html($string);
-	$("#infoModal").modal('show');
+	$string += '<tbody>';
+	$string += '<tr>';
+	$string += '<td>Date:</td>';
+	$string += '<td>' + shortDate($(this).data('date')) + '</td>';
+	$string += '</tr>';
+	$string += '<tr>';
+	$string += '<td>Caller:</td>';
+	$string += '<td>' + $(this).data('agentname') + '</td>';
+	$string += '</tr>';
+	$string += '<tr>';
+	$string += '<td>Status:</td>';
+	$string += '<td>' + $(this).data('status') + '</td>';
+	$string += '</tr>';
+	$string += '<tr>';
+	$string += '<td>Notes:</td>';
+	$string += '<td>' + ($(this).data('notes') == null ? 'No notes' : $(this).data('notes')) + '</td>';
+	$string += '</tr>';
+	$string += '<tr>';
+	$string += '<td>Sent Message:</td>';
+	$string += '<td>' + ($(this).data('sentmessage') == 'f' ? 'No' : 'Yes') + '</td>';
+	$string += '</tr>';
+	$string += '<tr>';
+	$string += '<td>Call Again:</td>';
+	$string +=
+		'<td>' +
+		($(this).data('callagaindate') == '0000-00-00' ? 'No' : shortDate($(this).data('callagaindate'))) +
+		'</td>';
+	$string += '</tr>';
+	$string += '</tbody>';
+	$string += '</table>';
+	$('#infoModalText').html($string);
+	$('#infoModal').modal('show');
 });
 
-$("#businessPhone").on('click', function () {
-	navigator.clipboard.writeText($(this).data('phone'));
-	console.log('copied');
-	//alert('Phone number copied to clipboard');
+$(document).on('click', '#businessPhone', function (element) {
+	alert('Phone Number copied to clipboard');
+	var $temp = $('<input>');
+	$('body').append($temp);
+	$temp.val($(element).text()).select();
+	document.execCommand('copy');
+	$temp.remove();
 });

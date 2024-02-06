@@ -19,7 +19,8 @@ $coverages = $coverage->getAll();
 <h3 class="text-center" id="clientDiv" data-name="<?= $quoteDetail->legalName ?>">Proposal For : <?= $quoteDetail->legalName ?></h3>
 <hr>
 <div class="row w-100">
-    <div class="col">
+    <!-- Inputs for Coverage and Amount -->
+    <!-- <div class="col">
         <label for="coverageSelect">Please Select a Line of Business:</label>
         <select id="coverageSelect" class="form-select" aria-label="Default select example">
             <?php foreach ($coverages as $coverage) { ?>
@@ -30,55 +31,55 @@ $coverages = $coverage->getAll();
     <div class="col">
         <label for="coverageAmount">Amount:</label>
         <input type="text" class="form-control rounded" id="coverageAmount" placeholder="Amount">
-    </div>
+    </div> -->
     <div class="col-auto d-flex align-items-end">
         <div class="text-end">
-            <button class="btn btn-success" id="btnAddCoverage">Add Coverage</button>
-            <button class="btn btn-primary" id="btnAddOption">Add Option</button>
+            <button title="Click to add a Coverage" class="btn btn-success" id="btnAddCoverage">Add Coverage</button>
+            <button title="Click to add an Option" class="btn btn-success" id="btnAddOption">Add Option</button>
+            <button title="Click to add a Bill Plan" class="btn btn-success" id="btnAddBillPlan">Add Bill Plan</button>
         </div>
     </div>
 </div>
 <hr>
 <div class="row">
-    <table class="table" id="tableCoverage">
-        <thead class="text-center">
-            <tr>
-                <th colspan="3" class="bg-primary text-white font-bold">Coverage</th>
-                <th class="gap"></th>
-                <th data-id="1" colspan="5" class="bg-success text-white font-bold option">Option 1</th>
-            </tr>
-            <tr>
-                <th class="bg-primary-light"></th>
-                <th class="bg-primary-light">Type</th>
-                <th class="bg-primary-light text-end">Amount</th>
-                <th class="gap"></th>
-                <th data-id="1" class="bg-success-light">Carrier</th>
-                <th data-id="1" class="bg-success-light text-end">Base Premium</th>
-                <th data-id="1" class="bg-success-light text-end">Taxes & Fees</th>
-                <th data-id="1" class="bg-success-light text-end">Total Premium</th>
-                <th data-id="1" class="bg-success-light">Notes</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-center bg-primary-light font-bold h4">Total Premium</td>
-                <td class="gap"></td>
-                <td colspan="5" data-id="1" class="bg-success-light text-center font-bold h4 totalPremium">$0.00</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-white text-center bg-primary font-bold h4">Down Payment</td>
-                <td class="gap"></td>
-                <td data-id="1" class="bg-success text-white font-bold h4 text-center" colspan="5"><span>$</span><input data-id="1" class="rounded downPayment" type="number" value="0"></td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-white text-center bg-primary font-bold h4">Installments</td>
-                <td class="gap"></td>
-                <td data-id="1" class="bg-success text-white font-bold h4 text-center" colspan="5"><input data-id="1" class="rounded installments" type="number" value="10"/><span> Installments of $</span><input data-id="1" class="rounded installment" type="number" value="0"/></td>
-            </tr>
-        </tfoot>
-    </table>
+    <!-- Nav Tabs -->
+    <ul class="nav nav-tabs" id="optionsTabs" role="tablist">
+        <li class="nav-item" role="presentation" data-option=1>
+            <a class="nav-link active" id="optionTab1" data-bs-toggle="tab" href="#tabOption1" role="tab" aria-controls="coverage" aria-selected="true">Option 1</a>
+        </li>
+    </ul>
+    <!-- Tab Content -->
+    <div class="tab-content mt-2" id="optionContent">
+        <div data-option=1 id="tabOption1" class="tab-pane active" role="tabpanel" aria-labelledby="table-tab">
+            <caption class="text-sm">All Coverages with <span class="bg-warning-light p-1">BACKGROUND</span> are missing a Bill Plan</caption>
+            <table class="table tableOptions mt-2" data-option=1>
+                <thead class="text-center">
+                    <tr>
+                        <th class="bg-primary-light"></th>
+                        <th class="bg-primary-light text-start">Line of Business</th>
+                        <th class="bg-primary-light text-end">Amount</th>
+                        <th data-id="1" class="bg-success-light text-start">Carrier</th>
+                        <th data-id="1" class="bg-success-light text-end">Base Premium</th>
+                        <th data-id="1" class="bg-success-light text-end">Taxes & Fees</th>
+                        <th data-id="1" class="bg-success-light text-end">Total Premium</th>
+                        <th data-id="1" class="bg-success-light">Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot class="d-none">
+                    <tr class="bg-primary text-white text-center">
+                        <th colspan="1"></th>
+                        <th colspan="3">Bill Plan for</th>
+                        <th class="text-end">Duration</th>
+                        <th class="text-end">No. of Installments</th>
+                        <th class="text-end">Down Payment</th>
+                        <th class="text-end">Installment Amount</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="row">
@@ -89,11 +90,9 @@ $coverages = $coverage->getAll();
 </div>
 
 <style>
-    .gap {
-        width: 5px;
-        /* Set the width of the gap */
-        border: none !important;
-        /* Get rid of the border */
+    #optionsTabs .nav-link.active {
+        background-color: var(--bs-primary);
+        color: white;
     }
 </style>
 

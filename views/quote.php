@@ -1,3 +1,7 @@
+<?php
+$referral = $_GET['referral'];
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 
@@ -30,7 +34,7 @@
                     <div class="row" id="agencyInformation">
                         <div class="col-lg-8 col-sm-12 p-0">
                             <div class="form-floating mb-2">
-                                <input class="form-control rounded border-primary" id="referral" type="text" placeholder="Referral">
+                                <input disabled class="form-control rounded border-primary" id="referral" type="text" placeholder="Referral" value="<?= $referral ?>">
                                 <label class="text-primary" for="referral">REFERRAL</label>
                             </div>
                             <div class="row mt-2">
@@ -61,10 +65,6 @@
                                 <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">*DOT#</div>
                                 <div class="col-lg-2  pair">
                                     <input type="number" id="insuredDOT" placeholder="xxxxxxxx" class="bg-white h-100 text-primary border border-primary rounded-end p-1 text-center w-100">
-                                </div>
-                                <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">MC#</div>
-                                <div class="col-lg-2  pair">
-                                    <input type="number" id="insuredMC" placeholder="xxxxxxxx" class="bg-white h-100 text-primary border border-primary rounded-end p-1 text-center w-100">
                                 </div>
                                 <div class="col-lg-2  bg-primary text-white rounded-start p-1 text-center">*Name</div>
                                 <div class="col-lg-4  pair">
@@ -98,6 +98,40 @@
                                 <div class="col-lg-1  pair">
                                     <input type="text" id="insuredZipCode" placeholder="Zipcode" class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">
                                 </div>
+
+                                <div class="col-lg-1 bg-primary text-white rounded-start p-1 text-center">
+                                    <div>Parking Address</div>
+                                </div>
+                                <div>
+                                    <label for="sameAddress">Same as business address</label>
+                                    <input type="checkbox" id="sameAddress" checked>
+                                </div>
+                                <div id="parkingAddress" class="d-none row">
+                                    <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">*Parking Address</div>
+                                    <div class="col-lg-5  pair">
+                                        <input type="text" id="insuredAddress" placeholder="Address" class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">
+                                    </div>
+                                    <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">*Parking City</div>
+                                    <div class="col-lg-2  pair">
+                                        <input type="text" id="insuredCity" placeholder="City" class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">
+                                    </div>
+                                    <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">*Parking State</div>
+                                    <div class="col-lg-2  pair">
+                                        <div class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">
+                                            <select id="insuredState" class="form-select" aria-label="Default select example">
+                                                <option selected>Select a State</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">*Parking ZipCode</div>
+                                <div class="col-lg-1  pair">
+                                    <input type="text" id="insuredZipCode" placeholder="Zipcode" class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">
+                                </div>
+                                </div>
+
 
                                 <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">Email</div>
                                 <div class="col-lg-3  pair">

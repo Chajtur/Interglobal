@@ -2,8 +2,13 @@
 
 include '../models/Dates.php';
 include '../models/User.php';
+include '../controllers/Login.php';
 
-$data = getDaysOff(getUser());
+$user = new User($_SESSION['user']['id']);
+$fecha = $_POST['fecha'];
+$dates = new Holiday($fecha);
+
+$data = $dates->getDaysOff(getUser());
 
 ?>
 <p id="nombreFeriado" data-bs-toggle='collapse' data-bs-target="#vacacionesContent" class="w-100 bg-primary text-white rounded border border-success p-1 ps-2 shadow text-center ">Vacaciones</p>
@@ -12,8 +17,8 @@ $data = getDaysOff(getUser());
         <li class="nav-item" role="presentation">
             <button class="nav-link active border border-1" id="tabMisVacaciones" data-bs-toggle="tab" data-bs-target="#contentMisVacaciones" type="button" role="tab" aria-controls="misVacaciones" aria-selected="true">Mis Vacaciones</button>
         </li>
-        <?php if (hasPermission('listarVacaciones')) {
-            $dataDate = getApprovedDaysOffbyDay($_POST['fecha']); ?>
+        <?php if ($user->hasPermission('listarVacaciones')) {
+            $dataDate = $dates->getApprovedDaysOffbyDay($fecha); ?>
             <li class="nav-item" role="presentation">
                 <button class="nav-link border border-1" id="tabVacacionesPersonal" data-bs-toggle="tab" data-bs-target="#contentVacacionesPersonal" type="button" role="tab" aria-controls="vacacionesPersonal" aria-selected="false">Staff</button>
             </li>
@@ -50,7 +55,7 @@ $data = getDaysOff(getUser());
                             <tr data-bs-toggle='collapse' data-bs-target='#id<?php echo $vacacion['id'] ?>' class='<?php echo $bgColor ?>'>
                                 <td><?php echo ++$key ?></td>
                                 <td><?php echo $vacacion['dateFrom'] ?></td>
-                                <td><?php echo getBusinessDays($vacacion['dateFrom'], $vacacion['dateTo']) ?></td>
+                                <td><?php echo $dates->getBusinessDays($vacacion['dateFrom'], $vacacion['dateTo']) ?></td>
                                 <td><?php echo $vacacion['status'] ?></td>
                             </tr>
                             <tr class='collapse accordion-collapse' id='id<?php echo $vacacion['id'] ?>' data-bs-parent='.table'>
@@ -112,7 +117,7 @@ $data = getDaysOff(getUser());
                                 <tr data-bs-toggle='collapse' data-bs-target='#id<?php echo $vacacion["id"] ?>' class='<?php echo $bgColor ?>'>
                                     <td><?php echo ++$key ?></td>
                                     <td><?php echo $vacacion['dateFrom'] ?></td>
-                                    <td><?php echo getBusinessDays($vacacion['dateFrom'], $vacacion['dateTo']) ?></td>
+                                    <td><?php echo $dates->getBusinessDays($vacacion['dateFrom'], $vacacion['dateTo']) ?></td>
                                     <td><?php echo $vacacion['status'] ?></td>
                                 </tr>
                                 <tr class='collapse accordion-collapse' id='id<?php echo $vacacion['id'] ?>' data-bs-parent='.table'>
@@ -146,7 +151,7 @@ $data = getDaysOff(getUser());
                                             <div class='col'><?php echo ($vacacion['approvedDate'] ?: '') ?></div>
                                         </div>
                                         <hr>
-                                        <?php if (hasPermission('aprobarVacaciones')) { ?>
+                                        <?php if ($user->hasPermission('aprobarVacaciones')) { ?>
                                             <div class="row">
                                                 <div class="justify-content-end d-flex pe-0 my-2">
                                                     <button type="button" class="btn btn-success solicitarVacaciones d-inline-block me-1" data-searchDate='<?php $_POST['fecha'] ?>'>Aprobar</button>

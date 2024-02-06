@@ -125,7 +125,7 @@ class Call
      * 
      * @return array - Arreglo de llamadas a la empresa
      */
-    function callHistoryByDot($dot)
+    static function callHistoryByDot($dot)
     {
         global $conn;
         $query = "Select c.idCall, c.dot, concat(e.firstName, ' ', e.lastname) as agentName, date(c.date) as `date`, l.Legal_Name as businessName, l.phone, l.Company_Rep1 as rep, n.note as notes, ca.date as callAgain, c.sentMessage, c.`status`, l.Business_Address as address, l.Business_State as state
@@ -203,7 +203,7 @@ class Call
      * 
      * @return array - El arreglo de recordatorios a mostrar
      */
-    function listReminders($agent)
+    static function listReminders($agent)
     {
         global $conn;
         $query = "Select c.idCall, c.dot, concat(e.firstName, ' ', e.lastname) as agentName, CONVERT_TZ(c.date,'-00:00','-06:00') as `date`, l.Legal_Name as businessName, l.phone, l.Company_Rep1 as rep, n.note, ca.date as callAgain, c.sentMessage, c.`status`, l.Business_Address as address, l.Business_State as state

@@ -16,6 +16,9 @@ $('body').on('click', '#btnGenerateProposal', function () {
 
 $('body').on('click', '#btnSearchDot', function () {
 	$dot = $('#dotSearch').val();
+	/*$.post('https://mobile.fmcsa.dot.gov/qc/services/carriers/3887916?webKey=5a6f85d3d2a12d1f5c7f2566a2c75d9a751f4d79', function (data) {
+		console.log(data);
+	});*/
 	$('#quoteDetail').load('../components/clientDetail.php', {
 		dot: $dot,
 	});
