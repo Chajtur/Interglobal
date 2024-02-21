@@ -316,103 +316,9 @@ $('#btnPreviewProposal').click(function () {
 	$('#infoModalTitle').text('Preview Proposal');
 	$('#infoModalText').html('<div id="previewProposalDiv"></div>');
 	$('#previewProposalDiv').load('../components/previewProposal.php');
-	$('#infoModalButtons').html(
-		'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnPrintProposal">Print</button>'
-	);
+	$('#infoModalButtons').html('<button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>');
 	$('#infoModal').addClass('fullscreen-modal');
 	$('#infoModal').modal('show');
-	/*$html =
-		'<head>' +
-		'  <title>' +
-		'    INTERGLOBAL INSURANCE CO. | US TRUCKING FOR HIRE' +
-		'  </title>' +
-		'  <meta name="viewport" content="width=device-width, initial-scale=1">' +
-		'  <meta charset="utf-8">' +
-		'  <link rel="icon" href="https://interglobalinsurance.com/wp-content/uploads/2021/12/LOGO-INTERGLOBAL-01-1329x800.png">' +
-		'</head>' +
-		'' +
-		'<body class="p-10 text-primary d-flex row justify-content-between">' +
-		'  <div>' +
-		'    <table class="table shadow-lg">' +
-		'      <thead>' +
-		'        <tr>' +
-		'           <th>' +
-		'        <a class="navbar-brand align-self-start" href="#" data-config-id="brand">' +
-		'          <img class="img-fluid" src="https://interglobalinsurance.com/wp-content/uploads/2021/12/LOGO-INTERGLOBAL-01-1329x800.png" alt="" width="auto">' +
-		'        </a>' +
-		'      </th>' +
-		'      <th>' +
-		'        <div class="text-end">' +
-		'          <h5>Quote Number: {QuoteNumber}</h5>' +
-		'        </div>' +
-		'        <div class="text-end">' +
-		'          <h5>Quote Date: {Date}</h5>' +
-		'        </div>' +
-		'      </th>' +
-		'    </table>' +
-		'    <hr>' +
-		'    <div class="row text-center">' +
-		'      <div class="h2 text-primary pt-8">Commercial Quote Proposal</div>' +
-		'      <div class="h3">Client: ' +
-		$('#clientDiv').data('name') +
-		'</div>' +
-		'    </div>' +
-		'    <div class="mt-5">' +
-		'      <p>' +
-		'        Interglobal Insurance Company is pleased to offer you the following Insurance Quote:' +
-		'      </p>' +
-		'    </div>' +
-		'  </div>';
-	async function processOptions() {
-		await Promise.all(
-			$('#tableCoverage thead .option')
-				.map(async function () {
-					await printOption($(this).data('id'));
-				})
-				.get()
-		);
-	}
-	processOptions().then(() => {
-		$html +=
-			'  <footer class="footer">' +
-			'    <div class="">If you have any questions or doubts about your quote, please do not hesitate contacting me at {phoneNumber} ext. {extension}, {agentName}.</div>' +
-			'    <div class="d-flex bg-primary justify-content-center align-items-center w-100 p-2 mt-2 pt-3">' +
-			'      <h6 class="text-white text-center">' +
-			'        172 NE 23rd Terrace, Homestead, Fl 33033' +
-			'        Office: 305-884-4080 / Mobile: 305-742-6203' +
-			'      </h6>' +
-			'      <h6 class="text-white text-center">' +
-			'        Office Hours: Mon - Fri 9:00 a.m. - 6:00 p.m. E.S.T.' +
-			'        Saturday from 10 a.m. to 2 p.m / Sunday closed' +
-			'      </h6>' +
-			'    </div>' +
-			'  </footer>' +
-			'</body>';
-		$.ajax({
-			url: '../components/html2pdf.php',
-			method: 'POST',
-			data: {
-				html: $html,
-				filename: 'test.pdf',
-				dot: $(this).data('dot'),
-			},
-			xhrFields: {
-				responseType: 'blob',
-			},
-			success: function (response) {
-				var file = new Blob([response], { type: 'application/pdf' });
-				var fileURL = URL.createObjectURL(file);
-
-				// Create a new window or iframe and load the PDF into it for preview
-				var previewWindow = window.open('', '_blank');
-				var iframe = previewWindow.document.createElement('iframe');
-				iframe.src = fileURL;
-				iframe.style.width = '100%';
-				iframe.style.height = '100%';
-				previewWindow.document.body.appendChild(iframe);
-			},
-		});
-	});*/
 });
 
 $('#optionContent').on('click', '.btnRemoveBillPlan', function () {
@@ -470,4 +376,106 @@ $('#optionContent').on('click', '.btnAddBillPlan', function () {
 		'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnSaveBillPlan">Save</button>'
 	);
 	$('#infoModal').modal('show');
+});
+
+$('#btnSaveProposal').on('click', function () {
+	let $dot = $(this).data('id');
+	let $errors = 0;
+	let $idQuote = 0;
+	$.post('../controllers/Quote.php', {
+		action: 'saveQuote',
+		dot: $dot,
+		idQuote : $(this).data('quote'),
+	}).done(function (data) {
+		data = JSON.parse(data);
+		if (data.code == 200) {
+			$idQuote = data.id;
+			$('#optionsTabs li').each(function () {
+				let $idOption = $(this).data('option');
+				console.log('Saving Coverages for ' + $idOption);
+				$('.tableOptions[data-option=' + $idOption + '] tbody .coverageRow').each(function () {
+					let $idCoverage = $(this).data('coverage');
+					let $coverageAmount = $(this).find('td:eq(2)').text();
+					let $carrier = $(this).find('td:eq(3)').text();
+					let $basePremium = $(this).find('td:eq(4)').text();
+					let $taxesFees = $(this).find('td:eq(5)').text();
+					let $notes = $(this).find('td:eq(7)').text();
+					let $idBillPlan = $(this).data('billplan');
+					if ($idBillPlan != '' && $idBillPlan != undefined) {
+						$.post('../controllers/Quote.php', {
+							action: 'saveQuoteCoverage',
+							idQuote: $idQuote,
+							idOption: $idOption,
+							idCoverage: $idCoverage,
+							coverageAmount: $coverageAmount,
+							carrier: $carrier,
+							basePremium: $basePremium,
+							taxesFees: $taxesFees,
+							notes: $notes,
+							idBillPlan: $idBillPlan,
+						}).done(function (data) {
+							console.log(data);
+							data = JSON.parse(data);
+							if (data.code == 500) {
+								$errors++;
+								$('#infoModalTitle').text('Error');
+								$('#infoModalText').text(data.message);
+								$('#infoModalButtons').html(
+									'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>'
+								);
+								$('#infoModal').modal('show');
+							}
+						});
+					}
+				});
+				console.log('Saving Bill Plans for ' + $idOption);
+				$('.tableOptions[data-option=' + $idOption + '] tfoot .billPlanRow').each(function () {
+					let $idBillPlan = $(this).data('billplan');
+					let $term = $(this).find('td:eq(2)').text();
+					let $installments = $(this).find('td:eq(3)').text();
+					let $downPayment = $(this).find('td:eq(4)').text();
+					let $installmentAmount = $(this).find('td:eq(5)').text();
+					$.post('../controllers/Quote.php', {
+						action: 'saveQuoteBillPlan',
+						idBillPlan: $idBillPlan,
+						idOption: $idOption,
+						term: $term,
+						installments: $installments,
+						downPayment: $downPayment,
+						installmentAmount: $installmentAmount,
+						idQuote: $idQuote,
+					}).done(function (data) {
+						console.log(data);
+						data = JSON.parse(data);
+						if (data.code == 500) {
+							$errors++;
+							$('#infoModalTitle').text('Error');
+							$('#infoModalText').text(data.message);
+							$('#infoModalButtons').html(
+								'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>'
+							);
+							$('#infoModal').modal('show');
+						}
+					});
+				});
+			});
+		} else {
+			$errors++;
+			$('#infoModalTitle').text('Error');
+			$('#infoModalText').text(data.message);
+			$('#infoModalButtons').html(
+				'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>'
+			);
+			$('#infoModal').modal('show');
+		}
+	});
+	if ($errors == 0) {
+		$('#btnSaveProposal').attr('data-quote', $idQuote);
+		$('#infoModalTitle').text('Success');
+		$('#infoModalText').text('Quote saved successfully');
+		$('#infoModalButtons').html(
+			'<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>'
+		);
+		$('#infoModal').modal('show');
+	}
 });

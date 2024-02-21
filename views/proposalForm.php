@@ -2,13 +2,13 @@
 
 include "../models/Quote.php";
 include "../controllers/Load.php";
-$id = $_POST['id'];
+$id = $_POST['id'] ?? "0";
+$client = $_POST['client'] ?? "0";
+$dot = $_POST['dot'] ?? "0";
 
-$quoteDetail = queryGeneralDot($id);
-
-//$quote = new Quote();
-//$quoteDetail = $quote->getQuoteDetail($id);
-
+if ($id != "0") {
+    $quoteDetail = queryGeneralDot($id);
+}
 
 include "../models/LoB.php";
 
@@ -16,22 +16,9 @@ $coverage = new LoB();
 $coverages = $coverage->getAll();
 
 ?>
-<h3 class="text-center" id="clientDiv" data-name="<?= $quoteDetail->legalName ?>">Proposal For : <?= $quoteDetail->legalName ?></h3>
+<h3 class="text-center" id="clientDiv" data-name="<?= $id == 0 ? $client : $quoteDetail->legalName ?>">Proposal For : <?= $id == 0 ? $client : $quoteDetail->legalName ?></h3>
 <hr>
 <div class="row w-100">
-    <!-- Inputs for Coverage and Amount -->
-    <!-- <div class="col">
-        <label for="coverageSelect">Please Select a Line of Business:</label>
-        <select id="coverageSelect" class="form-select" aria-label="Default select example">
-            <?php foreach ($coverages as $coverage) { ?>
-                <option value="<?= $coverage['id'] ?>"><?= $coverage['name'] ?></option>
-            <?php } ?>
-        </select>
-    </div>
-    <div class="col">
-        <label for="coverageAmount">Amount:</label>
-        <input type="text" class="form-control rounded" id="coverageAmount" placeholder="Amount">
-    </div> -->
     <div class="col-auto d-flex align-items-end">
         <div class="text-end">
             <button title="Click to add a Coverage" class="btn btn-success" id="btnAddCoverage">Add Coverage</button>
@@ -84,8 +71,8 @@ $coverages = $coverage->getAll();
 <hr>
 <div class="row">
     <div class="col-auto ms-auto">
-        <button class="btn btn-primary" id="btnPreviewProposal" data-dot=<?= $quoteDetail->dotNumber ?>>Preview Proposal</button>
-        <button class="btn btn-success" id="btnSaveProposal" data-id=<?= $id ?>>Save Proposal</button>
+        <button class="btn btn-primary" id="btnPreviewProposal" data-dot=<?= $quoteDetail->dotNumber ?? $dot ?>>Preview Proposal</button>
+        <button class="btn btn-success" id="btnSaveProposal" data-id=<?= $quoteDetail->dotNumber ?? $dot ?>>Save Proposal</button>
     </div>
 </div>
 

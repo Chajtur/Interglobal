@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include_once '../controllers/Login.php';
 include_once '../models/Business.php';
 include_once '../models/Call.php';
@@ -130,7 +133,7 @@ function saveCall()
     $status = $_POST['status'];
     $user = getUser();
     $callAgain = isset($_POST['callAgain']) ? $_POST['callAgain'] : 0;
-    $notes = $_POST['notes'];
+    $notes = addslashes($_POST['notes']);
     $sentMessage = $_POST['sentMessage'];
     $idCall = $call::insertCall($Dot, $status, $user, $sentMessage);
     if ($idCall) {

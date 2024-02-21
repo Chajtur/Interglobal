@@ -207,14 +207,15 @@ function getNewCall($state, $status, $type) {
 				resp = JSON.parse(resp);
 				$('#businessDOT').html(resp.DOT);
 				$('#businessDOT').attr('data-DOT', resp.DOT);
-				$('#businessMC').html('MC: ' + resp.Docket);
+				$('#businessMC').html('Email: ' + ((resp.Email == null) ? 'Not Provided' : resp.Email));
 				$('#businessName').html('Name: ' + resp.Legal_Name);
 				$('#businessAddress').html('Address: ' + resp.Business_Address);
-				$('#businessRep').html('Rep: ' + resp.Company_Rep1);
+				$('#businessRep').html('Rep: ' + ((resp.Company_Rep1 == null) ? 'Not Provided' : resp.Company_Rep1));
 				$('#businessState').html('State: ' + resp.Business_State);
 				$('#businessPhone').html(
 					'+1 (' + resp.Phone.substr(0, 3) + ') ' + resp.Phone.substr(3, 3) + '-' + resp.Phone.substr(6, 4)
 				);
+				$('#businessPhoneLink').attr('href', 'tel:+1' + resp.Phone);
 				navigator.clipboard
 					.writeText(resp.Phone)
 					.then(() => {

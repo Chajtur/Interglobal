@@ -56,9 +56,9 @@
         <div class="mt-1 p-1 border rounded">
             <h4 class="text-center">Call this Company</h4>
             <h4 class=" mb-2 text-center">
-                <div class="btn btn-success pe-none rounded p-2">
-                    <!-- <span class="fa-solid fa-phone fa-lg"></span> -->
-                    <span class="user-select-all text-decoration-none text-white" id="businessPhone"></span>
+                <div class="btn btn-success rounded p-2">
+                    <a class="fa-solid fa-phone fa-lg text-decoration-none text-white" id="businessPhoneLink"></a>
+                    <span class="text-white" id="businessPhone"></span>
                 </div>
             </h4>
         </div>

@@ -74,7 +74,6 @@ $referral = $_GET['referral'];
                                 <div class="col-lg-4  pair">
                                     <input type="text" id="ownersName" placeholder="Owner's Name" class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">
                                 </div>
-
                                 <div class="col-lg-1  bg-primary text-white rounded-start p-1 text-center">*Address</div>
                                 <div class="col-lg-5  pair">
                                     <input type="text" id="insuredAddress" placeholder="Address" class="h-100 bg-white text-primary border border-primary rounded-end p-1 text-center w-100">

@@ -36,13 +36,17 @@ $dompdf = new Dompdf($options);
 // Set paper size
 $dompdf->setPaper('Letter', 'portrait');
 
+
+$randomString = bin2hex(random_bytes(4));
+$quote = $_POST['dot'] == 0 ? $randomString : $_POST['dot'];
+
 // Replace all placeholder variables
 //$html = str_replace('{QuoteNumber}', $_POST['quoteNumber'], $html);
 $html = str_replace('{logo}', $logo, $html);
 $html = str_replace('{Date}', date('Y-m-d'), $html);
 $html = str_replace('{agentName}', $user->firstName . ' ' . $user->lastName, $html);
 $html = str_replace('{email}', $user->workEmail, $html);
-$html = str_replace('{QuoteNumber}', $_POST['dot'], $html);
+$html = str_replace('{QuoteNumber}', $quote, $html);
 
 $phoneNumber = $user->workPhone;
 $phoneNumberArray = str_split($phoneNumber);

@@ -10,6 +10,8 @@
     <script src="https://kit.fontawesome.com/55b2ee1815.js" crossorigin="anonymous"></script>
     <script src="../js/index.js"></script>
     <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <!-- ******* Load vonageClientSDK from a CDN ****** -->
+    <script src="https://cdn.jsdelivr.net/npm/@vonage/client-sdk@latest/dist/vonageClientSDK.min.js"></script>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/index.css">
@@ -23,19 +25,19 @@
 </head>
 
 <body id="allContent" class="d-flex vh-100 vw-100">
-        <?php
-        require "../controllers/Login.php";
-        startSession();
-        if (isset($_SESSION['isLoggedIn'])) {
-            if ($_SESSION['isLoggedIn'] != true) {
-                include 'login.php';
-            } else {
-                include 'main.php';
-            }
-        } else {
+    <?php
+    require "../controllers/Login.php";
+    startSession();
+    if (isset($_SESSION['isLoggedIn'])) {
+        if ($_SESSION['isLoggedIn'] != true) {
             include 'login.php';
+        } else {
+            include 'main.php';
         }
-        ?>
+    } else {
+        include 'login.php';
+    }
+    ?>
 </body>
 
 <script src="../js/index.js"></script>

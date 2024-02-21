@@ -1,1 +1,3 @@
-<h4>Quoted</h4>
+<?php
+
+include_once '../models/Quote.php';

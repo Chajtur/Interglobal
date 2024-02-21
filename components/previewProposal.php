@@ -145,7 +145,7 @@
     $html =
         '<head>' +
         '  <title>' +
-        '    INTERGLOBAL INSURANCE CO. | US TRUCKING FOR HIRE' +
+        '    Quote Number: {QuoteNumber} | Interglobal Insurance Company' +
         '  </title>' +
         '  <meta name="viewport" content="width=device-width, initial-scale=1">' +
         '  <meta charset="utf-8">' +
@@ -194,25 +194,25 @@
     }
     processOptions().then(() => {
         console.log('All options printed, now printing footer');
-        $html +=         '  <div class="page-break">' +
-        '    <table class="table border-0">' +
-        '      <thead>' +
-        '        <tr>' +
-        '           <th>' +
-        '        <a class="mt-5" href="#">' +
-        '          <img class="img-fluid" src="https://app.interglobalus.com/assets/logo-small.png" alt="" width="auto">' +
-        '        </a>' +
-        '      </th>' +
-        '      <th>' +
-        '        <div class="text-end">' +
-        '          <h5>Quote Number: {QuoteNumber}</h5>' +
-        '        </div>' +
-        '        <div class="text-end">' +
-        '          <h5>Quote Date: {Date}</h5>' +
-        '        </div>' +
-        '      </th>' +
-        '    </table>' +
-        '    <hr>';
+        $html += '  <div class="page-break">' +
+            '    <table class="table border-0">' +
+            '      <thead>' +
+            '        <tr>' +
+            '           <th>' +
+            '        <a class="mt-5" href="#">' +
+            '          <img class="img-fluid" src="https://app.interglobalus.com/assets/logo-small.png" alt="" width="auto">' +
+            '        </a>' +
+            '      </th>' +
+            '      <th>' +
+            '        <div class="text-end">' +
+            '          <h5>Quote Number: {QuoteNumber}</h5>' +
+            '        </div>' +
+            '        <div class="text-end">' +
+            '          <h5>Quote Date: {Date}</h5>' +
+            '        </div>' +
+            '      </th>' +
+            '    </table>' +
+            '    <hr>';
         $html += '<br><br><div class="mt-5"><p class="h5 text-justify">If you have any questions or doubts about the policies here presented, please do not hesitate contacting me, I am here to address any concerns you may have and ensure that you have all the information you need to make an informed decision about your insurance coverage. You can reach me at {phoneNumber} ext. {extension} or at my email {email}.</p><p class="h5">Your satisfaction and protection is our top priority.</p></div>' +
             '<br><br><br><br><div class="h5">{agentName}</div><div class="h5">Sales Executive</div></div><br><br><br><br>';
         $html += '<div style="position: absolute; bottom: 5px; width: 100%;"><h6>*Offer is valid for 30 days, after this period, the rates and terms may change.</h6>';
@@ -237,7 +237,6 @@
             data: {
                 html: $html,
                 filename: 'test.pdf',
-                //dot: $(this).data('dot'),
                 dot: $('#btnPreviewProposal').data('dot'),
             },
             xhrFields: {
@@ -256,7 +255,21 @@
                 iframe.style.width = '100%';
                 iframe.style.height = '100%';
                 previewWindow.document.body.appendChild(iframe);
+                $('#previewProposalSpinner').addClass('d-none');
+                $('#previewProposalFinished').removeClass('d-none');
             },
         });
     });
 </script>
+
+<div id="previewProposalSpinner" class="text-center justify-content-center align-items-center">
+    <div class="spinner-border text-info" style="width: 4rem; height:4rem"></div>
+    <div clas="text-primary">
+        <p>Please wait while we generate your proposal<br><br><small class="fw-bold">Interglobal Insurance / US Trucking for Hire</small></p>
+    </div>
+</div>
+<div id="previewProposalFinished" class="d-none text-center justify-content-center align-items-center">
+    <div class="text-primary">
+        <p>Your proposal is ready for download<br><br><small class="fw-bold">Interglobal Insurance / US Trucking for Hire</small></p>
+    </div>
+</div>

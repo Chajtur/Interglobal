@@ -39,7 +39,7 @@ checkActivity();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="infoModalText">
-                    <p>Tu sesión ha expirado debido a inactividad, deberás volver a iniciar sesión</p>
+                    <p>Your session has expired due to inactivity, you will need to log in again to continue.</p>
                 </div>
                 <div class="modal-footer" id="infoModalButtons">
                     <button type="button" class="btn btn-info" data-bs-dismiss="modal">Ok</button>
@@ -53,11 +53,11 @@ checkActivity();
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sesión Expirada</h5>
+                    <h5 class="modal-title">Session has expired</h5>
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
-                    <p>Tu sesión ha expirado debido a inactividad, deberás volver a iniciar sesión</p>
+                    <p>Your session has expired due to inactivity, you will need to log in again to continue.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" data-bs-dismiss="modal">Ok</button>

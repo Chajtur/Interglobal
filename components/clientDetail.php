@@ -2,6 +2,9 @@
 include "../models/Quote.php";
 include "../controllers/Load.php";
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 $id = $_POST['id'] ?? 0;
 $dot = $_POST['dot'] ?? 0;
 
@@ -12,8 +15,7 @@ if ($id != 0) {
 }
 
 if ($dot != 0) {
-    $quoteDetail = queryGeneralDot($dot);
-    //var_dump($quoteDetail);
+    $quoteDetail = queryGeneralDotWeb($dot);
 }
 ?>
 

@@ -25,7 +25,7 @@ include_once '../helpers/db.php';
 
 class User
 {
-    private $id;
+    public $id;
     private $userName;
     private $password;
     public $firstName;

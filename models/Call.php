@@ -88,7 +88,7 @@ class Call
      * 
      * @return integer - Id de la llamada insertada en BD
      */
-    function insertCall($dot, $status, $user, $sentMessage)
+    static function insertCall($dot, $status, $user, $sentMessage)
     {
         global $conn;
         $lastId = 0;
@@ -107,11 +107,11 @@ class Call
      * 
      * @return integer - Id of the inserted row
      */
-    function callAgain($idCall, $date)
+    static function callAgain($idCall, $date)
     {
         global $conn;
         $lastId = 0;
-        $query = "Insert into CallAgain (idCall, date) values ($idCall, '$date')";
+        $query = "Insert into CallAgain (idCall, date, createdOn) values ($idCall, '$date', now())";
         if ($conn->query($query) === TRUE) {
             $lastId = $conn->insert_id;
         }
@@ -151,7 +151,7 @@ class Call
      * 
      * @return integer - Id de la nota insertada
      */
-    function saveNote($idCall, $note)
+    static function saveNote($idCall, $note)
     {
         global $conn;
         $lastId = 0;
@@ -171,7 +171,7 @@ class Call
      * 
      * @return array - El arreglo de llamadas que cumplen con las condiciones
      */
-    function listCalls($agent, $status, $state)
+    static function listCalls($agent, $status, $state)
     {
         global $conn;
         $query = "Select c.idCall, c.dot, concat(e.firstName, ' ', e.lastname) as agentName, CONVERT_TZ(c.date,'-00:00','-06:00') as `date`, date(c.date) as shortDate, l.Legal_Name as businessName, l.phone, l.Company_Rep1 as rep, n.note, ca.date as callAgain, c.sentMessage, c.`status`, l.Business_Address as address, l.Business_State as state

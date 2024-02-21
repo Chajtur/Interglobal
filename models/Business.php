@@ -63,6 +63,8 @@ class Business
         }
         if ($state != 'All') {
             $query .= " and l.Business_State = '$state'";
+        } else {
+            $query .= " and l.Business_State not in ('CA', 'NY')";
         }
         $query .= 'and l.Insurer is null 
     order by RAND() limit 1';
