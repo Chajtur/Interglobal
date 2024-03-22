@@ -4,6 +4,8 @@ include_once '../controllers/Login.php';
 include_once '../models/Transaction.php';
 include_once '../models/User.php';
 
+$user = new User();
+
 startSession();
 checkActivity();
 
@@ -26,14 +28,35 @@ switch ($action) {
     case 'editTransaction':
         editTransaction();
         break;
+    case 'saveCommission':
+        saveCommission();
+        break;
     default:
         break;
+}
+
+/**
+ * Function controller to save a commission
+ */
+function saveCommission() {
+    $agentId = $_POST['agentId'];
+    $agentCommission = $_POST['agentCommission'] ?: 0.0;
+    $supervisorId = $_POST['supervisorId'];
+    $supervisorCommission = $_POST['supervisorCommission'] ?: 0.0;
+    $user = getUser();
+    $resp = updateCommission($agentId, $agentCommission, $supervisorId, $supervisorCommission, $user);
+    if ($resp == 1) {
+        echo json_encode(['status' => 'true', 'message' => 'Commissions updated successfully for agent ' . $agentId . ' and supervisor ' . $supervisorId]);
+    } else {
+        echo json_encode(['status' => 'false', 'message' => 'There was an error updating the commissions']);
+    }
 }
 
 /**
  * Function controller to export transactions
  */
 function exportTransactions() {
+    global $user;
     $mes = $_POST['mes'] ?? 'all';
     $agente = $_POST['agente'] ?? 'all';
     $tipo = $_POST['tipo'] ?? 'all';
@@ -53,7 +76,7 @@ function exportTransactions() {
         $carrier = $row['carrier'];
         $policyNumber = $row['policyNumber'];
         $agent = $row['agent'];
-        $employee = getAgent($agent);
+        $employee = $user->getAgent($agent);
         $agent = $employee['firstName'] . ' ' . $employee['lastName'];
         $data = [$date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent];
         $resp['data'][] = $data;
@@ -94,13 +117,14 @@ function listTransactions() {
 function saveTransaction() {
     $agent = $_POST['agent'] ?? getUser();
     $date = $_POST['date'];
-    $insured = $_POST['insured'];
-    $carrier = $_POST['carrier'];
+    $insured = addslashes($_POST['insured']);
+    $carrier = addslashes($_POST['carrier']);
     $policyNumber = $_POST['policyNumber'];
     $type = $_POST['type'];
     $premium = $_POST['premium'];
+    $commission = $_POST['commission'];
     $user = getUser();
-    echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $agent, $user));
+    echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent, $user));
 }
 
 /**
@@ -110,10 +134,11 @@ function editTransaction() {
     $id = $_POST['id'];
     $user = $_POST['agent'] ?? getUser();
     $date = $_POST['date'];
-    $insured = $_POST['insured'];
-    $carrier = $_POST['carrier'];
+    $insured = addslashes($_POST['insured']);
+    $carrier = addslashes($_POST['carrier']);
     $policyNumber = $_POST['policyNumber'];
     $type = $_POST['type'];
     $premium = $_POST['premium'];
-    echo json_encode(updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $user));
+    $commission = $_POST['commission'];
+    echo json_encode(updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $user));
 }

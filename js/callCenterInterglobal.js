@@ -1,4 +1,4 @@
-$('#spinner').modal('show');
+modalShow('spinner');
 
 $(document).ready(function () {
 	$('#nombreModulo').text('Call Center');
@@ -20,11 +20,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$(function () {
-		$('[data-bs-toggle="tooltip"]').tooltip();
-	});
-
-	$('#spinner').modal('hide');
+	modalHide('spinner');
 });
 
 $('.clickableCalls').on('click','tr', function() {

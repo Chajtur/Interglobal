@@ -9,9 +9,10 @@ class BillPlan {
     public $installments;
     public $installmentAmount;
     public $idOption;
+    public $optionName;
     public $term;
 
-    public function __construct($id = null, $idQuote = null, $downPayment = null, $installments = null, $installmentAmount = null, $idOption = null, $term = null)
+    public function __construct($id = null, $idQuote = null, $downPayment = null, $installments = null, $installmentAmount = null, $idOption = null, $optionName = null, $term = null)
     {
         $this->id = $id;
         $this->idQuote = $idQuote;
@@ -19,6 +20,7 @@ class BillPlan {
         $this->installments = $installments;
         $this->installmentAmount = $installmentAmount;
         $this->idOption = $idOption;
+        $this->optionName = $optionName;
         $this->term = $term;
     }
 
@@ -29,8 +31,8 @@ class BillPlan {
     function save()
     {
         global $conn;
-        $query = "Insert into Bill_Plans (idBillPlan, idQuote, downPayment, installments, amount, idOption, term)
-        values ('$this->id', $this->idQuote, $this->downPayment, $this->installments, $this->installmentAmount, $this->idOption, $this->term)";
+        $query = "Insert into Bill_Plans (idBillPlan, idQuote, downPayment, installments, amount, idOption, optionName, term)
+        values ('$this->id', $this->idQuote, $this->downPayment, $this->installments, $this->installmentAmount, $this->idOption, '$this->optionName', $this->term)";
         $resp = $conn->query($query);
         if ($resp) {
             return json_encode(array('code' => 200, 'message' => 'Bill Plan created successfully'));

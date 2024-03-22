@@ -8,7 +8,12 @@ checkActivity();
 $user = new User();
 
 ?>
-<h2 class="text-center">My Portfolio</h2>
+<div class="d-flex align-items-center">
+    <?php if ($user->hasPermission('editarComisiones')) { ?>
+        <i class="fas fa-gear fa-2x text-primary mt-1 clickable" title="Configure Agent Commissions" id="editAgentCommissions"></i>
+    <?php } ?>
+    <h2 class="text-center flex-grow-1">My Portfolio</h2>
+</div>
 <div class="row px-4 px-md-0 w-100" id="policySummary">
 </div>
 <div class="row px-4 px-md-0">
@@ -17,6 +22,7 @@ $user = new User();
             <div class="my-1 col-md-6 col-lg-1 text-center" id="yearSelectDiv">
                 <span for='yearSelect' id="yearSelectSpan">Select Year</span>
                 <select class="form-select my-1 pb-1" id='yearSelect'>
+                    <option value="all">All</option>
                     <?php
                     $year = date('Y');
                     for ($i = $year; $i >= 2018; $i--) {

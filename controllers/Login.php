@@ -119,7 +119,7 @@ function startSession()
 function checkActivity()
 {
     global $PATH;
-    if (isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > 3600) {
+    if (isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > 28800) {
         logOut();
         echo "<script>console.log('Sesión expirada, logging out...'); $('.modal').modal('hide'); $('#sesionExpirada').modal('show');</script>";
     }

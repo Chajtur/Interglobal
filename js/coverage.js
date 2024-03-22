@@ -5,7 +5,7 @@ $('#btnAddCoverage').click(function () {
 		idOption: $('#optionsTabs > li > a.active').closest('li').data('option'),
 	});
 	$('#infoModalButtons').html(
-		'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnSaveCoverage">Save</button>'
+		'<button type="button" class="btn-danger modalClose" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn-success" id="btnSaveCoverage">Save</button>'
 	);
 	$('#infoModal').modal('show');
 });
@@ -48,8 +48,9 @@ $('#btnAddOption').click(function () {
 			"' data-bs-toggle='tab' href='#tabOption" +
 			optionCount +
 			"' role='tab' aria-controls='coverage" +
-			"' aria-selected='true'>Option " +
-			optionCount +
+			"' aria-selected='true'>" + 
+			"<i class='fa-solid fa-pencil text-white me-3 optionName'></i>" +
+			"<span data-optionName=" + optionCount + ">Option " + optionCount + "</span>" +
 			'<i class="ms-3 fa-solid fa-trash-can text-white removeOption"/i></a></li>'
 	);
 	$('#optionContent .tab-pane').removeClass('active');
@@ -137,6 +138,18 @@ $('#optionsTabs').on('click', '.removeOption', function () {
 	$('#optionsTabs [data-option="' + id + '"]').remove();
 	$('#optionContent [data-option="' + id + '"]').remove();
 });
+
+$('#optionsTabs').on('click', '.optionName', function () {
+	$('#infoModalTitle').text('Edit Option Name');
+	$('#infoModalText').html('<div id="optionNameDiv"></div>');
+	$('#optionNameDiv').load('../components/editOptionName.php', {
+		optionId: $(this).closest('li').data('option'),
+		name : $('span[data-optionName="' + $(this).closest('li').data('option') + '"]').text(),
+	});
+	$('#infoModalButtons').html('<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnUpdateOptionName">Update</button>');
+	$('#infoModal').modal('show');
+});
+	
 
 function printOption($id) {
 	if ($id > 1) {
@@ -386,6 +399,7 @@ $('#btnSaveProposal').on('click', function () {
 		action: 'saveQuote',
 		dot: $dot,
 		idQuote : $(this).data('quote'),
+		type: $('#proposalType').val(),
 	}).done(function (data) {
 		data = JSON.parse(data);
 		if (data.code == 200) {
@@ -439,6 +453,7 @@ $('#btnSaveProposal').on('click', function () {
 						action: 'saveQuoteBillPlan',
 						idBillPlan: $idBillPlan,
 						idOption: $idOption,
+						optionName: $('span[data-optionName="' + $idOption + '"]').text(),
 						term: $term,
 						installments: $installments,
 						downPayment: $downPayment,

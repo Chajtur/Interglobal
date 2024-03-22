@@ -42,10 +42,10 @@
         let monthlyInstallment = parseFloat($('#monthlyInstallment').val() || 0);
         let billPlanRow = `<tr class="billPlanRow text-center" data-billPlan="${idBillPlan}">
             <td colspan="1">
-                <button title="Click to remove Bill Plan" class="btn btn-danger btn-sm btnRemoveBillPlan">
+                <button title="Click to remove Bill Plan" class="btn-danger btn-sm btnRemoveBillPlan">
                     <i class="fas fa-trash-alt"></i>
                 </button>
-                <button title="Click to edit Bill Plan" class="btn btn-info btn-sm btnEditBillPlan">
+                <button title="Click to edit Bill Plan" class="btn-info btn-sm btnEditBillPlan">
                     <i class="fas fa-pencil"></i>
                 </button>
             </td>

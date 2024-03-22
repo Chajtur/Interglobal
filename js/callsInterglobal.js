@@ -13,6 +13,22 @@ var $months = [
 	'December',
 ];
 
+var $flag = false;
+
+$('body').on('keyup', function (e) {
+	if (e.ctrlKey && e.key == 'q') {
+		getNewCall(
+			$('#filterCallState option:selected').val(),
+			$('#filterCallStatus option:selected').val(),
+			$('#filterCallType option:selected').val()
+		);
+		$('.callAgain').removeClass('bg-green-800');
+		$('.btnStatus').removeClass('active');
+		$('#callNotes').val('');
+		$('#sentMessage').prop('checked', false);
+	}
+});
+
 $(document).ready(function () {
 	var $states = [
 		{ All: 'All' },
@@ -93,7 +109,7 @@ $(document).ready(function () {
 				$('#filterCallStatus option:selected').val(),
 				$('#filterCallType option:selected').val()
 			);
-			$('.callAgain').removeClass('bg-success');
+			$('.callAgain').removeClass('bg-green-800');
 			$('.btnStatus').removeClass('active');
 			$('#callNotes').val('');
 			$('#sentMessage').prop('checked', false);
@@ -141,8 +157,10 @@ $(document).ready(function () {
 	});
 
 	$(document).on('click', '.callAgain', function () {
-		$('.callAgain').removeClass('bg-success');
-		$(this).addClass('bg-success');
+		$('.callAgain').removeClass('bg-green-800 text-white');
+		$('.callAgain').addClass('text-black');
+		$(this).addClass('bg-green-800 text-white');
+		$(this).removeClass('text-black');
 	});
 
 	$(document).on('click', '.btnStatus', function () {
@@ -154,20 +172,24 @@ $(document).ready(function () {
 		if ($('.btnStatus.active').text() == '') {
 			$('#infoModalTitle').html('Error!');
 			$('#infoModalText').html('You must select one result for the call Lead/Possible/No Answer...');
-			$('#infoModal').modal('show');
+			$('#infoModalTitle').parent().removeClass();
+			$('#infoModalTitle').parent().addClass('modalTitle bg-red-400');
+			modalShow('infoModal');
 			return false;
 		}
 		$.post('../controllers/CallCenter.php', {
 			action: 'saveCall',
 			DOT: $('#businessDOT').text(),
 			status: $('.btnStatus.active').text(),
-			callAgain: $('.callAgain.bg-success').data('fecha'),
+			callAgain: $('.callAgain.bg-green-800').data('fecha'),
 			notes: $('#callNotes').val(),
 			sentMessage: $('#sentMessage').is(':checked') ? 'true' : 'false',
 		}).done(function () {
 			$('#infoModalTitle').html('Call Saved!');
 			$('#infoModalText').html('Call was saved successfully!!');
-			$('#infoModal').modal('show');
+			$('#infoModalTitle').parent().removeClass();
+			$('#infoModalTitle').parent().addClass('modalTitle bg-green-400');
+			modalShow('infoModal');
 			getNewCall(
 				$('#filterCallState option:selected').val(),
 				$('#filterCallStatus option:selected').val(),
@@ -179,7 +201,7 @@ $(document).ready(function () {
 });
 
 function getNewCall($state, $status, $type) {
-	$('#spinner').modal('show');
+	modalShow('spinner');
 	$('#businessDOT').html('');
 	$('#businessDOT').attr('data-DOT', '');
 	$('#businessMC').html('');
@@ -189,7 +211,8 @@ function getNewCall($state, $status, $type) {
 	$('#businessState').html('');
 	$('#businessPhone').html('');
 	$('.btnStatus').removeClass('active');
-	$('.callAgain').removeClass('bg-success');
+	$('.callAgain').removeClass('bg-green-800');
+	$('.callAgain').removeClass('text-white');
 	$('#listDate').html('');
 	$('#callNotes').val('');
 	$('#sentMessage').prop('checked', false);
@@ -207,10 +230,10 @@ function getNewCall($state, $status, $type) {
 				resp = JSON.parse(resp);
 				$('#businessDOT').html(resp.DOT);
 				$('#businessDOT').attr('data-DOT', resp.DOT);
-				$('#businessMC').html('Email: ' + ((resp.Email == null) ? 'Not Provided' : resp.Email));
+				$('#businessMC').html('Email: ' + (resp.Email == null ? 'Not Provided' : resp.Email));
 				$('#businessName').html('Name: ' + resp.Legal_Name);
 				$('#businessAddress').html('Address: ' + resp.Business_Address);
-				$('#businessRep').html('Rep: ' + ((resp.Company_Rep1 == null) ? 'Not Provided' : resp.Company_Rep1));
+				$('#businessRep').html('Rep: ' + (resp.Company_Rep1 == null ? 'Not Provided' : resp.Company_Rep1));
 				$('#businessState').html('State: ' + resp.Business_State);
 				$('#businessPhone').html(
 					'+1 (' + resp.Phone.substr(0, 3) + ') ' + resp.Phone.substr(3, 3) + '-' + resp.Phone.substr(6, 4)
@@ -228,24 +251,33 @@ function getNewCall($state, $status, $type) {
 				$('#listDate').html('List Date: ' + resp.Upload_Date);
 				$('#insuranceName').html('Insurer: ' + resp.Insurer);
 				$('#insurancePolicy').html('Policy Number: ' + resp.Policy_Number);
-				$('#insuranceType').html('Type: ' + resp.Insurance_Type);
-				$('#insuranceExpirationDate').html(
-					'Expiration Date: ' +
-						shortDate('0000-' + resp.Policy_Expiration_Month + '-' + resp.Policy_Expiration_Day)
-				);
+				$year = new Date(resp.Upload_Date).getFullYear();
 				if (resp.Insurer != null) {
-					$('#insuranceDetails').removeClass('d-none');
+					$effectiveDate =
+						resp.Policy_Effective_Date == '0000-00-00'
+							? 'Not Provided'
+							: shortDate(resp.Policy_Effective_Date);
+					$expirationDate =
+						resp.Policy_Expiration_Date == '0000-00-00'
+							? shortDate($year + '-' + resp.Policy_Expiration_Month + '-' + resp.Policy_Expiration_Day)
+							: shortDate(resp.Policy_Expiration_Date);
+					$('#insuranceType').html('Effective Date: ' + $effectiveDate);
+					console.log($year);
+					$('#insuranceExpirationDate').html('Expiration Date: ' + $expirationDate);
+					$('#insuranceDetails').removeClass('hidden');
 				} else {
-					$('#insuranceDetails').addClass('d-none');
+					$('#insuranceDetails').addClass('hidden');
 				}
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 				callHistory(resp.DOT);
 			} else {
 				$('#infoModalTitle').html('No New Ventures!');
+				$('#infoModalTitle').parent().removeClass();
+				$('#infoModalTitle').parent().addClass('modalTitle bg-red-400');
 				$textString = 'No business profiles were found that match the filters selected';
 				$('#infoModalText').html($textString);
-				$('#spinner').modal('hide');
-				$('#infoModal').modal('show');
+				modalHide('spinner');
+				modalShow('infoModal');
 			}
 		})
 		.done(function () {
@@ -257,29 +289,28 @@ function drawCalendar($month) {
 	console.log($month);
 	var $year = new Date().getFullYear();
 	var $htmlString = '';
-	$htmlString += '<div class="row p-0">';
+	$htmlString += '<div class="flex flex-row p-0">';
 	$day = 1;
 	$row = 1;
 	$contador = 1;
 	$firstDay = new Date($year, $month, 1).getDay();
-	//$firstDay = $firstDay == 0 ? 7 : $firstDay;
 	$totalDays = new Date($year, parseInt($month) + 1, 0).getDate();
 	console.log('First Day ' + $firstDay);
 	$('#monthLookup').html($months[$month]);
 	while ($contador <= $firstDay) {
-		$htmlString += '<div class="dia col bg-white p-1"></div>';
+		$htmlString += '<div class="dia bg-white p-1"></div>';
 		$contador++;
 	}
 	while ($day <= $totalDays) {
 		$htmlString += '<div ';
 		$htmlString += 'data-fecha="' + $year + '-' + (parseInt($month) + 1) + '-' + $day + '"';
-		$htmlString += 'class="dia col text-black callAgain text-center p-1">';
+		$htmlString += 'class="dia callAgain text-center p-1 h-10">';
 		/* Aquí va el día */
 		$htmlString += $day;
 		$htmlString += '</div>';
 		if ($contador % 7 == 0) {
 			$row++;
-			$htmlString += "</div><div class='row p-0'>";
+			$htmlString += "</div><div class='flex flex-row p-0'>";
 			$contador = 0;
 		}
 		$day++;
@@ -296,7 +327,7 @@ function drawCalendar($month) {
 }
 
 function updateReminders() {
-	$('#spinner').modal('show');
+	modalShow('spinner');
 	$.post('../controllers/CallCenter.php', {
 		action: 'getReminders',
 	}).done(function (resp) {
@@ -320,7 +351,7 @@ function updateReminders() {
 				$('#tableReminders').append($string);
 			});
 		}
-		$('#spinner').modal('hide');
+		modalHide('spinner');
 	});
 }
 
@@ -328,11 +359,11 @@ function shortDate($date) {
 	$shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	[$ano, $mes, $dia] = $date.split('-');
 	$mes = $shortMonths[parseInt($mes) - 1];
-	return $mes + ' ' + $dia;
+	return $mes + ' ' + $dia + ' ' + $ano;
 }
 
 function callHistory($dot) {
-	$('#spinner').modal('show');
+	modalShow('spinner');
 	$.post('../controllers/CallCenter.php', {
 		action: 'getCallHistory',
 		dot: $dot,
@@ -343,23 +374,23 @@ function callHistory($dot) {
 			$.each(resp, function (index, call) {
 				switch (call.status) {
 					case 'Lead':
-						$bg = 'bg-success';
+						$bg = 'bg-green-800';
 						break;
 					case 'Possible Lead':
-						$bg = 'bg-info';
+						$bg = 'bg-sky-950';
 						break;
 					case 'No Answer':
-						$bg = 'bg-warning';
+						$bg = 'bg-yellow-500';
 						break;
 					case 'Not Interested':
-						$bg = 'bg-danger';
+						$bg = 'bg-red-700';
 						break;
 					case 'Black List':
-						$bg = 'bg-dark';
+						$bg = 'bg-black';
 						break;
 				}
 				$string = '';
-				$string += '<tr class="text-white ' + $bg + '"';
+				$string += '<tr class="text-white rounded ' + $bg + '"';
 				$string += ' data-dot=' + call.dot;
 				$string += ' data-agentname="' + call.agentName + '"';
 				$string += ' data-businessaddress="' + call.address + '"';
@@ -386,7 +417,9 @@ function getBusinessByPhoneOrDot($searchParam) {
 	if (!$searchParam) {
 		$('#infoModalTitle').html('Error!!');
 		$('#infoModalText').html('You have to input a phone number or DOT to search for');
-		$('#infoModal').modal('show');
+		$('#infoModalTitle').parent().removeClass();
+		$('#infoModalTitle').parent().addClass('modalTitle bg-red-400');
+		modalShow('infoModal');
 	} else {
 		$.post('../controllers/CallCenter.php', {
 			action: 'checkIfExists',
@@ -398,7 +431,9 @@ function getBusinessByPhoneOrDot($searchParam) {
 			} else {
 				$('#infoModalTitle').html('Error!!');
 				$('#infoModalText').html('No Company was found on our Lists with that phone number or DOT');
-				$('#infoModal').modal('show');
+				$('#infoModalTitle').parent().removeClass();
+				$('#infoModalTitle').parent().addClass('modalTitle bg-red-400');
+				modalShow('infoModal');
 			}
 		});
 	}
@@ -409,40 +444,66 @@ $('.clickableCalls').on('click', 'tr', function () {
 });
 
 $('.clickableCallHistory').on('click', 'tr', function () {
+	switch ($(this).data('status')) {
+		case 'Lead':
+			$bg = 'text-green-800';
+			break;
+		case 'Possible Lead':
+			$bg = 'text-sky-950';
+			break;
+		case 'No Answer':
+			$bg = 'text-yellow-500';
+			break;
+		case 'Not Interested':
+			$bg = 'text-red-700';
+			break;
+		case 'Black List':
+			$bg = 'text-black';
+			break;
+	}
 	$('#infoModalTitle').html('Call Details');
-	$string = "<table class='table table-borderless border rounded'>";
+	$('#infoModalTitle').parent().removeClass();
+	$('#infoModalTitle').parent().addClass('modalTitle bg-blue-500');
+	$string = "<table class='table w-full border-2 rounded-lg border-blue-500'>";
 	$string += '<tbody>';
-	$string += '<tr>';
-	$string += '<td>Date:</td>';
+	$string += '<tr class="border-b">';
+	$string += '<td class="p-2">Date:</td>';
 	$string += '<td>' + shortDate($(this).data('date')) + '</td>';
 	$string += '</tr>';
-	$string += '<tr>';
-	$string += '<td>Caller:</td>';
+	$string += '<tr class="border-b">';
+	$string += '<td class="p-2">Caller:</td>';
 	$string += '<td>' + $(this).data('agentname') + '</td>';
 	$string += '</tr>';
-	$string += '<tr>';
-	$string += '<td>Status:</td>';
-	$string += '<td>' + $(this).data('status') + '</td>';
+	$string += '<tr class="border-b">';
+	$string += '<td class="p-2">Status:</td>';
+	$string += '<td class="' + $bg + '">' + $(this).data('status') + '</td>';
 	$string += '</tr>';
-	$string += '<tr>';
-	$string += '<td>Notes:</td>';
+	$string += '<tr class="border-b">';
+	$string += '<td class="p-2">Notes:</td>';
 	$string += '<td>' + ($(this).data('notes') == null ? 'No notes' : $(this).data('notes')) + '</td>';
 	$string += '</tr>';
-	$string += '<tr>';
-	$string += '<td>Sent Message:</td>';
-	$string += '<td>' + ($(this).data('sentmessage') == 'f' ? 'No' : 'Yes') + '</td>';
-	$string += '</tr>';
-	$string += '<tr>';
-	$string += '<td>Call Again:</td>';
+	$string += '<tr class="border-b">';
+	$string += '<td class="p-2">Sent Message:</td>';
 	$string +=
-		'<td>' +
+		'<td class="p-2 ' +
+		($(this).data('sentmessage') == 'f' ? 'text-red-800' : 'text-green-800') +
+		'">' +
+		($(this).data('sentmessage') == 'f' ? 'No' : 'Yes') +
+		'</td>';
+	$string += '</tr>';
+	$string += '<tr class="border-b">';
+	$string += '<td class="p-2">Call Again:</td>';
+	$string +=
+		'<td class="' +
+		($(this).data('callagaindate') == '0000-00-00' ? 'text-red-800' : 'text-green-800') +
+		'">' +
 		($(this).data('callagaindate') == '0000-00-00' ? 'No' : shortDate($(this).data('callagaindate'))) +
 		'</td>';
 	$string += '</tr>';
 	$string += '</tbody>';
 	$string += '</table>';
 	$('#infoModalText').html($string);
-	$('#infoModal').modal('show');
+	modalShow('infoModal');
 });
 
 $(document).on('click', '#businessPhone', function (element) {

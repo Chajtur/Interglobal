@@ -7,7 +7,7 @@ $client = $_POST['client'] ?? "0";
 $dot = $_POST['dot'] ?? "0";
 
 if ($id != "0") {
-    $quoteDetail = queryGeneralDot($id);
+    $quoteDetail = queryGeneralDotWeb($id);
 }
 
 include "../models/LoB.php";
@@ -17,6 +17,13 @@ $coverages = $coverage->getAll();
 
 ?>
 <h3 class="text-center" id="clientDiv" data-name="<?= $id == 0 ? $client : $quoteDetail->legalName ?>">Proposal For : <?= $id == 0 ? $client : $quoteDetail->legalName ?></h3>
+<div class="col-4 mx-auto">
+    <label class="w-100 text-center text-primary" for="proposalType">Select Proposal Type</label>
+    <select class="form-select text-primary" id="proposalType">
+        <option value="1">New Business</option>
+        <option value="2">Renewal</option>
+    </select>
+</div>
 <hr>
 <div class="row w-100">
     <div class="col-auto d-flex align-items-end">
@@ -32,7 +39,9 @@ $coverages = $coverage->getAll();
     <!-- Nav Tabs -->
     <ul class="nav nav-tabs" id="optionsTabs" role="tablist">
         <li class="nav-item" role="presentation" data-option=1>
-            <a class="nav-link active" id="optionTab1" data-bs-toggle="tab" href="#tabOption1" role="tab" aria-controls="coverage" aria-selected="true">Option 1</a>
+            <a class="nav-link active text-decoration-none" id="optionTab1" data-bs-toggle="tab" href="#tabOption1" role="tab" aria-controls="coverage" aria-selected="true">
+                <i class="fa-solid fa-pencil text-white me-3 optionName"></i><span data-optionName=1>Option 1</span>
+            </a>
         </li>
     </ul>
     <!-- Tab Content -->

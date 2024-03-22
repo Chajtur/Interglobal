@@ -26,75 +26,9 @@ $('#btnNewTransaction').on('click', function () {
 });
 
 $(document).ready(function () {
-	$('body').on('click', '#btnSaveTransaction', function () {
-		$.post('../controllers/Transaction.php', {
-			action: 'saveTransaction',
-			agent: $('#newTransactionForm').data('agent'),
-			insured: $('#insured').val(),
-			carrier: $('#carrier').val(),
-			policyNumber: $('#policyNumber').val(),
-			type: $('#transactionType').val(),
-			premium: $('#premium').val(),
-			date: $('#newTransactionDate').val(),
-		}).done(function (resp) {
-			if (resp > 0) {
-				// success
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Success');
-				$('#infoModalText').html('Transaction saved successfully');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn btn-info" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-				loadPolicySummary();
-				loadPolicyTable();
-			} else {
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Error');
-				$('#infoModalText').html('There was an error saving the transaction');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-			}
-		});
-	});
+	
 
-	$('body').on('click', '#btnSavePolicy', function () {
-		$.post('../controllers/Transaction.php', {
-			action: 'editTransaction',
-			agent: $('#newTransactionForm').data('agent'),
-			insured: $('#insured').val(),
-			carrier: $('#carrier').val(),
-			policyNumber: $('#policyNumber').val(),
-			premium: $('#premium').val(),
-			date: $('#newTransactionDate').val(),
-			id: $('#newTransactionForm').data('id'),
-			type: $('#transactionType').val(),
-		}).done(function (resp) {
-			console.log(resp);
-			if (resp == 1) {
-				// success
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Success');
-				$('#infoModalText').html('Transaction updated successfully');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn btn-info" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-				loadPolicySummary();
-				loadPolicyTable();
-			} else {
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Error');
-				$('#infoModalText').html('There was an error updating the Transaction');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-			}
-		});
-	});
+	
 });
 
 function loadPolicySummary($quarter) {
@@ -119,7 +53,7 @@ function loadPolicyTable() {
 			page: 1,
 		},
 		function () {
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 		}
 	);
 }
@@ -135,4 +69,16 @@ $('#refreshPolicyTable').on('click', function () {
 
 $('body').on('click', '.btn-check', function () {
 	loadPolicySummary($(this).attr('id'));
+});
+
+$('#editAgentCommissions').on('click', function () {
+	$('#infoModalTitle').text('Edit Agent Commissions');
+	$modalContent = "<div id='editCommission'></div>";
+	$('#infoModalText').html($modalContent);
+	$('#editCommission').load('../components/editAgentCommissions.php', function () {
+		$('#infoModal').modal('show');
+	});
+	$modalContent =
+		'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnSaveCommission">Save</button>';
+	$('#infoModalButtons').html($modalContent);
 });

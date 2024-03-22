@@ -84,16 +84,16 @@ $coverages = $coverage->getAll();
             let idOption = "<?= $_POST['idOption'] ?>";
             let coverageRow = `<tr class="coverageRow bg-warning-light" data-coverage="${coverage}">
                                 <td class="text-center">
-                                    <button title="Click to remove Coverage" class="btn btn-danger btn-sm btnRemoveCoverage">
+                                    <button title="Click to remove Coverage" class="btn-danger btn-sm btnRemoveCoverage">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
-                                    <button title="Click to assign Bill Plan" class="btn btn-success btn-sm btnAddBillPlan">
+                                    <button title="Click to assign Bill Plan" class="btn-success btn-sm btnAddBillPlan">
                                         <i class="fas fa-coins"></i>
                                     </button>
                                 </td>
                                 <td class="text-start">${coverageName}</td>
                                 <td class="text-end">$${amount}</td>
-                                <td class="text-start"><button title="Click to edit Carrier Information" class="btn btn-info btn-sm btnEditCoverage me-3"><i class="fas fa-pencil"></i></button>${(option == idOption ? carrier : 'Carrier')}</td>
+                                <td class="text-start"><button title="Click to edit Carrier Information" class="btn-info btn-sm btnEditCoverage me-3"><i class="fas fa-pencil"></i></button>${(option == idOption ? carrier : 'Carrier')}</td>
                                 <td class="text-end">$${(option == idOption ? basePremium : '0.00')}</td>
                                 <td class="text-end">$${(option == idOption ? taxesFees : '0.00')}</td>
                                 <td class="text-end">$${(option == idOption ? totalPremium : '0.00')}</td>

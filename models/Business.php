@@ -67,7 +67,7 @@ class Business
             $query .= " and l.Business_State not in ('CA', 'NY')";
         }
         $query .= 'and l.Insurer is null 
-    order by RAND() limit 1';
+                    order by RAND() limit 1';
         $resp = $conn->query($query);
         $data = $resp->fetch_assoc();
         return $data;
@@ -85,33 +85,33 @@ class Business
     {
         global $conn;
         $query = 'Select * 
-        from Lists l';
-        if ($status == 0) {
-            $query .= ' where l.dot
-        not in (
-            select c.dot 
-            from Calls c
-            where (c.status in ("Lead", "Possible Lead", "Black List"))
-            or (c.status = "No Answer" and c.date > date_sub(now(), interval 168 hour))
-            or (c.status = "Not Interested" and c.date > date_sub(now(), interval 720 hour)))';
-        } else if ($status == 1) {
-            $query .= ' where l.dot
-            not in (
-                select distinct(c.dot)
-                from Calls c)';
-        } else if ($status == 2) {
-            $query .= ' where l.dot
-            in (
-                select distinct(c.dot)
-                from Calls c
-                where c.status = "No Answer")';
-        }
-        if ($state != 'All') {
-            $query .= " and l.Business_State = '$state'";
-        }
-        $query .= 'and l.Insurer is not null
-    and date(now()) <= concat(year(now()), "-", l.Policy_Expiration_Month, "-", l.Policy_Expiration_Day)
-    order by RAND() limit 1';
+                    from Lists l';
+                    if ($status == 0) {
+                        $query .= ' where l.dot
+                    not in (
+                        select c.dot 
+                        from Calls c
+                        where (c.status in ("Lead", "Possible Lead", "Black List"))
+                        or (c.status = "No Answer" and c.date > date_sub(now(), interval 168 hour))
+                        or (c.status = "Not Interested" and c.date > date_sub(now(), interval 720 hour)))';
+                    } else if ($status == 1) {
+                        $query .= ' where l.dot
+                        not in (
+                            select distinct(c.dot)
+                            from Calls c)';
+                    } else if ($status == 2) {
+                        $query .= ' where l.dot
+                        in (
+                            select distinct(c.dot)
+                            from Calls c
+                            where c.status = "No Answer")';
+                    }
+                    if ($state != 'All') {
+                        $query .= " and l.Business_State = '$state'";
+                    }
+                    $query .= 'and l.Insurer is not null
+                and date(now()) <= concat(year(now()), "-", l.Policy_Expiration_Month, "-", l.Policy_Expiration_Day)
+                order by RAND() limit 1';
         $resp = $conn->query($query);
         $data = $resp->fetch_assoc();
         return $data;

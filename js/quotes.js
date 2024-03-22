@@ -3,14 +3,15 @@ $('#tableQuotes').on('click', 'tr', function () {
 	$('#tableQuotes tr').removeClass('bg-info text-white');
 	$(this).addClass('bg-info text-white');
 	$('#quoteDetail').load('../components/clientDetail.php', {
-		id: $id,
+		dot: $id,
 	});
 });
 
 $('body').on('click', '#btnGenerateProposal', function () {
 	$id = $(this).data('id');
 	$('#contenido').load('../views/proposalForm.php', {
-		id: $id,
+		client: $(this).data('client'),
+		dot: $(this).data('dot')
 	});
 });
 

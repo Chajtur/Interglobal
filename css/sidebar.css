@@ -1,9 +1,81 @@
-sidebar .active {
-  background-color: rgb(189, 189, 189) !important;
-  border-radius: 5px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+.rounded-div {
+    width: 50px;
+    height: 50px;
+    /* background-color: #333;
+    color: #fff; */
+    border-radius: 50%; /* Make the div rounded */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.rounded-div:hover .tooltip {
+    display: block;
+}
+
+.icon.active span {
+    color: rgb(106, 179, 218) !important;
 }
 
 sidebar {
-  background-color: rgb(239, 235, 235);
-  border-radius: 5px;
+    width: 60px !important;
+    height: 100vh;
+    /* background-color: rgb(2, 53, 89); */
+    /* color: #fff; */
+    transition: width 0.3s;
+    transition-delay: 1s;
+    z-index: 100;
+    margin-right: 8px;
+    box-sizing: border-box;
+}
+
+sidebar:hover {
+    width: 160px !important;
+}
+
+sidebar-btn {
+    width: 100%;
+    height: 64px;
+    border: none;
+    background: none;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+    font-size: 20px;
+    transition: background 0.5s;
+}
+
+sidebar-btn:hover {
+    background-color: #444;
+}
+
+.sidebar-text {
+    display: none;
+}
+
+sidebar .icon {
+    cursor: pointer;
+}
+
+sidebar .icon:hover {
+    color: rgb(106, 179, 218) !important;
 }

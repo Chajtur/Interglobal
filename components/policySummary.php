@@ -1,6 +1,7 @@
 <?php
 include_once '../models/Transaction.php';
 include_once '../models/User.php';
+include_once '../controllers/Login.php';
 
 $quarter = $_POST['quarter'] ?? 'fullYear';
 $agente = $_POST['agente'] ?? getUser();
@@ -8,6 +9,8 @@ $year = $_POST['year'] ?? date('Y');
 $data = getPolicyStats($year, $agente, $quarter);
 $yearToDate = $data['generalStats'];
 $monthlyStats = $data['monthlyStats'];
+$premium = $yearToDate['premium'];
+$class = ($premium >= 0) ? 'text-success' : 'text-danger';
 foreach ($monthlyStats as $row) {
     $dataPoints[] = array("label" => date('M', mktime(0, 0, 0, $row['month(date)'], 10)), "y" => $row['premium']);
 }
@@ -47,8 +50,8 @@ foreach ($monthlyStats as $row) {
             <div class="row mt-2">
                 <div class="col-6">
                     <h6>Transactions: <?= $yearToDate['total'] ?></h6>
-                    <h6>Premium: $<?= number_format($yearToDate['premium'], 2) ?></h6>
-                    <h6>Commission: $<?= number_format($yearToDate['commission'], 2) ?></h6>
+                    <h6 class="<?php echo $class ?>"><span class="text-primary">Premium: </span>$<?= str_replace('-','',number_format($yearToDate['premium'], 2)) ?></h6>
+                    <h6 class="<?php echo $class ?>"><span class="text-primary">Commission: </span>$<?= str_replace('-','',number_format($yearToDate['commission'], 2)) ?></h6>
                 </div>
                 <div class="col-6">
                     <h6>New Business: <?= $yearToDate['newBusiness'] ?></h6>

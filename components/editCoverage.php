@@ -1,9 +1,16 @@
+<?php
+$coverageAmount = is_numeric($_POST['coverageAmount']) ? $_POST['coverageAmount'] : 0;
+$basePremium = is_numeric($_POST['basePremium']) ? $_POST['basePremium'] : 0;
+$taxesFees = is_numeric($_POST['taxesFees']) ? $_POST['taxesFees'] : 0;
+?>
+
+
 <!-- Inputs for Coverage and Amount -->
 <div class="row">
     <p>Line of Business: <?= $_POST['coverage'] ?></p>
 </div>
 <div class="row">
-    <p>Coverage Amount: <?= $_POST['coverageAmount'] ?></p>
+    <p>Coverage Amount: <?= $coverageAmount ?></p>
 </div>
 <div class="row">
     <label for="carrier">Carrier:</label>
@@ -11,18 +18,18 @@
 </div>
 <div class="row">
     <label for="basePremium">Base Premium:</label>
-    <input type="number" class="form-control rounded" id="basePremium" placeholder="0.00" value="<?= $_POST['basePremium'] ?>">
+    <input type="number" class="form-control rounded" id="basePremium" placeholder="0.00" value="<?= $basePremium ?>">
 </div>
 <div class="row">
     <label for="taxesFees">Taxes & Fees:</label>
-    <input type="number" class="form-control rounded" id="taxesFees" placeholder="0.00" value="<?= $_POST['taxesFees'] ?>">
+    <input type="number" class="form-control rounded" id="taxesFees" placeholder="0.00" value="<?= $taxesFees ?>">
 </div>
 <div class="row">
     <label for="notes">Notes:</label>
     <textarea rows="3" type="text" class="form-control rounded" id="notes" placeholder="Write a note..."><?= $_POST['notes'] ?></textarea>
 </div>
 <div class="row">
-    <h3 class="totalPremium mt-3">Total Premium: $<span id="totalPremium"><?php echo number_format(($_POST['basePremium'] + $_POST['taxesFees']), 2) ?></span></h3>
+    <h3 class="totalPremium mt-3">Total Premium: $<span id="totalPremium"><?php echo number_format($basePremium + $taxesFees, 2) ?></span></h3>
 </div>
 
 <script>

@@ -77,9 +77,9 @@ class User
     {
         global $conn;
         $query = "Select *
-from Employees
-where (userName = '" . $user . "' or workEmail = '" . $user . "')
-and active = 1 limit 1";
+                    from Employees
+                    where (userName = '" . $user . "' or workEmail = '" . $user . "')
+                    and active = 1 limit 1";
         $resp = $conn->query($query);
         $usuario = $resp->fetch_assoc();
         if ($usuario) {
@@ -187,13 +187,37 @@ and active = 1 limit 1";
     function listAgents()
     {
         global $conn;
-        $query = "SELECT e.id, concat(e.firstName, ' ', e.lastName) as name
-                    FROM Calls c, Employees e
-                    WHERE c.`user` = e.id
-                    GROUP BY e.id";
+        $query = "Select E.id, E.firstName, E.lastName, AC.agentCommission, AC.idSupervisor, AC.supervisorCommission, S.firstName as supervisorName, S.lastName as supervisorLastName
+                    from Employees E
+                    left join agentCommissions AC on E.id = AC.idAgent
+                    left join Employees S on AC.idSupervisor = S.id
+                    where E.active = 1";
         $resp = $conn->query($query);
         $agents = mysqli_fetch_all($resp, MYSQLI_ASSOC);
-        return $agents;
+        $resp = [];
+        foreach ($agents as $agent) {
+            $roles = $this->getRoles($agent['id']);
+            $var = 'agent';
+            $roles = explode(',', $roles[0]['roles']);
+            if (in_array($var, $roles)) {
+                $resp[] = $agent;
+            }
+        }
+        return $resp;
+    }
+
+    /**
+     * Función que lista todos los roles del usuario
+     * 
+     * @return array - Lista de roles
+     */
+    function getRoles($id)
+    {
+        global $conn;
+        $query = "Select roles from Employees where id = " . $id;
+        $resp = $conn->query($query);
+        $roles = mysqli_fetch_all($resp, MYSQLI_ASSOC);
+        return $roles;
     }
 
     /**
@@ -211,58 +235,58 @@ and active = 1 limit 1";
                 from PunchTimes
                 where year(punchTime) = $year and month(punchTime) = $month and employeeId = $employeeId
                 group by date(punchTime)";
-                        $datosObj = $conn->query($query);
-                        $marcas = mysqli_fetch_all($datosObj, MYSQLI_ASSOC);
-                        //echo json_encode($marcas);
-                        return ($marcas);
-                    }
+        $datosObj = $conn->query($query);
+        $marcas = mysqli_fetch_all($datosObj, MYSQLI_ASSOC);
+        //echo json_encode($marcas);
+        return ($marcas);
+    }
 
-                    /**
-                     * Función que retorna los datos del usuario
-                     * @agent int - El id del usuario
-                     *
-                     * @return array - El usuario
-                     */
-                    function getAgent($agent)
-                    {
-                        global $conn;
-                        $query = "Select * from Employees where id = $agent";
-                        $resp = $conn->query($query);
-                        $agent = $resp->fetch_assoc();
-                        return $agent;
-                    }
+    /**
+     * Función que retorna los datos del usuario
+     * @agent int - El id del usuario
+     *
+     * @return array - El usuario
+     */
+    function getAgent($agent)
+    {
+        global $conn;
+        $query = "Select * from Employees where id = $agent";
+        $resp = $conn->query($query);
+        $agent = $resp->fetch_assoc();
+        return $agent;
+    }
 
-                    /**
-                     * Función que valida si un usuario tiene un rol específico
-                     * @agent int - El id del usuario
-                     * @role string - El rol que vamos a validar
-                     *
-                     * @return integer - 0 o 1 dependiendo si tiene o no el rol
-                     */
-                    function hasRole($agent, $role)
-                    {
-                        global $conn;
-                        $query = "Select * from Employees where id = $agent";
-                        $resp = $conn->query($query);
-                        $roles = $resp->fetch_assoc();
-                        var_dump($roles);
-                        $roles = explode(',', $roles['roles']);
-                        if (in_array($role, $roles)) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    }
+    /**
+     * Función que valida si un usuario tiene un rol específico
+     * @agent int - El id del usuario
+     * @role string - El rol que vamos a validar
+     *
+     * @return integer - 0 o 1 dependiendo si tiene o no el rol
+     */
+    function hasRole($agent, $role)
+    {
+        global $conn;
+        $query = "Select * from Employees where id = $agent";
+        $resp = $conn->query($query);
+        $roles = $resp->fetch_assoc();
+        var_dump($roles);
+        $roles = explode(',', $roles['roles']);
+        if (in_array($role, $roles)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
-                    /**
-                     * Función que lista todos los agentes haciendo llamadas de seguros
-                     *
-                     * @return array - Lista de agentes
-                     */
-                    function listInsuranceAgents()
-                    {
-                        global $conn;
-                        $query = "SELECT e.id, concat(e.firstName, ' ', e.lastName) as name
+    /**
+     * Función que lista todos los agentes haciendo llamadas de seguros
+     *
+     * @return array - Lista de agentes
+     */
+    function listInsuranceAgents()
+    {
+        global $conn;
+        $query = "SELECT e.id, concat(e.firstName, ' ', e.lastName) as name
                 FROM Employees e
                 WHERE active = 1";
         $resp = $conn->query($query);

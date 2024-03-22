@@ -14,7 +14,10 @@ $(document).ready(function(){
         if (resp) {
             window.location.href = "main.php";
         } else {
-            $('#liveAlertPlaceholder').show();
+            modalShow('liveToast');
+            setTimeout(function () {
+                modalHide('liveToast');
+            }, 3000);
         }
         });
     }

@@ -99,10 +99,11 @@ function removeHoliday()
 function saveHoliday()
 {
     $date = $_POST['fecha'] ?: '2023-01-01';
+    $fecha = new holiday($date);
     $name = $_POST['nombre'] ?: 'Feriado';
     $detail = $_POST['detalle'] ?: 'Se otorgó feriado';
     $fullDay = $_POST['diaCompleto'] ?: 'true';
-    $resp['data'] = insertHoliday($date, $name, $detail, $fullDay);
+    $resp['data'] = $fecha->save($date, $name, $detail, $fullDay);
     if ($resp['data'] > 0) {
         $resp['status'] = 'success';
     } else {
@@ -130,7 +131,8 @@ function userPermission()
  */
 function getInfoDate()
 {
-    $holiday = getHolidays($_POST['date']);
+    $date = new holiday($_POST['date']);
+    $holiday = $date->getHolidays();
     echo json_encode($holiday);
 }
 

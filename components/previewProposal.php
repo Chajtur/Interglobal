@@ -3,8 +3,8 @@
         if ($id > 1) {
             $html += '<div class="page-break">';
         }
-        $html += '<h1 class="text-center">Option ' +
-            $id +
+        $html += '<h1 class="text-center"> ' + 
+            $('span[data-optionname="' + $id + '"]').text() +
             '</h1></div>' +
             '<div class="row"><table class="table text-primary"><tbody>';
         var totalDownPayment = 0;
@@ -172,9 +172,13 @@
         '      </th>' +
         '    </table>' +
         '    <hr>' +
-        '    <div class="row text-center">' +
-        '      <div class="h2 text-primary pt-8">Commercial Quote Proposal</div>' +
-        '      <div class="h3">Client: ' +
+        '    <div class="row text-center">';
+        if ($('#proposalType').val() == 1) {
+            $html += '      <div class="h4 text-primary pt-8">Commercial Quote Proposal</div>';
+        } else {
+            $html += '      <div class="h4 text-primary pt-8">Renewal Offer</div>';
+        }
+        $html += '      <div class="h4">for</div><div class="h4"> ' +
         $('#clientDiv').data('name') +
         '</div>' +
         '    </div>' +

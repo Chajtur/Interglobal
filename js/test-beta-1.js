@@ -94,7 +94,7 @@ $(document).ready(function () {
 				$('#insuredState').val(respuesta.phyState);
 				$('#insuredEmail').focus();
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 			$('#insuredMC').focus();
 		});
 	});
@@ -115,7 +115,7 @@ $(document).ready(function () {
 				$('#insuredState').val(respuesta.phyState);
 				$('#insuredEmail').focus();
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 		});
 	});
 

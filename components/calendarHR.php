@@ -8,22 +8,22 @@ $user->load($_SESSION['user']['id']);
 
 $year = isset($_POST['year']) ? $_POST['year'] : date("Y");
 $month = isset($_POST['month']) ? $_POST['month'] : date("n");
-$months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+$months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 $employee = isset($_POST['employee']) ? $_POST['employee'] : getUser();
 $marcaciones = $user->getMonthPunches($year, $month, $employee);
 
 echo "<script>console.log('Procesando marcaciones de $employee para el mes de $month del año $year esta es la lista" . json_encode($marcaciones) . "');</script>";
 ?>
 
-<div class="row border-bottom border-danger border-4">
-    <div class="col">
+<div class="flex flex-row border-b-red-900 border-b-4">
+    <div class="">
         <h4><?php echo $months[$month - 1]; ?></h4>
     </div>
-    <div class="col">
+    <div class="mx-8">
         <h4><?php echo $year; ?></h4>
     </div>
 </div>
-<div class="row border-bottom border-2 border-danger shadow pt-2">
+<div class="flex flex-row border-b-2 border-b-red-900 shadow pt-2">
     <?php
     $primeraQuincena = 0;
     $segundaQuincena = 0;
@@ -31,49 +31,47 @@ echo "<script>console.log('Procesando marcaciones de $employee para el mes de $m
     $day = 1;
     $row = 1;
     $totalDays = cal_days_in_month(CAL_GREGORIAN, 10, $year);
-    $week = array('LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB', 'DOM');
+    $week = array('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN');
     $dayOfWeek = 0;
     while ($dayOfWeek <= 6) { ?>
-        <div class="col dia">
+        <div class="dia">
             <h6><?= $week[$dayOfWeek] ?></h6>
         </div>
     <?php $dayOfWeek++;
     } ?>
 </div>
-<div class="row text-white">
+<div class="flex flex-row text-white lg:min-h-20 mt-1">
     <?php
     $day = 1;
     $row = 1;
-    //$month = date("n");
     $firstDay = date("N", strtotime($year . "-" . $month . "-1"));
     $contador = 1;
     for ($contador = 1; $contador < $firstDay; $contador++) {
-        $bgColor = ($contador >= 6) ? "bg-primary text-white" : "bg-white text-secondary"; ?>
-        <div class="p-0 p-md-2 col rounded border border-white dia <?= $bgColor ?>"></div>
+        $bgColor = ($contador >= 6) ? "bg-sky-950 text-white" : "bg-white text-gray-400"; ?>
+        <div class="p-0 md:p-2 rounded border border-white dia <?= $bgColor ?>"></div>
     <?php }
     while ($day <= $totalDays) {
-        //$entrada = 'N/A';
-        $bgColor = ($contador >= 6) ? "bg-primary" : "bg-secondary";
-        $entrada = 'No marcó';
+        $bgColor = ($contador >= 6) ? "bg-sky-950" : "bg-gray-400";
+        $entrada = 'No punch-in';
         foreach ($marcaciones as $marcacion) {
             //var_dump($marcacion);
             if ($day == $marcacion['Fecha']) {
                 $entrada = $marcacion['Entrada'];
             }
         }
-        if ($entrada != 'No marcó') {
+        if ($entrada != 'No punch-in') {
             if ($entrada > '07:00:00') {
-                $bgColor = 'bg-danger';
+                $bgColor = 'bg-red-900';
             } else {
-                $bgColor = 'bg-success';
+                $bgColor = 'bg-green-800';
             }
         }
     ?>
-        <div class="dia p-0 p-md-2 col rounded border border-white text-white calendarClickable <?= $bgColor ?>" data-searchdate="<?php echo ($year . '-' . $month . '-' . $day)?>">
-            <div class="row">
+        <div class="flex flex-col dia p-0 md:p-2 rounded border border-white text-white <?php if ($contador < 6) { echo 'calendarClickable'; } ?> <?= $bgColor ?>" data-searchdate="<?php echo ($year . '-' . $month . '-' . $day)?>" data-day="<?php echo $months[$month - 1] . " " . $day . " " . $year ?>">
+            <div class="text-right">
                 <span><?= $day ?></span>
             </div>
-            <div class="row">
+            <div class="">
                 <p>
                     <?php
                     if ($contador < 6) {
@@ -88,14 +86,14 @@ echo "<script>console.log('Procesando marcaciones de $employee para el mes de $m
             $row++;
             $contador = 0; ?>
 </div>
-<div class='row'>
+<div class='flex flex-row lg:min-h-20'>
 <?php } ?>
 <?php $day++;
         $contador++;
     }
     $contador--;
     while ($contador % 7 <> 0) { ?>
-    <div class="col dia p-0 p-md-2 rounded border border-white"></div>
+    <div class="dia p-0 md:p-2 rounded border border-white"></div>
 <?php $contador++;
     }
 ?>

@@ -125,7 +125,7 @@ function loadCallLog($agent, $status, $state) {
 			$string += '</tr>';
 		});
 		$('#callLogTable').html($string);
-		$('#spinner').modal('hide');
+		modalHide('spinner');
 	});
 }
 

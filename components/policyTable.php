@@ -1,6 +1,7 @@
 <?Php
 include "../models/User.php";
 include "../models/Transaction.php";
+include_once "../controllers/Login.php";
 
 $year = $_POST['year'] ?? date('Y');
 $mes = $_POST['mes'] ?? 'all';
@@ -10,18 +11,20 @@ $keyword = $_POST['keyword'] ?? null;
 $page = $_POST['page'] ?? 1;
 $data = getTransactions($year, $mes, $agente, $tipo, $keyword, $page);
 $user = new User();
+$agentCommissions = $user->listAgents();
 ?>
 
 <div class="mx-auto px-2 mt-4">
-    <table class="table table-responsive-sm text-center" id="tblTransactions">
-        <thead>
+    <table class="table table-responsive-sm text-center capitalize" id="tblTransactions">
+        <thead class="bg-primary text-white">
             <td>Date</td>
             <td>Insured</td>
             <td>Carrier</td>
             <td>Policy No.</td>
             <td class="text-end">Transaction</td>
             <td class="text-end">Premium</td>
-            <td class="text-end">Commission</td>
+            <td class="text-end">Agency Comm</td>
+            <td class="text-end">Agent Comm</td>
             <?php if ($user->hasPermission('listarPolizas')) { ?>
                 <td>Agent</td>
             <?php } ?>
@@ -31,16 +34,24 @@ $user = new User();
             <?php
             foreach ($data['data'] as $row) {
                 $date = date_create($row['date']);
-                $date = date_format($date, 'M d');
+                $date = date_format($date, 'm-d-y');
                 $type = $row['type'];
                 $premium = number_format($row['premium'], 2);
-                $commission = number_format(($row['premium'] * 0.04),2);
+                $rawAgentCommission = $row['premium'] * $row['commission'] / 100;
+                $agencycommission = number_format(($row['premium'] * $row['commission'] / 100), 2);
+                $idToFind = $row['agent'];
+                $result = array_filter($agentCommissions, function ($item) use ($idToFind) {
+                    return $item['id'] == $idToFind;
+                });
+                $firstMatch = reset($result);
+                $agentPercentage = $firstMatch['agentCommission']/100;
+                $agentcommission = number_format(($rawAgentCommission * $agentPercentage), 2);
                 $insured = $row['insured'];
                 $carrier = $row['carrier'];
                 $policyNumber = $row['policyNumber'];
                 $agent = $row['agent'];
                 $employee = $user->getAgent($agent);
-                $agent = $employee['firstName'] . ' ' . $employee['lastName'];
+                $agent = $employee['firstName'];
                 $id = $row['id'];
                 $class = '';
                 if ($premium >= 0) {
@@ -54,8 +65,9 @@ $user = new User();
                         <td>$carrier</td>
                         <td>$policyNumber</td>
                         <td class='text-end'>$type</td>
-                        <td class='text-end $class'>$$premium</td>
-                        <td class='text-end $class'>$$commission</td>";
+                        <td class='text-end $class'>" . str_replace('-', '', $premium) . "</td>
+                        <td class='text-end $class'>" . str_replace('-', '', $agencycommission) . "</td>
+                        <td class='text-end $class'>" . str_replace('-', '', $agentcommission) . "</td>";
                 if ($user->hasPermission('listarPolizas')) {
                     echo "<td>$agent</td>";
                 }
@@ -70,11 +82,12 @@ $user = new User();
             <td></td>
             <td></td>
             <td class="text-end align-bottom"><?= $data['stats']['totalRows'] ?></td>
-            <td class="text-end text-success fw-bold align-bottom <?php echo ($data['stats']['totalPremium'] < 0) ? 'text-danger' : 'text-success' ?>">$<?= number_format($data['stats']['totalPremium'],2) ?></td>
-            <td class="text-end text-success fw-bold align-bottom <?php echo ($data['stats']['totalPremium'] < 0) ? 'text-danger' : 'text-success' ?>">$<?= number_format($data['stats']['totalPremium']*0.04,2) ?></td>
-            <td colspan="2"><button class="btn btn-success ms-2" id="btnExport">Export to Excel</button></td>
+            <td class="text-end text-success fw-bold align-bottom <?php echo ($data['stats']['totalPremium'] < 0) ? 'text-danger' : 'text-success' ?>">$<?= str_replace('-', '', number_format($data['stats']['totalPremium'], 2)) ?></td>
+            <td class="text-end text-success fw-bold align-bottom <?php echo ($data['stats']['totalPremium'] < 0) ? 'text-danger' : 'text-success' ?>">$<?= str_replace('-', '', number_format($data['stats']['agencyCommission'], 2)) ?></td>
+            <td class="text-end text-success fw-bold align-bottom <?php echo ($data['stats']['totalPremium'] < 0) ? 'text-danger' : 'text-success' ?>">$<?= str_replace('-', '', number_format($data['stats']['agentCommission'] , 2)) ?></td>
+            <td colspan="2"><button class="btn-success ms-2" id="btnExport">Export to Excel</button></td>
         </tfoot>
-        <nav aria-label="Policy Pagination text-end">
+        <nav aria-label="Policy Pagination" class="text-end">
             <ul class="pagination text-primary">
                 <li class="page-item">
                     <a class="page-link text-primary firstPage" href="#" aria-label="Previous">

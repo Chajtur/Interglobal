@@ -26,7 +26,7 @@ $(document).on('click', '#btnSaveTicket', function () {
 			resp = JSON.parse(resp);
 			if (resp.status == 'true') {
 				// success
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 				$('#infoModalTitle').text('Success');
 				$('#infoModalText').html(resp.message);
 				$('#infoModalButtons').html(
@@ -37,7 +37,7 @@ $(document).on('click', '#btnSaveTicket', function () {
 				$('#openTickets').load('../components/openTickets.php');
 				$('#closedTickets').load('../components/closedTickets.php');
 			} else {
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 				$('#infoModalTitle').text('Error');
 				$('#infoModalText').html(resp.message);
 				$('#infoModalButtons').html(

@@ -24,11 +24,11 @@ $transactionTypes = [
  * 
  * @return array - El resultado de la actualización
  */
-function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $agent)
+function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent)
 {
     global $conn;
     $user = getUser();
-    $query = "Update Transactions set date = '$date', insured = '$insured', carrier = '$carrier', policyNumber = '$policyNumber', type = '$type', premium = $premium, agent = $agent, updatedOn = now(), updatedBy = $user where id = $id";
+    $query = "Update Transactions set date = '$date', insured = '$insured', carrier = '$carrier', policyNumber = '$policyNumber', type = '$type', premium = $premium, commission = '$commission', agent = $agent, updatedOn = now(), updatedBy = $user where id = $id";
     $resp = $conn->query($query);
     if ($resp) {
         return 1;
@@ -49,10 +49,10 @@ function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type,
  * 
  * @return array - El resultado de la inserción
  */
-function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $agent, $user)
+function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent, $user)
 {
     global $conn;
-    $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $agent,  now(), $user)";
+    $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, commission, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $commission, $agent,  now(), $user)";
     $resp = $conn->query($query);
     if ($resp) {
         return $conn->insert_id;
@@ -73,7 +73,7 @@ function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $pre
 function getAllTransactions($mes, $agente, $tipo, $keyword)
 {
     global $conn;
-    $query = "Select date, insured, carrier, policyNumber, type, premium, agent from Transactions where deletedOn is null and year(date) = " . date('Y');
+    $query = "Select date, insured, carrier, policyNumber, type, premium, agent from Transactions where deletedOn is null";
     if ($mes != 'all') {
         $query .= " and month(date) = $mes";
     }
@@ -111,12 +111,22 @@ function getTransactions($year, $mes, $agente, $tipo, $keyword, $page)
     global $conn;
     $page = $page - 1;
     $page = $page * 10;
-    $query = "Select * from Transactions where deletedOn is null and year(date) = $year";
+    if ($agente <> 'all') {  
+        $query = "Select idAgent from agentCommissions where idSupervisor = $agente";
+        $resp = $conn->query($query);
+        $agents = $resp->fetch_all(MYSQLI_ASSOC);
+        $agents[] = ['idAgent' => $agente];
+        $agents = implode(',', array_column($agents, 'idAgent'));
+    }
+    $query = "Select * from Transactions where deletedOn is null";
+    if ($year != 'all') {
+        $query .= " and year(date) = $year";
+    }
     if ($mes != 'all') {
         $query .= " and month(date) = $mes";
     }
     if ($agente != 'all') {
-        $query .= " and agent = $agente";
+        $query .= " and agent in ($agents)";
     }
     if ($tipo != 'all') {
         $query .= " and type = '$tipo'";
@@ -127,18 +137,21 @@ function getTransactions($year, $mes, $agente, $tipo, $keyword, $page)
     $query .= " order by date, id ASC limit $page, 10";
     $resp = $conn->query($query);
     $data = $resp->fetch_all(MYSQLI_ASSOC);
-    $query = "Select count(*) as totalRows, sum(premium) as totalPremium from Transactions where deletedOn is null and year(date) = $year";
+    $query = "Select count(T.id) as totalRows, sum(T.premium) as totalPremium, sum(T.premium * T.commission/100) as agencyCommission, sum(T.premium * T.commission/100 * AC.agentCommission/100) as agentCommission from Transactions T, agentCommissions AC where T.deletedOn is null and T.agent = AC.idAgent";
+    if ($year != 'all') {
+        $query .= " and year(date) = $year";
+    }
     if ($mes != 'all') {
         $query .= " and month(date) = $mes";
     }
     if ($agente != 'all') {
-        $query .= " and agent = $agente";
+        $query .= " and T.agent in ($agents)";
     }
     if ($tipo != 'all') {
-        $query .= " and type = '$tipo'";
+        $query .= " and T.type = '$tipo'";
     }
     if ($keyword != null) {
-        $query .= " and (insured like '%$keyword%' or policyNumber like '%$keyword%' or carrier like '%$keyword%')";
+        $query .= " and (T.insured like '%$keyword%' or T.policyNumber like '%$keyword%' or T.carrier like '%$keyword%')";
     }
     $transactions['data'] = $data;
     $resp2 = $conn->query($query);
@@ -178,10 +191,12 @@ function getPolicyStats($year, $agente, $quarter)
             break;
     }
     global $conn;
-    $query = "Select count(*) as total, sum(premium) as premium, sum(premium * 0.04) as commission, sum(if(type = 'NEW BUSINESS', 1, 0)) as newBusiness, sum(if(type = 'RENEWAL', 1, 0)) as renewal, sum(if(type = 'CANCELLATION', 1, 0)) as cancellation, sum(if(type = 'REINSTATEMENT', 1, 0)) as reinstatement, sum(if(type = 'ADDITIONAL PREMIUM', 1, 0)) as additionalPremium, sum(if(type = 'RETURN PREMIUM', 1, 0)) as returnPremium, sum(if(type = 'OTHER', 1, 0)) as other
+    $query = "Select count(*) as total, sum(premium) as premium, sum(premium * commission/100) as commission, sum(if(type = 'NEW BUSINESS', 1, 0)) as newBusiness, sum(if(type = 'RENEWAL', 1, 0)) as renewal, sum(if(type = 'CANCELLATION', 1, 0)) as cancellation, sum(if(type = 'REINSTATEMENT', 1, 0)) as reinstatement, sum(if(type = 'ADDITIONAL PREMIUM', 1, 0)) as additionalPremium, sum(if(type = 'RETURN PREMIUM', 1, 0)) as returnPremium, sum(if(type = 'OTHER', 1, 0)) as other
     from Transactions 
-    where deletedOn is null 
-    and year(date) = $year";
+    where deletedOn is null";
+    if ($year != 'all') {
+        $query .= " and year(date) = $year";
+    }
     if ($agente != 'all') {
         $query .= " and agent = $agente";
     }
@@ -190,10 +205,12 @@ function getPolicyStats($year, $agente, $quarter)
     }
     $resp = $conn->query($query);
     $generalStats = $resp->fetch_assoc();
-    $query = "Select month(date), count(*) as total, round(sum(premium),2) as premium, round(sum(premium * 0.04),2) as commission 
+    $query = "Select month(date), count(*) as total, round(sum(premium),2) as premium, round(sum(premium * commission/100),2) as commission 
         from Transactions 
-        where deletedOn is null 
-        and year(date) = $year";
+        where deletedOn is null";
+    if ($year != 'all') {
+        $query .= " and year(date) = $year";
+    }
     if ($agente != 'all') {
         $query .= " and agent = $agente";
     };
@@ -233,6 +250,13 @@ function getTransaction($id)
     }
 }
 
+/**
+ * Función que elimina una transacción
+ * @id int - El id de la transacción
+ * @user int - El usuario que está eliminando la transacción
+ * 
+ * @return array - El resultado de la eliminación
+ */
 function removeTransaction($id, $user)
 {
     global $conn;
@@ -244,3 +268,28 @@ function removeTransaction($id, $user)
         return $conn->error;
     }
 };
+
+/**
+ * Función que actualiza el porcentaje de comisión de un agente
+ * @agentId int - El id del agente
+ * @commission float - El porcentaje de comisión
+ * @supervisorId int - El id del supervisor
+ * @supervisorCommission float - El porcentaje de comisión del supervisor
+ * @user int - El usuario que está actualizando la comisión
+ * 
+ * @return array - El resultado de la actualización
+ */
+function updateCommission($agentId, $commission, $supervisorId, $supervisorCommission, $user)
+{
+    global $conn;
+    $query = "Insert ignore into agentCommissions 
+                (idAgent, agentCommission, idSupervisor, supervisorCommission) 
+                values ($agentId, $commission, $supervisorId, $supervisorCommission)
+                on duplicate key update agentCommission = $commission, idSupervisor = $supervisorId, supervisorCommission = $supervisorCommission, updatedOn = now(), updatedBy = $user";
+    $resp = $conn->query($query);
+    if ($resp) {
+        return 1;
+    } else {
+        return $conn->error;
+    }
+}

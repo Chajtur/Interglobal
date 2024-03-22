@@ -45,7 +45,7 @@ function saveBillPlan()
     $installmentAmount = $_POST['installmentAmount'];
     $installmentAmount = str_replace('$', '', $installmentAmount);
     $installmentAmount = str_replace(',', '', $installmentAmount);
-    $billPlan = new BillPlan($_POST['idBillPlan'], $_POST['idQuote'], $downPayment, $_POST['installments'], $installmentAmount, $_POST['idOption'], $_POST['term']);
+    $billPlan = new BillPlan($_POST['idBillPlan'], $_POST['idQuote'], $downPayment, $_POST['installments'], $installmentAmount, $_POST['idOption'],addslashes($_POST['optionName']), $_POST['term']);
     echo $billPlan->save();
 }
 
@@ -137,5 +137,6 @@ function saveQuote()
     $quote->dot = $_POST['dot'];
     $quote->owner = $user;
     $quote->status = "Quoted";
+    $quote->type = $_POST['type'];
     echo $quote->save();
 }

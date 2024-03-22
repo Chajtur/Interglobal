@@ -133,7 +133,7 @@ $(document).ready(function () {
 					};
 				});
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 		});
 	});
 
@@ -153,7 +153,7 @@ $(document).ready(function () {
 				$('#insuredState').val(respuesta.phyState);
 				$('#insuredEmail').focus();
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 			$('#insuredMC').focus();
 		});
 	});
@@ -174,7 +174,7 @@ $(document).ready(function () {
 				$('#insuredState').val(respuesta.phyState);
 				$('#insuredEmail').focus();
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 		});
 	});
 

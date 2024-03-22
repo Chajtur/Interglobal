@@ -1,139 +1,128 @@
 <?php
 $user = new User();
-$user->load($_SESSION['user']['id']);
+if (isset($_SESSION['user']['id'])) {
+    $user->load($_SESSION['user']['id']);
+} else {
+    header('Location: ../index.php');
+}
 ?>
 <link rel="stylesheet" href="../css/sidebar.css">
 <script src="../js/sidebar.js"></script>
-<div class="position-relative navbar-menu">
-  <div class="position-fixed top-0 start-0 bottom-0 w-75 mw-sm-xs pt-6 overflow-auto">
-    <div class="px-6 pb-0 position-relative d-flex justify-content-center">
-      <div class="d-inline-flex align-items-center text-center">
+<div class="text-white" id="sidebar">
+    <div class="mt-3 text-center">
         <a class="" href="#" data-config-id="brand">
-          <i class="fas fa-user fa-6x text-primary"></i>
+            <i class="fas fa-user fa-3x text-white"></i>
         </a>
-      </div>
     </div>
-    <h5 class="text-primary text-center"><?= $user->firstName?></h5>
-    <h5 class="text-primary text-center"><?= $user->lastName?></h5>
-    <div class="py-0 px-6">
-      <ul class="nav flex-column mb-8">
-        <li class="nav-item nav-pills" data-module='Dashboard'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-chart-line fa-lg"></span>
-            <span class="mx-4 small">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item nav-pills" data-module='Calendario'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-calendar-days fa-lg"></span>
-            <span class="mx-4 small" data-bs-custom-class="custom-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Marcación, Feriados, Vacaciones, Permisos...">Calendar</span>
-          </a>
-        </li>
-        <li class="nav-item nav-pills" data-module='VIN'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-car-side fa-lg"></span>
-            <span class="mx-4 small ms-2">Search VIN</span>
-          </a>
-        </li>
-      </ul>
-      <hr>
-      <?php if ($user->hasPermission('interglobal')) { ?>
-        <h3 class="btn border-0 ps-0 text-primary mb-2 text-uppercase small fw-bold" id="interglobalUlBtn">Interglobal Insurance</h3>
-      <?php } ?>
-      <ul class="nav flex-column mb-8 d-none" id="interglobalUl">
-        <?php if ($user->hasPermission('callCenter')) { ?>
-          <li class="nav-item nav-pills" data-module='CallCenterInter'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-headset fa-lg"></span>
-              <span class="mx-4 small" data-config-id="link3">Call Center</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('polizas')) { ?>
-          <li class="nav-item nav-pills" data-module='MyPolicies'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-briefcase fa-lg"></span>
-              <span class="mx-4 small" data-config-id="link3">My Portfolio</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('cotizaciones')) { ?>
-          <li class="nav-item nav-pills" data-module='Quotes'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa fa-pen-to-square fa-lg" aria-hidden="true"></span>
-              <span class="small mx-4" data-config-id="link5">Quotes</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('rfp')) { ?>
-          <li class="nav-item nav-pills" data-module='RFP'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa fa-file-contract fa-lg" aria-hidden="true"></span>
-              <span class="small mx-4" data-config-id="link5">RFP</span>
-            </a>
-          </li>
-        <?php } ?>
-      </ul>
-      <?php if ($user->hasPermission('usTrucking')) { ?>
-        <h3 class="btn border-0 ps-0 text-primary mb-2 text-uppercase small fw-bold" id="usTruckingUlBtn">US Trucking for Hire</h3>
-      <?php } ?>
-      <ul class="nav flex-column d-none" id="usTruckingUl">
-        <?php if ($user->hasPermission('cargas')) { ?>
-          <li class="nav-item nav-pills" data-module="load">
-            <a class="nav-link p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-route fa-lg"></span>
-              <span class="mx-4 small" data-config-id="link7">Loads</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('camiones')) { ?>
-          <li class="nav-item nav-pills" data-module="truck">
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-truck-moving fa-lg"></span>
-              <span class="mx-4 small" data-config-id="link8">Trucks</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('conductores')) { ?>
-          <li class="nav-item nav-pills" data-module="driver">
-            <a class="nav-link p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-users fa-lg"></span>
-              <span class="mx-4 small" data-config-id="link9">Drivers</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('callCenter')) { ?>
-          <li class="nav-item nav-pills" data-module='CallCenter'>
-            <a class="nav-link  p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-headset fa-lg"></span>
-              <span class="mx-4 small" data-config-id="link3">Call Center</span>
-            </a>
-          </li>
-        <?php } ?>
-        <?php if ($user->hasPermission('safer')) { ?>
-          <li class="nav-item nav-pills" data-module="safer">
-            <a class="nav-link p-3 d-flex align-items-center" href="#">
-              <span class="fa-solid fa-s fa-lg"></span>
-              <span class="small mx-4" data-config-id="link10">Safer</span>
-            </a>
-          </li>
-        <?php } ?>
-      </ul>
-      <hr>
-      <ul class="nav flex-column mb-1">
-        <li class="nav-item nav-pills" data-module='eticket'>
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-list-check fa-lg"></span>
-            <span class="mx-4 small" data-config-id="link11">E-Tickets</span>
-          </a>
-        </li>
-        <li class="nav-item nav-pills" id="liCerrarSesion">
-          <a class="nav-link  p-3 d-flex align-items-center" href="#">
-            <span class="fa-solid fa-power-off fa-lg"></span>
-            <span class="mx-4 small" data-config-id="link12">Logout</span>
-          </a>
-        </li>
-      </ul>
+    <hr class="mt-3" >
+    <div class="rounded-div bg-zinc-400 mt-3 mx-auto fw-bold" title="Human Resources" data-id="hr">HR</div>
+    <div class="icon-group" data-id="hr">
+        <div class="mt-3 icon ms-4" data-module="Dashboard">
+            <div class="align-items-center" href="#">
+                <span class="fa-solid fa-chart-line fa-xl text-white"></span>
+                <span class="sidebar-text text-white">Dashboard</span>
+            </div>
+        </div>
+        <div class="mt-3 icon ms-4" data-module="Calendario">
+            <div class="align-items-center" href="#">
+                <span class="fa-solid fa-calendar-days fa-xl text-white"></span>
+                <span class="sidebar-text text-white">Calendar</span>
+            </div>
+        </div>
     </div>
-  </div>
+    <hr class="mt-3" >
+    <?php if ($user->hasPermission('interglobal')) { ?>
+        <div class="rounded-div bg-zinc-400 mt-3 mx-auto fw-bold" data-id='ii' title="Interglobal Insurance">II</div>
+        <div class="icon-group" data-id='ii'>
+            <div class="mt-3 icon ms-4" data-module="VIN">
+                <div class="align-items-center" href="#">
+                    <span class="fa-solid fa-car-side fa-xl text-white"></span>
+                    <span class="sidebar-text text-white">Search VIN</span>
+                </div>
+            </div>
+            <?php if ($user->hasPermission('callCenter')) { ?>
+                <div class="mt-3 icon ms-4" data-module="CallCenterInter">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-headset fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Call Center</span>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($user->hasPermission('polizas')) { ?>
+                <div class="mt-3 icon ms-4" data-module="MyPolicies">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-briefcase fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Portfolio</span>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($user->hasPermission('cotizaciones')) { ?>
+                <div class="mt-3 icon ms-4" data-module="Quotes">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-pen-to-square fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Quotes</span>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($user->hasPermission('rfp')) { ?>
+                <div class="mt-3 icon ms-4" data-module="RFP">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-file-contract fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">RFP</span>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <hr class="mt-3" >    
+    <?php } ?>
+    <?php if ($user->hasPermission('usTrucking')) { ?>
+        <div class="rounded-div bg-zinc-400 mt-3 mx-auto fw-bold" data-id='ut' title="US Trucking for Hire">UT</div>
+        <div class="icon-group" data-id="ut">
+            <?php if ($user->hasPermission('cargas')) { ?>
+                <div class="mt-3 icon ms-4" data-module="load">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-route fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Loads</span>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($user->hasPermission('camiones')) { ?>
+                <div class="mt-3 icon ms-4" data-module="trucks">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-truck-moving fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Trucks</span>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($user->hasPermission('conductores')) { ?>
+                <div class="mt-3 icon ms-4" data-module="drivers">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-user-tie fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Drivers</span>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <hr class="mt-3" >
+    <?php } ?>
+    <?php if ($user->hasPermission('configurarSistema')) { ?>
+        <div class="mt-3 icon ms-4" data-module="systemConfig">
+            <div class="align-items-center" href="#">
+                <span class="fa-solid fa-gears fa-xl text-white"></span>
+                <span class="sidebar-text text-white">Parameters</span>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="mt-3 icon ms-4" data-module="eticket">
+        <div class="align-items-center" href="#">
+            <span class="fa-solid fa-list-check fa-xl text-white"></span>
+            <span class="sidebar-text text-white">E-Tickets</span>
+        </div>
+    </div>
+    <div class="mt-3 icon ms-4" id="logOut">
+        <div class="align-items-center" href="#">
+            <span class="fa-solid fa-power-off fa-xl text-white"></span>
+            <span class="sidebar-text text-white">Logout</span>
+        </div>
+    </div>
 </div>

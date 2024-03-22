@@ -76,10 +76,10 @@ $(document).ready(function () {
 				$('#insuredCity').val(respuesta.phyCity);
 				$('#insuredZipCode').val(respuesta.phyZipcode);
 				$('#insuredState').val(respuesta.phyState);
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 				$('#ownersName').focus();
 			} else {
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 				$('#insuredMC').focus();
 			}
 		});
@@ -99,10 +99,10 @@ $(document).ready(function () {
 				$('#insuredCity').val(respuesta.phyCity);
 				$('#insuredZipCode').val(respuesta.phyZipcode);
 				$('#insuredState').val(respuesta.phyState);
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 				$('#ownersName').focus();
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 		});
 	});
 

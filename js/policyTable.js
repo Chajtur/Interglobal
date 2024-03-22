@@ -13,7 +13,7 @@ $(document)
 				keyword: $('#searchText').val(),
 			},
 			function () {
-				$('#spinner').modal('hide');
+				modalHide('spinner');
 			}
 		);
 	});
@@ -31,7 +31,7 @@ $(document).on('click', '.firstPage', function () {
             keyword: $('#searchText').val(),
         },
         function () {
-            $('#spinner').modal('hide');
+            modalHide('spinner');
         }
     );
 });
@@ -49,12 +49,12 @@ $(document).on('click', '.lastPage', function () {
             keyword: $('#searchText').val(),
         },
         function () {
-            $('#spinner').modal('hide');
+            modalHide('spinner');
         }
     );
 });
 
-$(document).on('click', 'tr', function () {
+$(document).on('click', 'tbody tr', function () {
     $(this).addClass('bg-info-light selected').siblings().removeClass('bg-info-light selected');
 });
 
@@ -111,7 +111,6 @@ $(document).on('click', '#btnDeletePolicy', function () {
     });
 });
 
-
 $(document).on('click', '#btnExport', function () {
     $('#spinner').modal('show');
     $.post('../controllers/Transaction.php', {
@@ -139,9 +138,9 @@ $(document).on('click', '#btnExport', function () {
                 return buf;    
             }
             saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'Transactions.xlsx');
-            $('#spinner').modal('hide');
+            modalHide('spinner');
         } else {
-            $('#spinner').modal('hide');
+            modalHide('spinner');
             $('#infoModalTitle').text('Error');
             $('#infoModalText').html(resp.message);
             $('#infoModalButtons').html(

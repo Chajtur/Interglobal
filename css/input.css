@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	h4 {
+		@apply text-2xl font-bold;
+	}
+
+	button {
+		@apply text-white font-bold py-2 px-4 rounded-lg cursor-pointer focus:outline-none focus:ring-4 shadow;
+	}
+}
+
+@layer components {
+	.modalTitle {
+		@apply px-4 py-5 border-b text-white sm:px-6;
+	}
+
+	.btn-success {
+		@apply bg-gradient-to-r from-green-600 to-green-800 hover:bg-green-700 hover:ring-green-500 shadow-green-500;
+	}
+
+	.btn-danger {
+		@apply bg-gradient-to-r from-red-600 to-red-800 hover:bg-red-700 hover:ring-red-500 shadow-red-500;
+	}
+
+	.btn-warning {
+		@apply bg-gradient-to-r from-yellow-600 to-yellow-800 hover:bg-yellow-700 hover:ring-yellow-500 shadow-yellow-500;
+	}
+
+	.btn-info {
+		@apply bg-gradient-to-r from-blue-600 to-blue-800 hover:bg-blue-700 hover:ring-blue-500 shadow-blue-500;
+	}
+
+	.btn-primary {
+		@apply bg-gradient-to-r from-sky-800 to-sky-950 hover:bg-sky-700 hover:ring-sky-500 shadow-sky-500;
+	}
+
+	.btn-secondary {
+		@apply bg-gradient-to-r from-zinc-200 to-zinc-400 hover:bg-gray-700 hover:ring-gray-500;
+	}
+}

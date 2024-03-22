@@ -32,5 +32,5 @@ Knowledge Request: These tickets are for requests for information or assistance,
             <span class="float-end my-n5 px-1 bg-primary rounded small text-white" id="count_message"></span>
         </div>
         <div class="w-100 text-end">
-            <button type="button" class="btn btn-primary" id="btnSaveTicket">Open Ticket</button>
+            <button type="button" class="btn-primary" id="btnSaveTicket">Open Ticket</button>
         </div>

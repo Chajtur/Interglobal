@@ -8,14 +8,16 @@ class Quote
     public $date;
     public $dot;
     public $owner;
+    public $type;
     public $status;
 
-    public function __construct($id = null, $date = null, $dot = null,  $status = null, $owner = null)
+    public function __construct($id = null, $date = null, $dot = null,  $status = null, $owner = null, $type = null)
     {
         $this->id = $id;
         $this->date = $date;
         $this->dot = $dot;
         $this->status = $status;
+        $this->type = $type;
         $this->owner = $owner;
     }
 
@@ -60,11 +62,9 @@ class Quote
     function getAll($user)
     {
         global $conn;
-        $query = "Select id, date, name, status
+        $query = "Select id, date(`date`) as date, dot
         from Quotes q
-        where q.owner = $user
-        and q.status <> 'Closed'
-        group by q.dot, q.owner, q.proposedDate
+        where q.idUser = $user
         order by q.date desc";
         $resp = $conn->query($query);
         $quotes = mysqli_fetch_all($resp, MYSQLI_ASSOC);
@@ -96,8 +96,8 @@ class Quote
     {
         include_once('../models/User.php');
         global $conn;
-        $query = "Insert into Quotes (date, idUser, dot)
-        values (now(), '$this->owner', '$this->dot')";
+        $query = "Insert into Quotes (date, idUser, dot, type)
+        values (now(), '$this->owner', '$this->dot', '$this->type')";
         $conn->query($query);
         $this->id = $conn->insert_id;
         if ($this->id) {
@@ -108,3 +108,44 @@ class Quote
         return $conn->insert_id;
     }
 };
+
+
+class pendingQuote
+{
+    public $id;
+    public $date;
+    public $businessName;
+    public $status;
+    public $owner;
+    public $dot;
+    
+    public function __construct($id = null, $date = null, $businessName = null, $status = null, $owner = null,$type = null, $dot = null)
+    {
+        $this->id = $id;
+        $this->date = $date;
+        $this->businessName = $businessName;
+        $this->status = $status;
+        $this->owner = $owner;
+        $this->dot = $dot;
+    }
+
+    /**
+     * Función que devuelve todas las cotizaciones que se han asignado a un usuario
+     * 
+     * @user integer - El id del usuario a buscar
+     * 
+     * @return array - Lista de cotizaciones que se han asignado al usuario
+     */
+    public static function getAll($user)
+    {
+        global $conn;
+        $query = "Select q.id, date(q.date) as date, q.dot, q.status, q.name, q.owner as owner
+        from Requested_Quotes q, Employees u 
+				where q.owner = u.id
+        and q.status = 'Requested' and q.owner = $user
+        order by q.date desc";
+        $resp = $conn->query($query);
+        $quotes = mysqli_fetch_all($resp, MYSQLI_ASSOC);
+        return $quotes;
+    }
+}

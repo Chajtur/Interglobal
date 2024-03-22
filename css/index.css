@@ -2,6 +2,10 @@
 	display: inline-block;
 }
 
+.capitalize {
+	text-transform: capitalize !important;
+}
+
 body,
 html {
 	height: 100%;
@@ -70,13 +74,13 @@ content {
 	opacity: 1;
 }
 
-sidebar {
+/*sidebar {
     width: 320px !important;
     z-index: 100;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
+}*/
 
 #contenido {
 	/*background-image: url('../assets/just-laser-truck.gif');

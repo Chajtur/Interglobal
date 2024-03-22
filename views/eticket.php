@@ -3,7 +3,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 ?>
-<main class="container-fluid h-100">
+<!-- <main class="container-fluid h-100">
     <div class="row h-100 pb-3 ms-0">
         <div class="col">
             <div id="openTicket"></div>
@@ -20,6 +20,7 @@ if (!isset($_SESSION)) {
             <div id="closedTickets"></div>
         </div>
     </div>
-</main>
-<script type="text/javascript" src="../js/eticket.js"></script>
-<link rel="stylesheet" href="../css/eticket.css">
+</main> -->
+<div class="w-2/5 h-100 bg-gray-300 ms-0">
+    All tickets loading right now
+</div>

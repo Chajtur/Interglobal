@@ -124,8 +124,8 @@ function queryGeneralDotWeb()
     } else {
         echo 'No info found';
     }*/
-    $url = 'http://70.131.181.106:80/Load.php';
-    $data = array('dot' => 'value1', 'action' => 'queryGeneralDotWeb');
+    $url = 'http://interglobalservice.ddns.net//Load.php';
+    $data = array('dot' => $_POST['dot'], 'action' => 'queryGeneralDotWeb');
 
     $options = array(
         CURLOPT_URL => $url,
@@ -140,13 +140,10 @@ function queryGeneralDotWeb()
     curl_setopt_array($ch, $options);
     $response = curl_exec($ch);
 
-    if (!$response) {
-        die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-    }
-
     curl_close($ch);
 
-    echo $response;
+    $response = json_decode($response);
+    return $response->content->carrier;
 }
 
 function queryGeneralMc()

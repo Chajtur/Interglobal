@@ -19,7 +19,7 @@ $(document).ready(function () {
 				});
 				$('#vinTable').html($html);
 			}
-			$('#spinner').modal('hide');
+			modalHide('spinner');
 		});
 	});
 

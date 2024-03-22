@@ -1,19 +1,31 @@
 $(document).ready(function () {
-	$('.nav-pills').click(function () {
-		$('sidebar li').removeClass('active');
+
+	let resizeObserver = new ResizeObserver(() => { 
+		if ($('sidebar').width() >= 140) {
+			$('.sidebar-text').css('display', 'inline');
+			console.log('Sidebar width: ' + $('sidebar').width());
+		} else {
+			$('.sidebar-text').css('display', 'none');
+			console.log('Sidebar width: ' + $('sidebar').width());
+		}
+	}); 
+	  
+	let $div = document.querySelector('sidebar');
+
+	if($div !== null){
+		resizeObserver.observe($div);
+	} else {
+		console.log('No existe el elemento .sidebar');
+	}
+
+	$('sidebar .icon').on('click', function () {
+		$('sidebar .icon').removeClass('active');
 		$(this).addClass('active');
 		loadContent($(this).data('module'));
-		$('sidebar').addClass('d-none');
-		$('sidebar').removeClass('position-absolute');
-		$('sidebar').removeClass('bg-white');
-		$('.overlay').removeClass('active');
 	});
 
-	$('#btnCloseSidebar').on('click', function () {
-		$('sidebar').addClass('d-none');
-		$('sidebar').removeClass('position-absolute');
-		$('sidebar').removeClass('bg-white');
-		$('.overlay').removeClass('active');
+	$('.rounded-div').on('click', function () {
+		$('.icon-group[data-id=' + $(this).data('id') + ']').slideToggle();
 	});
 
 	function loadContent($modulo) {
@@ -63,28 +75,12 @@ $(document).ready(function () {
 		}
 	}
 
-	$('#liCerrarSesion').on('click', function () {
+	$('#logOut').on('click', function () {
 		$.post('../controllers/Login.php', {
 			action: 'logout',
 		}).done(function (resp) {
 			window.location.href = 'index.php';
 		});
 	});
-
-	$(document).on('click', '#interglobalUlBtn', function() {
-		if ($('#interglobalUl').hasClass('d-none')) {
-			$('#interglobalUl').removeClass('d-none');
-		} else {
-			$('#interglobalUl').addClass('d-none');
-		}
-	});
-
-	$(document).on('click', '#usTruckingUlBtn', function() {
-		if ($('#usTruckingUl').hasClass('d-none')) {
-			$('#usTruckingUl').removeClass('d-none');
-		} else {
-			$('#usTruckingUl').addClass('d-none');
-		}
-	})
 
 });
