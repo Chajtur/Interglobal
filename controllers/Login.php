@@ -75,6 +75,7 @@ function login()
             if (password_verify($pass, $User['password'])) {
                 $_SESSION['isLoggedIn'] = true;
                 $_SESSION['employeeId'] = $User['id'];
+                $_SESSION['last_activity'] = time();
                 $isLoggedIn = true;
                 echo 1;
                 die();
@@ -118,10 +119,11 @@ function startSession()
 
 function checkActivity()
 {
-    global $PATH;
-    if (isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > 28800) {
+    if (isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > 28800 || !isset($_SESSION['last_activity'])) {
         logOut();
-        echo "<script>console.log('Sesión expirada, logging out...'); $('.modal').modal('hide'); $('#sesionExpirada').modal('show');</script>";
+        echo "<script>
+                    modalShow('sesionExpirada');
+              </script>";
     }
     $_SESSION['last_activity'] = time();
 }

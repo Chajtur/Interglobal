@@ -3,7 +3,7 @@
         if ($id > 1) {
             $html += '<div class="page-break">';
         }
-        $html += '<h1 class="text-center"> ' + 
+        $html += '<h1 class="text-center"> ' +
             $('span[data-optionname="' + $id + '"]').text() +
             '</h1></div>' +
             '<div class="row"><table class="table text-primary"><tbody>';
@@ -173,12 +173,12 @@
         '    </table>' +
         '    <hr>' +
         '    <div class="row text-center">';
-        if ($('#proposalType').val() == 1) {
-            $html += '      <div class="h4 text-primary pt-8">Commercial Quote Proposal</div>';
-        } else {
-            $html += '      <div class="h4 text-primary pt-8">Renewal Offer</div>';
-        }
-        $html += '      <div class="h4">for</div><div class="h4"> ' +
+    if ($('#proposalType').val() == 1) {
+        $html += '      <div class="h4 text-primary pt-8">Commercial Quote Proposal</div>';
+    } else {
+        $html += '      <div class="h4 text-primary pt-8">Renewal Offer</div>';
+    }
+    $html += '      <div class="h4">for</div><div class="h4"> ' +
         $('#clientDiv').data('name') +
         '</div>' +
         '    </div>' +
@@ -259,21 +259,23 @@
                 iframe.style.width = '100%';
                 iframe.style.height = '100%';
                 previewWindow.document.body.appendChild(iframe);
-                $('#previewProposalSpinner').addClass('d-none');
-                $('#previewProposalFinished').removeClass('d-none');
+                $('#previewProposalSpinner').addClass('hidden');
+                $('#previewProposalFinished').removeClass('hidden');
             },
         });
     });
 </script>
 
-<div id="previewProposalSpinner" class="text-center justify-content-center align-items-center">
-    <div class="spinner-border text-info" style="width: 4rem; height:4rem"></div>
-    <div clas="text-primary">
-        <p>Please wait while we generate your proposal<br><br><small class="fw-bold">Interglobal Insurance / US Trucking for Hire</small></p>
+<div id="previewProposalSpinner" class="text-center content-center items-center">
+    <div class="p-6">
+        <div class="animate-spin rounded-full mx-auto h-24 w-24 border-t-4 border-b-4 border-sky-950"></div>
+        <div class="text-sky-950 mt-4">
+            <p>Please wait while we generate your proposal<br><br><small class="font-bold text-sm">Interglobal Insurance / US Trucking for Hire</small></p>
+        </div>
     </div>
 </div>
-<div id="previewProposalFinished" class="d-none text-center justify-content-center align-items-center">
-    <div class="text-primary">
+<div id="previewProposalFinished" class="hidden text-center content-center items-center">
+    <div class="text-sky-950">
         <p>Your proposal is ready for download<br><br><small class="fw-bold">Interglobal Insurance / US Trucking for Hire</small></p>
     </div>
 </div>

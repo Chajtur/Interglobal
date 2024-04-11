@@ -5,26 +5,32 @@ if (!isset($_SESSION)) {
     session_start();
 }
 ?>
-<h2 class="text-center pt-5">My Quotes</h2>
-<div class="row mt-7 justify-content-center">
-    <div class="col-4">
-        <label class="text-primary fw-bold" for="manualName">Please insert the client's name and DOT</label>
-        <input type="text" id="manualName" class="form-control rounded" placeholder="Client's Name">
-        <input type="text" id="manualDot" class="form-control rounded mt-3" placeholder="DOT">
-        <button class="btn btn-primary mt-3" id="btnManualProposal">Create Proposal</button>
+<h4 class="text-center mt-2">My Quotes</h4>
+<div class="flex mt-7 content-center justify-center">
+    <div class="w-full lg:w-1/3 flex-col">
+        <label class="text-sky-950 font-bold" for="manualName">Please insert the client's name and DOT</label>
+        <input type="text" id="manualName" class="mt-2" placeholder="Client's Name">
+        <input type="text" id="manualDot" class="mt-2" placeholder="DOT">
+        <div class="flex w-full justify-end">
+            <button class="btn-primary mt-2" id="btnManualProposal">Create Proposal</button>
+        </div>
     </div>
 </div>
-<div class="row w-100 mt-5">
-    <div class="col-4">
-        <label for="dotSearch" class="text-primary fw-bold">Search for a DOT</label>
-        <input type="text" id="dotSearch" class="form-control rounded" placeholder="DOT">
-        <button class="btn btn-primary mt-3" id="btnSearchDot">Search</button>
-        <div id='quoteDetail'></div>
+<div class="flex flex-row w-full justify-evenly mt-5">
+    <div class="w-1/3">
+        <div class="w-full lg:w-3/4">
+            <h4 class="text-sky-950 font-bold">Search for a DOT</h4>
+            <input type="text" id="dotSearch" class="rounded" placeholder="DOT">
+            <div class="flex w-full justify-end">
+                <button class="btn-primary mt-2" id="btnSearchDot">Search</button>
+            </div>
+            <div id='quoteDetail'></div>
+        </div>
     </div>
-    <div class="col-4">
+    <div class="w-1/3">
         <?php include '../components/pendingQuotes.php'; ?>
     </div>
-    <div class="col-4">
+    <div class="w-1/3">
         <?php include '../components/quoted.php'; ?>
     </div>
 </div>

@@ -21,6 +21,23 @@ class holiday
     }
 
     /**
+     * Función que verifica si la fecha es feriado
+     * 
+     * @return boolean - Si la fecha es feriado o no
+     */
+    function isHoliday()
+    {
+        global $conn;
+        $query = "Select * from Holidays where date = '$this->date'";
+        $resp = $conn->query($query);
+        $holiday = $resp->fetch_assoc();
+        if ($holiday) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Función que devuelve solamente la lista de fechas designadas como feriado
      * 
      * @return array - Listado de fechas de feriados

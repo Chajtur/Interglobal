@@ -1,23 +1,36 @@
-<div class="row" id="coverageBillPlan">
-    <div class="row">
-        <h6>Bill Plan Duration</h6>
-        <div class="d-flex">
+<div class="flex-col" id="coverageBillPlan">
+    <!-- <div class="flex-row">
+        <h6 class="w-full">Bill Plan Duration</h6>
+        <div class="flex">
             <p>6 months</p>
             <div class="form-check form-switch form-check-inline">
                 <input class="form-check-input float-end" type="checkbox" role="switch" id="billPlanDuration" checked>
             </div>
             <p>12 months</p>
         </div>
-    </div>
-    <div class="row">
+    </div> -->
+    <label for="billPlanDuration" class="flex items-center cursor-pointer">
+        <div class="mr-3 text-gray-700 font-medium">
+            6 months
+        </div>
+        <div class="relative">
+            <input id="billPlanDuration" type="checkbox" class="sr-only" />
+            <div id="billPlanDurationToggle" class="block bg-gray-600 w-14 h-8 rounded-full dotBG"></div>
+            <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+        </div>
+        <div class="ml-3 text-gray-700 font-medium">
+            12 months
+        </div>
+    </label>
+    <div class="flex-col mt-1">
         <label for="downPayment">Down Payment:</label>
         <input type="number" class="form-control rounded" id="downPayment" placeholder="0.00">
     </div>
-    <div class="row">
+    <div class="flex-col">
         <label for="installments">Installments:</label>
         <input type="number" class="form-control rounded" id="installments" placeholder="10">
     </div>
-    <div class="row">
+    <div class="flex-col">
         <label for="monthlyInstallment">Monthly Installment:</label>
         <input type="number" class="form-control rounded" id="monthlyInstallment" placeholder="0.00">
     </div>
@@ -33,6 +46,15 @@
         }
         return result;
     }
+
+    $(document).ready(function() {
+        $('#billPlanDurationToggle').click(function() {
+            console.log('Bill Plan Duration clicked');
+            var currentStatus = $('#billPlanDuration').prop('checked');
+            console.log(currentStatus);
+            $('#billPlanDuration').prop('checked', !currentStatus);
+        });
+    });
 
     $('#btnSaveBillPlan').click(function() {
         let duration = $('#billPlanDuration').is(':checked') ? 12 : 6;
@@ -65,7 +87,7 @@
                 }
             )}</td>`
         $('.tableOptions[data-option="<?= $_POST['idOption'] ?>"] tfoot').append(billPlanRow);
-        $('.tableOptions[data-option="<?= $_POST['idOption'] ?>"] tfoot').removeClass('d-none')
-        $('#infoModal').modal('hide');
+        $('.tableOptions[data-option="<?= $_POST['idOption'] ?>"] tfoot').removeClass('hidden')
+        modalHide('infoModal');
     });
 </script>

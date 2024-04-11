@@ -8,12 +8,12 @@ $index = array_search($idCoverage, array_column($coverages, 'id'));
 
 ?>
 
-<div class="row">
-    <h6 class="text-center">Please select a Bill Plan for <?= $coverages[$index]['name'] ?></h6>
+<div class="flex flex-row">
+    <h6 class="text-center font-bold">Please select a Bill Plan for <?= $coverages[$index]['name'] ?></h6>
 </div>
-<div class="row">
-    <table id="tableBillPlan" class="table bg-warning-light">
-        <thead class="bg-primary text-white text-end">
+<div class="flex flex-row">
+    <table id="tableBillPlan" class="table bg-red-100 w-full">
+        <thead class="bg-sky-950 text-white text-end">
             <tr>
                 <th>Duration</th>
                 <th>Installments</th>
@@ -47,16 +47,16 @@ $index = array_search($idCoverage, array_column($coverages, 'id'));
         });
 
         $('#tableBillPlan tbody tr').click(function() {
-            $(this).addClass('bg-success').siblings().removeClass('bg-success');
+            $(this).addClass('bg-green-800').siblings().removeClass('bg-green-800');
         });
     });
 
     $('#btnSaveBillPlan').click(function() {
         let idOption = <?= $_POST['idOption'] ?>;
-        let idBillPlan = $('#tableBillPlan tbody tr.bg-success').data('billplan');
+        let idBillPlan = $('#tableBillPlan tbody tr.bg-green-800').data('billplan');
         let idCoverage = <?= $_POST['idCoverage'] ?>;
         $('.tableOptions[data-option="' + idOption + '"] tbody tr[data-coverage="' + idCoverage + '"]').attr('data-billplan', idBillPlan);
-        $('.tableOptions[data-option="' + idOption + '"] tbody tr[data-coverage="' + idCoverage + '"]').addClass('bg-success-light').removeClass('bg-warning-light');
+        $('.tableOptions[data-option="' + idOption + '"] tbody tr[data-coverage="' + idCoverage + '"]').addClass('bg-green-100').removeClass('bg-red-100');
         // Remove coverage from all other bill plans
         $('.tableOptions[data-option=' + idOption + '] tfoot .billPlanRow').each(function() {
             var billPlanText = $(this).find('td:eq(1)').text();
@@ -76,6 +76,6 @@ $index = array_search($idCoverage, array_column($coverages, 'id'));
             }); // Filter out empty elements
             $(this).find('td:eq(1)').text(billPlanSplit.join(','));
         });
-        $('#infoModal').modal('hide');
+        modalHide('infoModal');
     });
 </script>

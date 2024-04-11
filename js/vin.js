@@ -1,10 +1,7 @@
-$('#nombreModulo').text('Consultar VIN');
-$('#nombreModuloM').text('Consultar VIN');
-
 $(document).ready(function () {
 	
     $('#vinSearchBtn').on('click', function () {
-		$('#spinner').modal('show');
+		modalShow('spinner');
 		$.get('../controllers/Load.php', {
 			action: 'searchVIN',
 			VIN: $('#vinSearch').val(),

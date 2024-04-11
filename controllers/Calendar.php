@@ -10,14 +10,8 @@ $action = $_POST['action'];
 
 // Controlador de solicitudes
 switch ($action) {
-    case 'getPunches':
-        getEmployeeMonthPunches();
-        break;
     case 'getHoliday':
         getInfoDate();
-        break;
-    case 'hasPermission':
-        userPermission();
         break;
     case 'saveHoliday':
         saveHoliday();
@@ -41,18 +35,18 @@ switch ($action) {
  */
 function userDaysOff()
 {
+    $holiday = new holiday();
     $user = getUser();
-    $resp['data'] = getDaysOff($user);
+    $resp['data'] = $holiday->getDaysOff($user);
     if ($resp['data'] > 0) {
         $resp['text'] = 1;
         $dias = [];
         foreach ($resp['data'] as $request) {
-            $request['askedDays'] = getBusinessDays($request['dateFrom'], $request['dateTo']);
+            $request['askedDays'] = $holiday->getBusinessDays($request['dateFrom'], $request['dateTo']);
             $dias[] = $request;
         }
         $resp['data'] = $dias;
     }
-    if (haspermission(2))
     echo json_encode($resp);
 }
 
@@ -62,16 +56,17 @@ function userDaysOff()
  */
 function askDayOff()
 {
+    $holiday = new holiday();
     $dateFrom = $_POST['from'] ?: '1901-01-01';
     $dateTo = $_POST['to'] ?: '1901-01-01';
-    $reason = $_POST['reason'] ?: 'Descanso';
-    $resp['data'] = insertVacationRequest($dateFrom, $dateTo, $reason, getUser());
+    $reason = $_POST['reason'] ?: 'Rest';
+    $resp['data'] = $holiday->insertVacationRequest($dateFrom, $dateTo, $reason, getUser());
     if ($resp['data'] > 0) {
         $resp['status'] = 'success';
-        $resp['text'] = 'Vacaciones solicitadas correctamente';
+        $resp['text'] = 'Vacation request has been entered successfully';
     } else {
         $resp['status'] = 'error';
-        $resp['text'] = 'No se ha podido ingresar la solicitud de vacaciones, favor intente de nuevo';
+        $resp['text'] = 'Error entering vacation request';
     }
     echo json_encode($resp);
 }
@@ -83,7 +78,8 @@ function askDayOff()
 function removeHoliday()
 {
     $date = $_POST['fecha'] ?: '2023-01-01';
-    $resp['data'] = deleteHoliday($date);
+    $holiday = new holiday($date);
+    $resp['data'] = $holiday->delete($date);
     if ($resp['data'] > 0) {
         $resp['status'] = 'success';
     } else {
@@ -100,8 +96,8 @@ function saveHoliday()
 {
     $date = $_POST['fecha'] ?: '2023-01-01';
     $fecha = new holiday($date);
-    $name = $_POST['nombre'] ?: 'Feriado';
-    $detail = $_POST['detalle'] ?: 'Se otorgó feriado';
+    $name = $_POST['nombre'] ?: 'Holiday';
+    $detail = $_POST['detalle'] ?: 'Holiday set successfully';
     $fullDay = $_POST['diaCompleto'] ?: 'true';
     $resp['data'] = $fecha->save($date, $name, $detail, $fullDay);
     if ($resp['data'] > 0) {
@@ -113,19 +109,6 @@ function saveHoliday()
 }
 
 /**
- * Controlador de la función hasPermission en el Modelo de User
- * Llama a la función hasPermission en User
- */
-function userPermission()
-{
-    if (isset($_POST['function'])) {
-        echo hasPermission($_POST['function']) == true ? 1 : 0;
-    } else {
-        echo 0;
-    }
-}
-
-/**
  * Controlador para buscar datos de feriados
  * Llama la función getHolidays de Dates.php
  */
@@ -134,13 +117,4 @@ function getInfoDate()
     $date = new holiday($_POST['date']);
     $holiday = $date->getHolidays();
     echo json_encode($holiday);
-}
-
-/**
- * Controlador para buscar las marcaciones del empleado
- * Llama a la función getMonthPunches en User
- */
-function getEmployeeMonthPunches()
-{
-    //echo getMonthPunches();
 }

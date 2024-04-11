@@ -6,35 +6,35 @@ $coverages = $coverage->getAll();
 ?>
 
 <!-- Inputs for Coverage and Amount -->
-<div class="row">
+<div class="flex flex-col">
     <label for="coverageSelect">Please Select a Line of Business:</label>
-    <select id="coverageSelect" class="form-select" aria-label="Default select example">
+    <select id="coverageSelect" class="" aria-label="Default select example">
         <?php foreach ($coverages as $coverage) { ?>
             <option value="<?= $coverage['id'] ?>"><?= $coverage['name'] ?></option>
         <?php } ?>
     </select>
 </div>
-<div class="row">
+<div class="flex flex-col">
     <label for="coverageAmount">Coverage Amount:</label>
     <input type="number" class="form-control rounded" id="coverageAmount" placeholder="0.00">
 </div>
-<div class="row">
+<div class="flex flex-col">
     <label for="carrier">Carrier:</label>
     <input type="text" class="form-control rounded" id="carrier" placeholder="Carrier">
 </div>
-<div class="row">
+<div class="flex flex-col">
     <label for="basePremium">Base Premium:</label>
     <input type="number" class="form-control rounded" id="basePremium" placeholder="0.00">
 </div>
-<div class="row">
+<div class="flex flex-col">
     <label for="taxesFees">Taxes & Fees:</label>
     <input type="number" class="form-control rounded" id="taxesFees" placeholder="0.00">
 </div>
-<div class="row">
+<div class="flex flex-col">
     <label for="notes">Notes:</label>
-    <textarea rows="3" type="text" class="form-control rounded" id="notes" placeholder="Write a note..."></textarea>
+    <textarea rows="3" type="text" class="form-control p-2 rounded border-2" id="notes" placeholder="Write a note..."></textarea>
 </div>
-<div class="row">
+<div class="flex flex-col">
     <h3 class="totalPremium mt-3">Total Premium: $<span id="totalPremium">0.00</span></h3>
 </div>
 
@@ -44,7 +44,7 @@ $coverages = $coverage->getAll();
         $('.tableOptions[data-option="' + idOption + '"] tbody tr').each(function() {
             let idCover = $(this).attr('data-coverage');
             let cover = $(this).find('td:eq(1)').text();
-            $html = "<li class='p-2 bg-success'>" +
+            $html = "<li class='p-2 bg-green-600'>" +
                 '<div class="form-check">' +
                 '<input class="form-check-input border-white" type="checkbox" value="" id="option' + idCover + '" data-coverage="' + idCover + '">' +
                 '<label class="form-check-label text-white" for="option' + idCover + '">' +
@@ -56,6 +56,7 @@ $coverages = $coverage->getAll();
         });
     });
 
+    /* Adds new coverage to the table */
     $('#btnSaveCoverage').click(function() {
         let coverage = $('#coverageSelect').val();
         let coverageName = $('#coverageSelect option:selected').text();
@@ -82,7 +83,7 @@ $coverages = $coverage->getAll();
         $('.tableOptions[data-option]').each(function() {
             let option = $(this).data('option');
             let idOption = "<?= $_POST['idOption'] ?>";
-            let coverageRow = `<tr class="coverageRow bg-warning-light" data-coverage="${coverage}">
+            let coverageRow = `<tr class="coverageRow bg-red-100" data-coverage="${coverage}">
                                 <td class="text-center">
                                     <button title="Click to remove Coverage" class="btn-danger btn-sm btnRemoveCoverage">
                                         <i class="fas fa-trash-alt"></i>
@@ -102,7 +103,7 @@ $coverages = $coverage->getAll();
             $(this).find('tbody').append(coverageRow);
         });
 
-        $('#infoModal').modal('hide');
+        modalHide('infoModal');
     });
 
     $(document).on('click', '#billPlan', function() {

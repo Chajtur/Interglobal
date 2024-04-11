@@ -7,7 +7,7 @@ $optionId = $_POST['optionId'] ?? 0;
 
 <div>
     <label for="optionName">Enter a name or description for the Option</label>
-    <input id="optionName" class="rounded w-100" type="text" value='<?= $name ?>'>
+    <input id="optionName" class="rounded w-full" type="text" value='<?= $name ?>'>
 </div>
 
 <script>
@@ -17,7 +17,7 @@ $(document).off().on('click', '#btnUpdateOptionName', function() {
     var optionId = <?= $optionId ?>;
     console.log('Option ID: ' + optionId + ' Name: ' + name + ', changing name ');
     $('span[data-optionname="' + optionId + '"]').text(name);
-    $(infoModal).modal('hide');
+    modalHide('infoModal');
 });
 
 </script>

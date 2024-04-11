@@ -72,20 +72,28 @@ $agentName = $user->getAgent($agent);
         <input name="commission" type="number" class="form-control input rounded border-primary" id="commission" value=<?= $commission ?> min="5.0" max="15.0" step="0.5">
     </div>
 </form>
-<div class="toast-container position-fixed top-0">
-    <div id="liveToast" class="toast bg-danger rounded w-100" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="5000" data-animation="true">
-        <div class="toast-header">
+<!-- <div class="fixed top-0 hidden">
+    <div id="liveToast" class="bg-red-800 rounded w-full" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="5000" data-animation="true">
+        <div class="flex items-center">
             <i class="bi-x-square"></i>
-            <strong class="me-auto ms-3">Error</strong>
+            <strong class="ml-auto mr-3">Error</strong>
         </div>
-        <div class="toast-body">
+        <div class="p-4">
             Commission must be between 5% and 15%
         </div>
     </div>
-</div>
+</div> -->
 
 
 <script>
+    if (<?= $id ?> != 0) {
+        $('#saveButton').attr('id', 'btnSavePolicy');
+        console.log('edit');
+    } else {
+        $('#saveButton').attr('id', 'btnSaveTransaction');
+        console.log('new');
+    }
+
     $(function() {
         $("#newTransactionDate").datepicker({
             dateFormat: "yy-mm-dd",
@@ -94,85 +102,97 @@ $agentName = $user->getAgent($agent);
             }
         });
     });
-    
-    $('#btnSaveTransaction').click(function () {
+
+    $('#btnSaveTransaction').click(function() {
         if ($('#commission').val() < 5 || $('#commission').val() > 15) {
-            $('#liveToast').toast('show');
+            toast('Commission must be between 5% and 15%', 'error');
             return false;
         }
 
-		$.post('../controllers/Transaction.php', {
-			action: 'saveTransaction',
-			agent: $('#newTransactionForm').data('agent'),
-			insured: $('#insured').val(),
-			carrier: $('#carrier').val(),
-			policyNumber: $('#policyNumber').val(),
-			type: $('#transactionType').val(),
-			premium: $('#premium').val(),
-			date: $('#newTransactionDate').val(),
+        $.post('../controllers/Transaction.php', {
+            action: 'saveTransaction',
+            agent: $('#newTransactionForm').data('agent'),
+            insured: $('#insured').val(),
+            carrier: $('#carrier').val(),
+            policyNumber: $('#policyNumber').val(),
+            type: $('#transactionType').val(),
+            premium: $('#premium').val(),
+            date: $('#newTransactionDate').val(),
             commission: $('#commission').val(),
-		}).done(function (resp) {
-			if (resp > 0) {
-				// success
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Success');
-				$('#infoModalText').html('Transaction saved successfully');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn-info" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-				loadPolicySummary();
-				loadPolicyTable();
-			} else {
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Error');
-				$('#infoModalText').html('There was an error saving the transaction');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn-danger" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-			}
-		});
-	});
+        }).done(function(resp) {
+            if (resp > 0) {
+                // success
+                modalHide('infoModal');
+                $('#infoModalTitle').text('Success');
+                $('#infoModalText').parent().removeClass().addClass('modalTitle bg-green-800');
+                $('#infoModalText').html('Transaction saved successfully');
+                $('#infoModalButtons').html(
+                    '<div id="okButton">'
+                );
+                $('#okButton').load('../components/buttons/okButton.php');
+                modalShow('infoModal');
+                loadPolicySummary();
+                loadPolicyTable();
+            } else {
+                modalHide('infoModal');
+                $('#infoModalTitle').text('Error');
+                $('#infoModalText').parent().removeClass().addClass('modalTitle bg-red-800');
+                $('#infoModalText').html('There was an error saving the transaction');
+                $('#infoModalButtons').html(
+                    '<div id="okButton">'
+                );
+                $('#okButton').load('../components/buttons/okButton.php');
+                modalShow('infoModal');
+            }
+        });
+    });
 
-    $('#btnSavePolicy').click(function () {
+    $('#btnSavePolicy').click(function() {
         if ($('#commission').val() < 5 || $('#commission').val() > 15) {
-            $('#liveToast').toast('show');
+            toast('Commission must be between 5% and 15%', 'error');
             return false;
         }
-		$.post('../controllers/Transaction.php', {
-			action: 'editTransaction',
-			agent: $('#newTransactionForm').data('agent'),
-			insured: $('#insured').val(),
-			carrier: $('#carrier').val(),
-			policyNumber: $('#policyNumber').val(),
-			premium: $('#premium').val(),
-			commission: $('#commission').val(),
-			date: $('#newTransactionDate').val(),
-			id: $('#newTransactionForm').data('id'),
-			type: $('#transactionType').val(),
-		}).done(function (resp) {
-			console.log(resp);
-			if (resp == 1) {
-				// success
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Success');
-				$('#infoModalText').html('Transaction updated successfully');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn-info" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-				loadPolicySummary();
-				loadPolicyTable();
-			} else {
-				$('#infoModal').modal('hide');
-				$('#infoModalTitle').text('Error');
-				$('#infoModalText').html('There was an error updating the Transaction');
-				$('#infoModalButtons').html(
-					'<button type="button" class="btn-danger" data-bs-dismiss="modal">Ok</button>'
-				);
-				$('#infoModal').modal('show');
-			}
-		});
-	});
+        $.post('../controllers/Transaction.php', {
+            action: 'editTransaction',
+            agent: $('#newTransactionForm').data('agent'),
+            insured: $('#insured').val(),
+            carrier: $('#carrier').val(),
+            policyNumber: $('#policyNumber').val(),
+            premium: $('#premium').val(),
+            commission: $('#commission').val(),
+            date: $('#newTransactionDate').val(),
+            id: $('#newTransactionForm').data('id'),
+            type: $('#transactionType').val(),
+        }).done(function(resp) {
+            console.log(resp);
+            if (resp == 1) {
+                // success
+                modalHide('infoModal');
+                $('#infoModalTitle').text('Success');
+                $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-green-800');
+                $('#infoModalText').html('Transaction updated successfully');
+                $('#infoModalButtons').html(
+                    '<div id="okButton"></div>'
+                );
+                $('#okButton').load('../components/buttons/okButton.php');
+                modalShow('infoModal');
+                loadPolicySummary();
+                loadPolicyTable();
+            } else {
+                modalHide('infoModal');
+                $('#infoModalTitle').text('Error');
+                $('#infoModalText').parent().removeClass().addClass('modalTitle bg-red-800');
+                $('#infoModalText').html('There was an error updating the Transaction');
+                $('#infoModalButtons').html(
+                    '<div id="okButton"></div>'
+                );
+                $('#okButton').load('../components/buttons/okButton.php');
+                modalShow('infoModal');
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        modalHide('spinner');
+    });
 </script>

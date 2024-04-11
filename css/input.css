@@ -7,14 +7,47 @@
 		@apply text-2xl font-bold;
 	}
 
+	h3 {
+		@apply text-3xl font-bold;
+	
+	}
+
 	button {
-		@apply text-white font-bold py-2 px-4 rounded-lg cursor-pointer focus:outline-none focus:ring-4 shadow;
+		@apply text-white font-bold py-2 px-4 rounded-lg cursor-pointer focus:outline-none focus:ring-4 hover:ring-2 shadow-md;
+	}
+
+	input, select {
+		@apply w-full py-2 px-4 rounded-lg border-2 border-zinc-400 focus:outline-none focus:ring-4 focus:ring-sky-700;
+	}
+
+	input:checked ~ .dot {
+		@apply translate-x-full
+	  }
+	
+	input:checked ~ .dotBG {
+		@apply bg-sky-700 ring-sky-300 ring-2
+	}
+
+	th, td {
+		@apply p-2
 	}
 }
 
 @layer components {
+	.btn-sm {
+		@apply py-1 px-2 text-sm;
+	}
+
 	.modalTitle {
 		@apply px-4 py-5 border-b text-white sm:px-6;
+	}
+
+	.nav-item {
+		@apply px-3 py-2 rounded-t-lg cursor-pointer text-gray-400 border border-gray-400 border-b-0 hover:bg-sky-950 hover:text-white;
+	}
+
+	.nav-item.active {
+		@apply bg-sky-950 text-white;
 	}
 
 	.btn-success {
@@ -34,10 +67,122 @@
 	}
 
 	.btn-primary {
-		@apply bg-gradient-to-r from-sky-800 to-sky-950 hover:bg-sky-700 hover:ring-sky-500 shadow-sky-500;
+		@apply bg-gradient-to-r from-sky-800 to-sky-950 hover:bg-sky-700 hover:ring-sky-700 shadow-sky-700;
 	}
 
 	.btn-secondary {
-		@apply bg-gradient-to-r from-zinc-200 to-zinc-400 hover:bg-gray-700 hover:ring-gray-500;
+		@apply bg-gradient-to-r from-zinc-200 to-zinc-400 hover:bg-gray-700 hover:ring-gray-500 shadow-zinc-500;
+	}
+
+	.btn-outline-info {
+		@apply text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white;
+	}
+
+	.btn-outline-primary {
+		@apply text-sky-600 border-sky-600 hover:bg-sky-600 hover:text-white;
+	}
+
+	.btn-outline-secondary {
+		@apply text-zinc-400 border-zinc-400 hover:bg-zinc-400 hover:text-white;
+	}
+
+	.btn-outline-success {
+		@apply text-green-600 border-green-600 hover:bg-green-600 hover:text-white;
+	}
+
+	.btn-outline-danger {
+		@apply text-red-600 border-red-600 hover:bg-red-600 hover:text-white;
+	}
+
+	.btn-outline-warning {
+		@apply text-yellow-600 border-yellow-600 hover:bg-yellow-600 hover:text-white;
+	}
+
+	.btn-outline-light {
+		@apply text-gray-600 border-gray-600 hover:bg-gray-600 hover:text-white;
+	}
+
+	.btn-outline-danger.checked {
+		@apply text-white border-red-600 bg-red-600;
+	}
+
+	.btn-outline-info.checked {
+		@apply text-white border-blue-600 bg-blue-600;
+	}
+
+	.btn-outline-primary.checked {
+		@apply text-white border-sky-600 bg-sky-600;
+	}
+
+	.btn-outline-secondary.checked {
+		@apply text-white border-zinc-400 bg-zinc-400;
+	}
+
+	.btn-outline-success.checked {
+		@apply text-white border-green-600 bg-green-600;
+	}
+
+	.btn-outline-warning.checked {
+		@apply text-white border-yellow-600 bg-yellow-600;
+	}
+
+	.bg-primary-light {
+		@apply bg-sky-100;
+	}
+
+	.accordion-header.active .arrowClose {
+		@apply block;
+	}
+
+	.accordion-header.active .arrowOpen {
+		@apply hidden;
+	}
+
+	.accordion-header:not(.active) .arrowClose {
+		@apply hidden;
+	}
+
+	.accordion-header:not(.active) .arrowOpen {
+		@apply block;
+	}
+
+	.accordion-header {
+		@apply flex items-center px-4 py-2 rounded cursor-pointer text-white text-center;
+	}
+
+	.accordion-content {
+		@apply transition-all duration-500 ease-in-out overflow-hidden;
+	}
+
+	.accordion-content:not(.active) {
+		@apply h-0;
+	}
+
+	.text-tab {
+		@apply p-2 text-center cursor-pointer font-bold border-b-2 gap-1 text-zinc-400 border-zinc-400 hover:text-zinc-800 hover:border-zinc-800;
+	}
+
+	.text-tab.active {
+		@apply text-zinc-800 border-zinc-800;
+	}
+
+	.tab-pane {
+		@apply transition-all duration-300 ease-in-out overflow-hidden;
+	}
+
+	.tab-pane:not(.active) {
+		@apply h-0 hidden;
+	}
+
+	.row-content {
+		@apply transition-all duration-300 ease-in-out overflow-hidden;
+	}
+
+	.row-content:not(.active) {
+		@apply h-0;
+	}
+
+	.page-item {
+		@apply border text-center cursor-pointer py-2 px-4;
 	}
 }

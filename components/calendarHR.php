@@ -2,6 +2,7 @@
 
 include_once('../models/User.php');
 include_once('../controllers/Login.php');
+include_once('../models/Dates.php');
 
 $user = new User();
 $user->load($_SESSION['user']['id']);
@@ -11,16 +12,22 @@ $month = isset($_POST['month']) ? $_POST['month'] : date("n");
 $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 $employee = isset($_POST['employee']) ? $_POST['employee'] : getUser();
 $marcaciones = $user->getMonthPunches($year, $month, $employee);
-
-echo "<script>console.log('Procesando marcaciones de $employee para el mes de $month del año $year esta es la lista" . json_encode($marcaciones) . "');</script>";
 ?>
 
-<div class="flex flex-row border-b-red-900 border-b-4">
-    <div class="">
-        <h4><?php echo $months[$month - 1]; ?></h4>
-    </div>
-    <div class="mx-8">
-        <h4><?php echo $year; ?></h4>
+<div class="border-b-red-900 border-b-4">
+    <div class="w-4/5 justify-between flex flex-row mx-auto">
+        <div class="cursor-pointer">
+            <i class="fa-solid fa-angles-left fa-2xl"></i>
+        </div>
+        <div class="">
+            <h4><?php echo $months[$month - 1]; ?></h4>
+        </div>
+        <div class="">
+            <h4><?php echo $year; ?></h4>
+        </div>
+        <div class="cursor-pointer">
+            <i class="fa-solid fa-angles-right fa-2xl"></i>
+        </div>
     </div>
 </div>
 <div class="flex flex-row border-b-2 border-b-red-900 shadow pt-2">
@@ -30,7 +37,7 @@ echo "<script>console.log('Procesando marcaciones de $employee para el mes de $m
     $diasNoMarcados = 0;
     $day = 1;
     $row = 1;
-    $totalDays = cal_days_in_month(CAL_GREGORIAN, 10, $year);
+    $totalDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
     $week = array('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN');
     $dayOfWeek = 0;
     while ($dayOfWeek <= 6) { ?>
@@ -52,22 +59,27 @@ echo "<script>console.log('Procesando marcaciones de $employee para el mes de $m
     <?php }
     while ($day <= $totalDays) {
         $bgColor = ($contador >= 6) ? "bg-sky-950" : "bg-gray-400";
-        $entrada = 'No punch-in';
+        $entrada = '';
         foreach ($marcaciones as $marcacion) {
-            //var_dump($marcacion);
             if ($day == $marcacion['Fecha']) {
                 $entrada = $marcacion['Entrada'];
             }
         }
-        if ($entrada != 'No punch-in') {
+        if ($entrada != '') {
             if ($entrada > '07:00:00') {
                 $bgColor = 'bg-red-900';
             } else {
                 $bgColor = 'bg-green-800';
             }
         }
+        $date = new Holiday($year . '-' . $month . '-' . $day);
+        if ($date->isHoliday()) {
+            $bgColor = 'bg-blue-800';
+        }
     ?>
-        <div class="flex flex-col dia p-0 md:p-2 rounded border border-white text-white <?php if ($contador < 6) { echo 'calendarClickable'; } ?> <?= $bgColor ?>" data-searchdate="<?php echo ($year . '-' . $month . '-' . $day)?>" data-day="<?php echo $months[$month - 1] . " " . $day . " " . $year ?>">
+        <div class="flex flex-col dia p-0 md:p-2 rounded border border-white text-white <?php if ($contador < 6) {
+                                                                                            echo 'calendarClickable';
+                                                                                        } ?> <?= $bgColor ?>" data-searchdate="<?php echo ($year . '-' . $month . '-' . $day) ?>" data-day="<?php echo $months[$month - 1] . " " . $day . " " . $year ?>">
             <div class="text-right">
                 <span><?= $day ?></span>
             </div>
@@ -97,4 +109,8 @@ echo "<script>console.log('Procesando marcaciones de $employee para el mes de $m
 <?php $contador++;
     }
 ?>
+</div>
+<div>
+    <h4 class="mb-2">Legend</h4>
+    <button class="btn-success">On time</button> <button class="btn-danger">Late</button> <button class="btn-secondary">No Punch-In</button> <button class="btn-info">Holiday</button> <button class="btn-primary">Weekend</button>
 </div>

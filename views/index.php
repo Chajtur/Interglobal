@@ -29,7 +29,7 @@ $_SESSION['root'] = ROOT_DIR;
     <link rel="icon" href="https://interglobalus.com/wp-content/uploads/2021/12/cropped-LOGO-INTERGLOBAL-01-270x270.png">
 </head>
 
-<body id="allContent" class="flex h-screen w-screen">
+<body id="allContent" class="flex h-screen w-screen bg-slate-100">
     <?php
     require "../controllers/Login.php";
     startSession();

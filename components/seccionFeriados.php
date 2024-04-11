@@ -1,7 +1,12 @@
 <?php
 
+include_once '../controllers/Login.php';
+
+startSession();
+checkActivity();
+
 include '../models/Dates.php';
-include '../models/User.php';
+include_once '../models/User.php';
 
 $user = new User($_SESSION['user']['id']);
 
@@ -10,8 +15,8 @@ $date = new Holiday($_POST['fecha']);
 $data = $date->getHolidays();
 ?>
 
-<p id="listaVacaciones" class="w-full bg-sky-950 text-white rounded border border-sky-950 p-1 ps-2 shadow mb-2 text-center">Holiday</p>
-
+<h4 id="listaVacaciones" class="w-full bg-sky-950 text-white rounded border border-sky-950 p-1 ps-2 shadow">Holiday</h4>
+<div class="mt-2">
 <?php
 if (($data) && ($data['holidayActive'])) { ?>
     <div class="flex flex-row w-full justify-between">
@@ -33,3 +38,4 @@ if (($data) && ($data['holidayActive'])) { ?>
     </div>
 <?php }
     } ?>
+</div>

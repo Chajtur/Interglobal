@@ -6,22 +6,24 @@ $quote = new Quote();
 $quotes = $quote->getAll($_SESSION['user']['id']);
 
 ?>
-<h4>Saved Quotes</h4>
-<table class="table table-striped" id="tableQuoted">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>DOT</th>
-            <th>Name</th>
+<div class="w-full lg:w-3/4">
+    <h4>Saved Quotes</h4>
+    <table class="table w-full" id="tableQuoted">
+</div>
+<thead>
+    <tr class="bg-sky-950 text-white font-bold">
+        <th class="p-2 rounded-s text-start">Date</th>
+        <th>DOT</th>
+        <th class="rounded-e p-2">Name</th>
+    </tr>
+</thead>
+<tbody>
+    <?php
+    foreach ($quotes as $q) { ?>
+        <tr class="border-b" data-id=<?= $q['id'] ?>>
+            <td class="p-2"><?= $q['date'] ?></td>
+            <td class='text-center'><?= $q['dot'] ?></td>
+            <td></td>
         </tr>
-    </thead>
-    <tbody>
-        <?php
-        foreach ($quotes as $q) { ?>
-            <tr data-id= <?= $q['id'] ?>>
-                <td><?= $q['date'] ?></td>
-                <td><?= $q['dot'] ?></td>
-                <td></td>
-            </tr>
-        <?php } ?>
-    </tbody>
+    <?php } ?>
+</tbody>

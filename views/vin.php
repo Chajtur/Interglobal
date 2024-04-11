@@ -6,20 +6,20 @@ if (!isset($_SESSION)) {
 }
 ?>
 
-<div class="row text-center">
-    <div class="col-md-4 col-sm-12 mx-auto justify-content-center">
-        <div class="form-floating mb-3 w-75 mx-auto">
-            <input class="form-control rounded border-primary" id="vinSearch" type="text" placeholder="VIN #">
-            <label class="text-primary" for="vinSearch">Ingrese el VIN a buscar</label>
+<div class="flex flex-col text-center">
+    <div class="w-full md:w-1/3 mx-auto justify-center">
+        <div class="mb-3 w-3/4 mx-auto">
+            <div class="text-sky-950" for="vinSearch">Input the VIN number</div>
+            <input class="rounded border border-sky-950" id="vinSearch" type="text" placeholder="VIN #">
         </div>
-        <button class="btn btn-info" id="vinSearchBtn">Cargar</button>
-        <div class="table-responsive mt-4">
-            <table class="table table-striped">
-                <thead>
-                    <th>Propiedad</th>
-                    <th>Valor</th>
+        <button class="btn-info" id="vinSearchBtn">Search</button>
+        <div class="mt-4">
+            <table class="table w-full">
+                <thead class="bg-blue-400 text-white rounded-lg">
+                    <th>Property</th>
+                    <th>Value</th>
                 </thead>
-                <tbody id="vinTable"></tbody>
+                <tbody id="vinTable" class="divide-y divide-gray-200"></tbody>
             </table>
         </div>
     </div>
