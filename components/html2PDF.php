@@ -2,8 +2,8 @@
 
 $styles = file_get_contents('../css/html2PDF.css');
 $logo = file_get_contents('../assets/logo-tiny-removebg-preview.png');
-include_once '../models/User.php';
-include_once '../controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
 
 ini_set("display_errors", true);
 ini_set("error_log", "phperr.log");
@@ -15,7 +15,7 @@ $user->load($_SESSION['user']['id']);
 
 
 // Include autoloader 
-require_once '../assets/dompdf/autoload.inc.php'; 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/assets/dompdf/autoload.inc.php'; 
 
 // Reference the Dompdf namespace 
 use Dompdf\Dompdf;

@@ -1,12 +1,11 @@
-<?php 
-
-include_once '../helpers/db.php';
+<?php
 
 class Coverage {
     public $id;
     public $idQuote;
     public $idBillPlan;
     public $carrier;
+    public $type;
     public $amount;
     public $basePremium;
     public $totalPremium;
@@ -54,10 +53,19 @@ class Coverage {
     function load($id, $idQuote, $idBillPlan)
     {
         global $conn;
-        $query = "Select * from Coverages where idCoverage = $id and idQuote = $idQuote and idBillPlan = $idBillPlan";
+        $query = "Select C.*, L.name from Coverages C, LoB L where idCoverage = $id and idQuote = $idQuote and idBillPlan = '$idBillPlan' and L.id = idCoverage";
         $resp = $conn->query($query);
         $coverage = $resp->fetch_assoc();
-        return $coverage;
+        $this->id = $coverage['idCoverage'];
+        $this->idQuote = $coverage['idQuote'];
+        $this->idBillPlan = $coverage['idBillPlan'];
+        $this->carrier = $coverage['carrier'];
+        $this->amount = $coverage['amount'];
+        $this->basePremium = $coverage['basePremium'];
+        $this->taxesFees = $coverage['taxesFees'];
+        $this->totalPremium = $this->basePremium + $this->taxesFees;
+        $this->notes = $coverage['notes'];
+        $this->type = $coverage['name'];
     }
 
     /** Función que lista todas las Coberturas del Bill Plan 
@@ -70,7 +78,7 @@ class Coverage {
     function listAll($idQuote, $idBillPlan)
     {
         global $conn;
-        $query = "Select idCoverage from Coverages where idQuote = $idQuote and idBillPlan = $idBillPlan";
+        $query = "Select idCoverage from Coverages where idQuote = $idQuote and idBillPlan = '$idBillPlan' order by idCoverage ASC";
         $resp = $conn->query($query);
         $coverages = mysqli_fetch_all($resp, MYSQLI_ASSOC);
         return $coverages;

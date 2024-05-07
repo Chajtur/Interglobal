@@ -417,11 +417,7 @@
 
         $(document).on('click', '#btnSaveCall', function() {
             if ($('.btnStatus.active').text() == '') {
-                $('#infoModalTitle').html('Error!');
-                $('#infoModalText').html('You must select one result for the call Lead/Possible/No Answer...');
-                $('#infoModalTitle').parent().removeClass();
-                $('#infoModalTitle').parent().addClass('modalTitle bg-red-400');
-                modalShow('infoModal');
+                toast('You must select one result for the call Lead/Possible/No Answer...', 'error');
                 return false;
             }
             $.post('../controllers/CallCenter.php', {
@@ -435,7 +431,9 @@
                 $('#infoModalTitle').html('Call Saved!');
                 $('#infoModalText').html('Call was saved successfully!!');
                 $('#infoModalTitle').parent().removeClass();
-                $('#infoModalTitle').parent().addClass('modalTitle bg-green-400');
+                $('#infoModalTitle').parent().addClass('modalTitle bg-green-400 successMessage');
+                $('#infoModalButtons').html('<div id="okButton"></div>');
+                $('#okButton').load('../components/buttons/okButton.php');
                 modalShow('infoModal');
                 getNewCall(
                     $('#filterCallState option:selected').val(),
@@ -714,7 +712,7 @@
         }
         $('#infoModalTitle').html('Call Details');
         $('#infoModalTitle').parent().removeClass();
-        $('#infoModalTitle').parent().addClass('modalTitle bg-blue-500');
+        $('#infoModalTitle').parent().addClass('modalTitle bg-blue-500 successMessage');
         $string = "<table class='table w-full border-2 rounded-lg border-blue-500'>";
         $string += '<tbody>';
         $string += '<tr class="border-b">';

@@ -1,7 +1,7 @@
-<script src="../js/quotes.js"></script>
 <?php
 
-if (!isset($_SESSION)) {
+if (!isset($_SESSION))
+{
     session_start();
 }
 ?>
@@ -28,9 +28,35 @@ if (!isset($_SESSION)) {
         </div>
     </div>
     <div class="w-1/3">
-        <?php include '../components/pendingQuotes.php'; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/quotes/pendingQuotes.php'; ?>
     </div>
     <div class="w-1/3">
-        <?php include '../components/quoted.php'; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/quotes/quoted.php'; ?>
     </div>
 </div>
+
+<script>
+    $('#btnGenerateProposal').click(function () {
+        $id = $(this).data('id');
+        $('#contenido').load('../views/proposalForm.php', {
+            client: $(this).data('client'),
+            dot: $(this).data('dot')
+        });
+    });
+
+    $('body').on('click', '#btnManualProposal', function () {
+        $client = $('#manualName').val();
+        $dot = $('#manualDot').val();
+        $('#contenido').load('../views/proposalForm.php', {
+            client: $client,
+            dot: $dot,
+        });
+    });
+
+    $('body').on('click', '#btnSearchDot', function () {
+        $dot = $('#dotSearch').val();
+        $('#quoteDetail').load('../components/quotes/clientDetail.php', {
+            dot: $dot,
+        });
+    });
+</script>

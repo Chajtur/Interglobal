@@ -60,6 +60,12 @@ $('.toastClose').on('click', function () {
 	$('#liveToast').addClass('hidden');
 });
 
+$('#infoModal').click(function() {
+    if ($('#infoModalTitle').parent().hasClass('successMessage')) {
+        modalHide('infoModal');
+    }
+});
+
 $('#menuSwipe').on('swipe', function () {
 	$(sidebar).toggleClass('hidden');
 });
@@ -71,9 +77,7 @@ function checkUser() {
 	}).done(function (resp) {
 		console.log(resp);
 		if (resp == 0) {
-			//$('.modal').modal('hide');
 			modalShow('sesionExpirada');
-			//$('#sesionExpirada').modal('show');
 			location.reload();
 		}
 	});

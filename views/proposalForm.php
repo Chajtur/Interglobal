@@ -5,18 +5,37 @@ include "../controllers/Load.php";
 $id = $_POST['id'] ?? "0";
 $client = $_POST['client'] ?? "0";
 $dot = $_POST['dot'] ?? "0";
+$idQuote = $_POST['idQuote'] ?? "0";
 
-if ($id != "0") {
-    $quoteDetail = queryGeneralDotWeb($id);
+if ($id != "0")
+{
+    $quoteDetail = queryGeneralDot($id);
 }
 
-include "../models/LoB.php";
+if ($idQuote != "0")
+{
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/models/Quote.php";
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/models/BillPlan.php";
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/models/Coverage.php";
 
-$coverage = new LoB();
-$coverages = $coverage->getAll();
+    $quote = new Quote();
+    $coverage = new Coverage();
+    $quote->load($idQuote);
+    $billPlanObject = new BillPlan();
+    $billPlans = $billPlanObject->listAll($idQuote);
+    $billPlanDetail = new BillPlan();
+    $idOption = 0;
+}
+
+include $_SERVER['DOCUMENT_ROOT'] . "/models/LoB.php";
+
+$LOB = new LoB();
+$coverageList = $LOB->getAll();
 
 ?>
-<h3 class="text-center text-sky-950" id="clientDiv" data-name="<?= $id == 0 ? $client : $quoteDetail->legalName ?>">Proposal For : <?= $id == 0 ? $client : $quoteDetail->legalName ?></h3>
+<h3 class="text-center text-sky-950" id="clientDiv"
+    data-name="<?= $idQuote == 0 ? ($id == 0 ? $client : $quoteDetail->legalName) : $quote->owner ?>">
+    Proposal For : <?= $idQuote == 0 ? ($id == 0 ? $client : $quoteDetail->legalName) : $quote->owner ?></h3>
 <div class="w-full lg:w-1/3 mx-auto mt-2 flex flex-col p-2">
     <label class="w-full text-center text-sky-950" for="proposalType">Select Proposal Type</label>
     <select class="text-sky-950" id="proposalType">
@@ -38,61 +57,188 @@ $coverages = $coverage->getAll();
 <div class="flex flex-col mt-2">
     <!-- Nav Tabs -->
     <ul class="nav nav-tabs flex flex-row border-b" id="optionsTabs" role="tablist">
-        <li class="nav-item active" role="presentation" data-option=1>
-            <a class="nav-link" id="optionTab1" data-bs-toggle="tab" href="#tabOption1" role="tab" aria-controls="coverage" aria-selected="true">
-                <i class="fa-solid fa-pencil text-white me-3 optionName"></i><span data-optionName=1>Option 1</span>
-            </a>
-        </li>
+        <?php if ($idQuote == 0)
+        { ?>
+            <li class="nav-item active" role="presentation" data-option=1>
+                <a class="nav-link" id="optionTab1" data-bs-toggle="tab" href="#tabOption1" role="tab"
+                    aria-controls="coverage" aria-selected="true">
+                    <i class="fa-solid fa-pencil text-white me-3 optionName"></i><span data-optionName=1>Option 1</span>
+                </a>
+            </li>
+        <?php } else
+        {
+            foreach ($billPlans as $bp)
+            {
+                $billPlanObject->load($bp['idBillPlan'], $idQuote);
+                if ($billPlanObject->idOption != $idOption)
+                {
+                    $idOption = $billPlanObject->idOption;
+                    ?>
+                    <li class="nav-item <?php echo $idOption == 1 ? ' active' : ''?>" role="presentation" data-option=<?= $idOption ?>>
+                        <a class="nav-link" id="optionTab<?= $idOption ?>" data-bs-toggle="tab" href="#tabOption<?= $idOption ?>" role="tab" aria-controls="coverage" aria-selected="true">
+                            <i class="fa-solid fa-pencil text-white me-3 optionName"></i><span data-optionName=<?= $idOption ?>><?= $billPlanObject->optionName ?: 'Option ' . $idOption ?></span><?php if ($idOption <> 1)
+                            {
+                                echo "<i class='ms-3 fa-solid fa-trash-can text-white removeOption'/i></i>"; 
+                                } 
+                            ?>
+                        </a>
+                    </li>
+                <?php }
+            }
+        } ?>
     </ul>
     <!-- Tab Content -->
     <div class="tab-content mt-2" id="optionContent">
-        <div data-option=1 id="tabOption1" class="tab-pane active" role="tabpanel" aria-labelledby="table-tab">
-            <caption class="text-xs">All Coverages with <span class="bg-red-100 p-1">BACKGROUND</span> are missing a Bill Plan</caption>
-            <table class="table tableOptions mt-2 w-full" data-option=1>
-                <thead>
-                    <tr class="text-center">
-                        <th class="bg-sky-100"></th>
-                        <th class="bg-sky-100 text-start">Line of Business</th>
-                        <th class="bg-sky-100 text-end">Amount</th>
-                        <th data-id="1" class="bg-green-100 text-start">Carrier</th>
-                        <th data-id="1" class="bg-green-100 text-end">Base Premium</th>
-                        <th data-id="1" class="bg-green-100 text-end">Taxes & Fees</th>
-                        <th data-id="1" class="bg-green-100 text-end">Total Premium</th>
-                        <th data-id="1" class="bg-green-100">Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot class="hidden">
-                    <tr class="bg-sky-950 text-white text-center">
-                        <th colspan="1"></th>
-                        <th colspan="3">Bill Plan for</th>
-                        <th class="text-end">Duration</th>
-                        <th class="text-end">No. of Installments</th>
-                        <th class="text-end">Down Payment</th>
-                        <th class="text-end">Installment Amount</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+        <?php
+        if ($idQuote != 0)
+        {
+            $options = $quote->listOptions();
+            foreach ($options as $op)
+            {
+                $idOption = $op['idOption'];
+                $billPlanList = $quote->listBillPlans($idOption);
+                ?>
+            <div data-option=<?= $idOption ?> id="tabOption<?= $idOption ?>"
+                    class="tab-pane <?= $idOption == 1 ? 'active' : '' ?>" role="tabpanel"
+                    aria-labelledby="table-tab">
+                    <caption class="text-xs">All Coverages with <span class="bg-red-100 p-1">BACKGROUND</span> are missing a
+                        Bill Plan</caption>
+                    <table class="table tableOptions mt-2 w-full" data-option=<?= $idOption ?>>
+                        <thead>
+                        <tr class="text-center">
+                            <th class="bg-sky-100"></th>
+                            <th class="bg-sky-100 text-start">Line of Business</th>
+                            <th class="bg-sky-100 text-end">Amount</th>
+                            <th data-id="1" class="bg-green-100 text-start">Carrier</th>
+                            <th data-id="1" class="bg-green-100 text-end">Base Premium</th>
+                            <th data-id="1" class="bg-green-100 text-end">Taxes & Fees</th>
+                            <th data-id="1" class="bg-green-100 text-end">Total Premium</th>
+                            <th data-id="1" class="bg-green-100">Notes</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($billPlanList as $bp)
+                            {
+                                $billPlanObject->load($bp['idBillPlan'], $quote->id);
+                                $coverages = $coverage->listAll($quote->id, $billPlanObject->id);
+                                foreach ($coverages as $c)
+                                {
+                                    $coverage->load($c['idCoverage'], $quote->id, $billPlanObject->id);
+                                    $coverageAmount = $coverage->amount;
+                                    ?>
+                                    <tr class="coverageRow bg-green-100" data-coverage=<?= $coverage->id ?> data-billplan=<?= $billPlanObject->id ?>>
+                                        <td class="text-center">
+                                        <button title="Click to remove Coverage" class="btn-danger btn-sm btnRemoveCoverage">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <button title="Click to assign Bill Plan" class="btn-success btn-sm btnAddBillPlan">
+                                        <i class="fas fa-coins"></i>
+                                    </button>
+                                        </td>
+                                        <td class="text-start"><?= $coverage->type ?></td>
+                                        <td class="text-end">$<?= number_format($coverageAmount, 2, '.', ',') ?></td>
+                                        <td class="text-start">
+                                            <button class="btn-info btn-sm btnEditCoverage me-3">
+                                                <i class="fas fa-pencil"></i>
+                                            </button>
+                                            <?= $coverage->carrier ?>
+                                        </td>
+                                        <td class="text-end">$<?= number_format($coverage->basePremium, 2, '.', ',') ?></td>
+                                        <td class="text-end">$<?= number_format($coverage->taxesFees, 2, '.', ',') ?></td>
+                                        <td class="text-end totalPremiumCoverage" data-value=<?= $coverage->totalPremium ?>>$<?= number_format($coverage->totalPremium, 2, '.', ',') ?></td>
+                                        <td class="text-center">Notes</td>
+                                    </tr>
+                                <?php }
+                            } ?>
+                        </tbody>
+                        <tfoot class="">
+                            <tr class="bg-sky-950 text-white text-center">
+                                <th colspan="1"></th>
+                                <th colspan="3">Bill Plan for</th>
+                                <th class="text-end">Duration</th>
+                                <th class="text-end">No. of Installments</th>
+                                <th class="text-end">Down Payment</th>
+                                <th class="text-end">Installment Amount</th>
+                            </tr>
+                            <?php
+                            foreach ($billPlanList as $bp)
+                            {
+                                $billPlanObject->load($bp['idBillPlan'], $quote->id);
+                                ?>
+                                <tr class="billPlanRow text-end" data-billplan=<?= $billPlanObject->id ?>>
+                                    <td class="text-center">
+                                        <button title="Click to remove Bill Plan" class="btn-danger btn-sm btnRemoveBillPlan me-1">
+                                            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                        </button>
+                                        <button title="Click to edit Bill Plan" class="btn-info btn-sm btnEditBillPlan">
+                                            <i class="fas fa-pencil" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                    <td colspan="3" class="text-center"><?= $billPlanObject->listCoverages() ?></td>
+                                    <td><?= $billPlanObject->term ?></td>
+                                    <td><?= $billPlanObject->installments ?></td>
+                                    <td>$<?= number_format($billPlanObject->downPayment, 2, '.', ',') ?></td>
+                                    <td>$<?= number_format($billPlanObject->installmentAmount, 2, '.', ',') ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tfoot>
+                    </table>
+            </div>
+        <?php }
+        } else { ?>
+            <div data-option=1 id="tabOption1" class="tab-pane active" role="tabpanel" aria-labelledby="table-tab">
+                <caption class="text-xs">All Coverages with <span class="bg-red-100 p-1">BACKGROUND</span> are missing a
+                    Bill Plan</caption>
+                <table class="table tableOptions mt-2 w-full" data-option=1>
+                    <thead>
+                        <tr class="text-center">
+                            <th class="bg-sky-100"></th>
+                            <th class="bg-sky-100 text-start">Line of Business</th>
+                            <th class="bg-sky-100 text-end">Amount</th>
+                            <th data-id="1" class="bg-green-100 text-start">Carrier</th>
+                            <th data-id="1" class="bg-green-100 text-end">Base Premium</th>
+                            <th data-id="1" class="bg-green-100 text-end">Taxes & Fees</th>
+                            <th data-id="1" class="bg-green-100 text-end">Total Premium</th>
+                            <th data-id="1" class="bg-green-100">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot class="hidden">
+                        <tr class="bg-sky-950 text-white text-center">
+                            <th colspan="1"></th>
+                            <th colspan="3">Bill Plan for</th>
+                            <th class="text-end">Duration</th>
+                            <th class="text-end">No. of Installments</th>
+                            <th class="text-end">Down Payment</th>
+                            <th class="text-end">Installment Amount</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        <?php } ?>
 </div>
 <hr>
 <div class="flex-row flex mt-2">
     <div class="w-auto ms-auto">
-        <button class="btn-primary" id="btnPreviewProposal" data-dot=<?= $quoteDetail->dotNumber ?? $dot ?>>Preview Proposal</button>
-        <button class="btn-success" id="btnSaveProposal" data-id=<?= $quoteDetail->dotNumber ?? $dot ?>>Save Proposal</button>
+        <button class="btn-primary" id="btnPreviewProposal" data-dot=<?= $quoteDetail->dotNumber ?? $dot ?>>Preview
+            Proposal</button>
+        <button class="btn-success" id="btnSaveProposal" data-id=<?= $quoteDetail->dotNumber ?? $dot ?>>Save
+            Proposal</button>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-    $('#btnAddCoverage').click(function() {
+    $('#btnAddCoverage').click(function () {
         $('#infoModalTitle').text('Add Coverage');
         $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-green-600');
         $('#infoModalText').html('<div id="quoteCoverageDiv"></div>');
-        $('#quoteCoverageDiv').load('../components/quoteCoverage.php', {
+        $('#quoteCoverageDiv').load('../components/quotes/quoteCoverage.php', {
             idOption: $('#optionsTabs > li.active').data('option'),
         });
         $('#infoModalButtons').html(
@@ -103,13 +249,13 @@ $coverages = $coverage->getAll();
         modalShow('infoModal');
     });
 
-    $('#optionContent').on('click', '.btnRemoveCoverage', function() {
+    $('#optionContent').on('click', '.btnRemoveCoverage', function () {
         let coverage = $(this).closest('tr').find('td:eq(1)').text();
         let idOption = $(this).closest('table').data('option');
-        $('.tableOptions[data-option=' + idOption + '] tfoot .billPlanRow').each(function() {
+        $('.tableOptions[data-option=' + idOption + '] tfoot .billPlanRow').each(function () {
             var billPlanText = $(this).find('td:eq(1)').text();
             billPlanSplit = billPlanText.split(',');
-            billPlanSplit = billPlanSplit.filter(function(value, index, arr) {
+            billPlanSplit = billPlanSplit.filter(function (value, index, arr) {
                 return value != coverage;
             });
             $(this).find('td:eq(1)').text(billPlanSplit.join(','));
@@ -117,11 +263,11 @@ $coverages = $coverage->getAll();
         $(this).closest('tr').remove();
     });
 
-    $('#btnAddBillPlan').click(function() {
+    $('#btnAddBillPlan').click(function () {
         $('#infoModalTitle').text('Add new Bill Plan');
         $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-blue-400');
         $('#infoModalText').html('<div id="billPlanDiv"></div>');
-        $('#billPlanDiv').load('../components/billPlanCoverage.php', {
+        $('#billPlanDiv').load('../components/quotes/billPlanCoverage.php', {
             idOption: $('#optionsTabs > li.active').data('option'),
         });
         $('#infoModalButtons').html(
@@ -132,7 +278,7 @@ $coverages = $coverage->getAll();
         modalShow('infoModal');
     });
 
-    $('#btnAddOption').click(function() {
+    $('#btnAddOption').click(function () {
         var optionCount = $('#optionsTabs > li').length;
         optionCount++;
         $('#optionsTabs > li').removeClass('active');
@@ -187,7 +333,7 @@ $coverages = $coverage->getAll();
             '</table>' +
             '</div>'
         );
-        $('.tableOptions[data-option="1"] tbody tr').each(function() {
+        $('.tableOptions[data-option="1"] tbody tr').each(function () {
             var coverage = $(this).find('td:eq(1)').text();
             var coverageId = $(this).data('coverage');
             var coverageAmount = $(this).find('td:eq(2)').text();
@@ -229,17 +375,17 @@ $coverages = $coverage->getAll();
         });
     });
 
-    $('#optionsTabs').on('click', '.removeOption', function() {
+    $('#optionsTabs').on('click', '.removeOption', function () {
         var id = $(this).closest('li').data('option');
         $('#optionsTabs [data-option="' + id + '"]').remove();
         $('#optionContent [data-option="' + id + '"]').remove();
     });
 
-    $('#optionsTabs').on('click', '.optionName', function() {
+    $('#optionsTabs').on('click', '.optionName', function () {
         $('#infoModalTitle').text('Edit Option Name');
         $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-sky-950');
         $('#infoModalText').html('<div id="optionNameDiv"></div>');
-        $('#optionNameDiv').load('../components/editOptionName.php', {
+        $('#optionNameDiv').load('../components/quotes/editOptionName.php', {
             optionId: $(this).closest('li').data('option'),
             name: $('span[data-optionName="' + $(this).closest('li').data('option') + '"]').text(),
         });
@@ -290,24 +436,24 @@ $coverages = $coverage->getAll();
                 '</h3></div>';
         }
         $html += '  <table class="table table-striped">' + '    <tbody>';
-        $('.coverageRow').each(function() {
+        $('.coverageRow').each(function () {
             var carrierName = $(this)
                 .find('.carrierName[data-id=' + $id + ']')
                 .val();
             var basePremium = parseFloat(
                 $(this)
-                .find('.basePremium[data-id=' + $id + ']')
-                .val()
+                    .find('.basePremium[data-id=' + $id + ']')
+                    .val()
             );
             var taxesFees = parseFloat(
                 $(this)
-                .find('.taxesFees[data-id=' + $id + ']')
-                .val()
+                    .find('.taxesFees[data-id=' + $id + ']')
+                    .val()
             );
             var totalPremiumCoverage = parseFloat(
                 $(this)
-                .find('.totalPremiumCoverage[data-id=' + $id + ']')
-                .data('value')
+                    .find('.totalPremiumCoverage[data-id=' + $id + ']')
+                    .data('value')
             );
             var coverageAmount = $(this).find('td:eq(2)').text();
             var coverage = $(this).find('td:eq(1)').text();
@@ -392,22 +538,26 @@ $coverages = $coverage->getAll();
             '  </table>';
     }
 
-    $('#optionContent').on('click', '.btnEditCoverage', function() {
+    $('#optionContent').on('click', '.btnEditCoverage', function () {
         var idCoverage = $(this).closest('tr').data('coverage');
         var idOption = $(this).closest('table').data('option');
         var coverage = $(this).closest('tr').find('td:eq(1)').text();
         var coverageAmount = $(this).closest('tr').find('td:eq(2)').text();
         var carrier = $(this).closest('tr').find('td:eq(3)').text();
+        carrier = carrier.replace(/\s/g, '');
         var basePremium = $(this).closest('tr').find('td:eq(4)').text();
         var taxesFees = $(this).closest('tr').find('td:eq(5)').text();
         var notes = $(this).closest('tr').find('td:eq(7)').text();
+        coverageAmount = coverageAmount.replace('$', '');
         basePremium = basePremium.replace('$', '');
         taxesFees = taxesFees.replace('$', '');
+        coverageAmount = coverageAmount.replace(',', '');
         basePremium = basePremium.replace(',', '');
         taxesFees = taxesFees.replace(',', '');
-        $('#infoModalTitle').text('Edit Coverage');
+        $('#infoModalTitle').html('<i class="fa-solid fa-triangle-exclamation fa-beat fa-xl me-2"></i>Edit Coverage');
+        $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-yellow-600');
         $('#infoModalText').html('<div id="quoteCoverageDiv"></div>');
-        $('#quoteCoverageDiv').load('../components/editCoverage.php', {
+        $('#quoteCoverageDiv').load('../components/quotes/editCoverage.php', {
             idCoverage: idCoverage,
             idOption: idOption,
             coverage: coverage,
@@ -418,23 +568,25 @@ $coverages = $coverage->getAll();
             notes: notes,
         });
         $('#infoModalButtons').html(
-            '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnUpdateCoverage">Update</button>'
+            '<div class="flex flex-row gap-1"><div id="cancelButton"></div><div id="btnUpdateCoverage"></div>'
         );
+        $('#cancelButton').load('../components/buttons/cancelButton.php');
+        $('#btnUpdateCoverage').load('../components/buttons/saveButton.php');
         modalShow('infoModal');
     });
 
-    $('#btnPreviewProposal').click(function() {
+    $('#btnPreviewProposal').click(function () {
         $('#infoModalTitle').text('Preview Proposal');
         $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-blue-400');
         $('#infoModalText').html('<div id="previewProposalDiv"></div>');
-        $('#previewProposalDiv').load('../components/previewProposal.php');
+        $('#previewProposalDiv').load('../components/quotes/previewProposal.php');
         $('#infoModalButtons').html('<div id="okButton"></div>');
         $('#okButton').load('../components/buttons/okButton.php');
         $('#infoModal').addClass('fullscreen-modal');
         modalShow('infoModal');
     });
 
-    $('#optionContent').on('click', '.btnRemoveBillPlan', function() {
+    $('#optionContent').on('click', '.btnRemoveBillPlan', function () {
         console.log('btnRemoveBillPlan');
         let idOption = $(this).closest('table').data('option');
         let billPlan = $(this).closest('tr').data('billplan');
@@ -451,7 +603,7 @@ $coverages = $coverage->getAll();
         }
     });
 
-    $('#optionContent').on('click', '.btnEditBillPlan', function() {
+    $('#optionContent').on('click', '.btnEditBillPlan', function () {
         var idBillPlan = $(this).closest('tr').data('billplan');
         var idOption = $(this).closest('table').data('option');
         var billPlan = $(this).closest('tr').find('td:eq(1)').text();
@@ -459,9 +611,10 @@ $coverages = $coverage->getAll();
         var billPlanInstallments = $(this).closest('tr').find('td:eq(3)').text();
         var billPlanDownPayment = $(this).closest('tr').find('td:eq(4)').text();
         var billPlanAmount = $(this).closest('tr').find('td:eq(5)').text();
-        $('#infoModalTitle').text('Edit Bill Plan');
+        $('#infoModalTitle').html('<i class="fa-solid fa-triangle-exclamation fa-beat me-2"></i> Edit Bill Plan');
+        $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-yellow-600');
         $('#infoModalText').html('<div id="billPlanDiv"></div>');
-        $('#billPlanDiv').load('../components/editBillPlan.php', {
+        $('#billPlanDiv').load('../components/quotes/editBillPlan.php', {
             idBillPlan: idBillPlan,
             idOption: idOption,
             billPlan: billPlan,
@@ -471,18 +624,20 @@ $coverages = $coverage->getAll();
             amount: billPlanAmount,
         });
         $('#infoModalButtons').html(
-            '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-success" id="btnUpdateBillPlan">Update</button>'
+            '<div class="flex flex-row gap-1"><div id="cancelButton"></div><div id="btnUpdateBillPlan"></div></div>'
         );
+        $('#cancelButton').load('../components/buttons/cancelButton.php');
+        $('#btnUpdateBillPlan').load('../components/buttons/saveButton.php');
         modalShow('infoModal');
     });
 
-    $('#optionContent').on('click', '.btnAddBillPlan', function() {
+    $('#optionContent').on('click', '.btnAddBillPlan', function () {
         var idOption = $(this).closest('table').data('option');
         var idCoverage = $(this).closest('tr').data('coverage');
         $('#infoModalTitle').text('Add Coverage to Bill Plan');
         $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-blue-400');
         $('#infoModalText').html('<div id="billPlanDiv"></div>');
-        $('#billPlanDiv').load('../components/addBillPlanCoverage.php', {
+        $('#billPlanDiv').load('../components/quotes/addBillPlanCoverage.php', {
             idOption: idOption,
             idCoverage: idCoverage,
         });
@@ -494,7 +649,7 @@ $coverages = $coverage->getAll();
         modalShow('infoModal');
     });
 
-    $('#btnSaveProposal').on('click', function() {
+    $('#btnSaveProposal').on('click', function () {
         let $dot = $(this).data('id');
         let $errors = 0;
         let $idQuote = 0;
@@ -503,14 +658,15 @@ $coverages = $coverage->getAll();
             dot: $dot,
             idQuote: $(this).data('quote'),
             type: $('#proposalType').val(),
-        }).done(function(data) {
+            name: $('#clientDiv').data('name'),
+        }).done(function (data) {
             data = JSON.parse(data);
             if (data.code == 200) {
                 $idQuote = data.id;
-                $('#optionsTabs li').each(function() {
+                $('#optionsTabs li').each(function () {
                     let $idOption = $(this).data('option');
                     console.log('Saving Coverages for ' + $idOption);
-                    $('.tableOptions[data-option=' + $idOption + '] tbody .coverageRow').each(function() {
+                    $('.tableOptions[data-option=' + $idOption + '] tbody .coverageRow').each(function () {
                         let $idCoverage = $(this).data('coverage');
                         let $coverageAmount = $(this).find('td:eq(2)').text();
                         let $carrier = $(this).find('td:eq(3)').text();
@@ -530,23 +686,25 @@ $coverages = $coverage->getAll();
                                 taxesFees: $taxesFees,
                                 notes: $notes,
                                 idBillPlan: $idBillPlan,
-                            }).done(function(data) {
+                            }).done(function (data) {
                                 console.log(data);
                                 data = JSON.parse(data);
                                 if (data.code == 500) {
                                     $errors++;
-                                    $('#infoModalTitle').text('Error');
+                                    $('#infoModalTitle').html('<i class="fa-solid fa-circle-exclamation fa-beat me-2"></i> Error');
+                                    $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-red-600');
                                     $('#infoModalText').text(data.message);
                                     $('#infoModalButtons').html(
-                                        '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>'
+                                        '<div id="okButton"></div>'
                                     );
+                                    $('#okButton').load('../components/buttons/okButton.php');
                                     modalShow('infoModal');
                                 }
                             });
                         }
                     });
                     console.log('Saving Bill Plans for ' + $idOption);
-                    $('.tableOptions[data-option=' + $idOption + '] tfoot .billPlanRow').each(function() {
+                    $('.tableOptions[data-option=' + $idOption + '] tfoot .billPlanRow').each(function () {
                         let $idBillPlan = $(this).data('billplan');
                         let $term = $(this).find('td:eq(2)').text();
                         let $installments = $(this).find('td:eq(3)').text();
@@ -562,16 +720,18 @@ $coverages = $coverage->getAll();
                             downPayment: $downPayment,
                             installmentAmount: $installmentAmount,
                             idQuote: $idQuote,
-                        }).done(function(data) {
+                        }).done(function (data) {
                             console.log(data);
                             data = JSON.parse(data);
                             if (data.code == 500) {
                                 $errors++;
-                                $('#infoModalTitle').text('Error');
-                                $('#infoModalText').text(data.message);
-                                $('#infoModalButtons').html(
-                                    '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>'
-                                );
+                                $('#infoModalTitle').html('<i class="fa-solid fa-circle-exclamation fa-beat me-2"></i> Error');
+                                    $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-red-600');
+                                    $('#infoModalText').text(data.message);
+                                    $('#infoModalButtons').html(
+                '<div id="okButton"></div>'
+            );
+            $('#okButton').load('../components/buttons/okButton.php');
                                 modalShow('infoModal');
                             }
                         });
@@ -579,26 +739,30 @@ $coverages = $coverage->getAll();
                 });
             } else {
                 $errors++;
-                $('#infoModalTitle').text('Error');
-                $('#infoModalText').text(data.message);
-                $('#infoModalButtons').html(
-                    '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>'
-                );
+                $('#infoModalTitle').html('<i class="fa-solid fa-circle-exclamation fa-beat me-2"></i> Error');
+                                    $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-red-600');
+                                    $('#infoModalText').text(data.message);
+                                    $('#infoModalButtons').html(
+                '<div id="okButton"></div>'
+            );
+            $('#okButton').load('../components/buttons/okButton.php');
                 modalShow('infoModal');
             }
         });
         if ($errors == 0) {
             $('#btnSaveProposal').attr('data-quote', $idQuote);
-            $('#infoModalTitle').text('Success');
-            $('#infoModalText').text('Quote saved successfully');
+            $('#infoModalTitle').html('<i class="fa-solid fa-circle-check fa-beat me-2"></i> Success!');
+                                    $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-green-600');
+                                    $('#infoModalText').text('Quote saved successfully');
             $('#infoModalButtons').html(
-                '<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>'
+                '<div id="okButton"></div>'
             );
+            $('#okButton').load('../components/buttons/okButton.php');
             modalShow('infoModal');
         }
     });
 
-    $('ul').on('click', '.nav-item', function() {
+    $('ul').on('click', '.nav-item', function () {
         console.log('nav item clicked');
         $('.nav-item').siblings().removeClass('active');
         $(this).addClass('active');
@@ -607,4 +771,10 @@ $coverages = $coverage->getAll();
         $('#tabOption' + $optionID).addClass('active');
     });
 
+    $(document).ready(function () {
+    <?php if ($idQuote != 0) { ?>
+        $('#proposalType').val(<?= json_encode($quote->type) ?>);
+    <?php } ?>
+    modalHide('spinner');
+});
 </script>

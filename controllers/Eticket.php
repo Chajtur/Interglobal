@@ -1,6 +1,6 @@
 <?php
-include_once '../controllers/Login.php';
-include_once '../models/Eticket.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Eticket.php';
 
 startSession();
 checkActivity();

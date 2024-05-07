@@ -1,7 +1,7 @@
 <?php 
 
-include_once '../models/BillPlan.php';
-include_once '../controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/BillPlan.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
 
 startSession();
 checkActivity();

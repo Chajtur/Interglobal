@@ -1,7 +1,7 @@
 <?Php
-include "../models/User.php";
-include "../models/Transaction.php";
-include_once "../controllers/Login.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/models/User.php";
+include $_SERVER['DOCUMENT_ROOT'] . "/models/Transaction.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/controllers/Login.php";
 
 $year = $_POST['year'] ?? date('Y');
 $mes = $_POST['mes'] ?? 'all';

@@ -1,7 +1,7 @@
 <?php
-include_once '../models/Transaction.php';
-include_once '../models/User.php';
-include_once '../controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Transaction.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
 
 $quarter = $_POST['quarter'] ?? 'fullYear';
 $agente = $_POST['agente'] ?? getUser();

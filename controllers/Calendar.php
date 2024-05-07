@@ -1,7 +1,8 @@
 <?php
 
-include_once '../models/Dates.php';
-require_once('../controllers/Login.php');
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Dates.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
 
 startSession();
 checkActivity();
@@ -35,9 +36,10 @@ switch ($action) {
  */
 function userDaysOff()
 {
+    $daysOff = new vacation();
     $holiday = new holiday();
     $user = getUser();
-    $resp['data'] = $holiday->getDaysOff($user);
+    $resp['data'] = $daysOff->getDaysOff($user);
     if ($resp['data'] > 0) {
         $resp['text'] = 1;
         $dias = [];
@@ -56,11 +58,11 @@ function userDaysOff()
  */
 function askDayOff()
 {
-    $holiday = new holiday();
+    $holiday = new vacation();
     $dateFrom = $_POST['from'] ?: '1901-01-01';
     $dateTo = $_POST['to'] ?: '1901-01-01';
     $reason = $_POST['reason'] ?: 'Rest';
-    $resp['data'] = $holiday->insertVacationRequest($dateFrom, $dateTo, $reason, getUser());
+    $resp['data'] = $holiday->request($dateFrom, $dateTo, $reason, getUser());
     if ($resp['data'] > 0) {
         $resp['status'] = 'success';
         $resp['text'] = 'Vacation request has been entered successfully';

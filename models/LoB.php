@@ -1,6 +1,6 @@
 <?php
 
-include_once '../helpers/db.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/helpers/db.php';
 
 class LoB{
     private $id;

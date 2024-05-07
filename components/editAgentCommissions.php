@@ -1,6 +1,6 @@
 <?php
 
-include_once '../models/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 $user = new User();
 
 $agents = $user->listAgents();

@@ -1,0 +1,41 @@
+[26-Apr-2024 15:57:50 UTC] PHP Notice:  Undefined index: employeeName in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 73
+[26-Apr-2024 15:57:50 UTC] PHP Notice:  Undefined index: employeeTitle in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 74
+[26-Apr-2024 15:57:50 UTC] PHP Notice:  Undefined index: daysOff in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 75
+[26-Apr-2024 15:57:50 UTC] PHP Notice:  Undefined index: daysTaken in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 78
+[26-Apr-2024 16:23:07 UTC] PHP Notice:  Array to string conversion in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 88
+[30-Apr-2024 16:50:43 UTC] PHP Notice:  Array to string conversion in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 88
+[30-Apr-2024 18:31:28 UTC] PHP Fatal error:  Uncaught Error: Call to a member function get_cellmap() on null in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php:40
+Stack trace:
+#0 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableCell->reflow(Object(Dompdf\FrameDecorator\Block))
+#1 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\Block.php(865): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow(Object(Dompdf\FrameDecorator\Block))
+#2 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\Block->reflow(NULL)
+#3 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\Page.php(142): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow()
+#4 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\Page->reflow(NULL)
+#5 C:\laragon\www\crm\assets\dompdf\vendor\do in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php on line 40
+[30-Apr-2024 20:30:49 UTC] PHP Fatal error:  Uncaught Error: Call to a member function get_cellmap() on null in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php:40
+Stack trace:
+#0 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableCell->reflow(NULL)
+#1 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableRow.php(56): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow()
+#2 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableRow->reflow(Object(Dompdf\FrameDecorator\Block))
+#3 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\Block.php(865): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow(Object(Dompdf\FrameDecorator\Block))
+#4 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\Block->reflow(Object(Dompdf\FrameDecorator\Block))
+#5 C:\l in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php on line 40
+[30-Apr-2024 20:31:04 UTC] PHP Fatal error:  Uncaught Error: Call to a member function get_cellmap() on null in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php:40
+Stack trace:
+#0 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableCell->reflow(NULL)
+#1 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableRow.php(56): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow()
+#2 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableRow->reflow(Object(Dompdf\FrameDecorator\Block))
+#3 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\Block.php(865): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow(Object(Dompdf\FrameDecorator\Block))
+#4 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\Block->reflow(Object(Dompdf\FrameDecorator\Block))
+#5 C:\l in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php on line 40
+[30-Apr-2024 20:31:31 UTC] PHP Fatal error:  Uncaught Error: Call to a member function get_cellmap() on null in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php:40
+Stack trace:
+#0 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableCell->reflow(NULL)
+#1 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableRow.php(56): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow()
+#2 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\TableRow->reflow(Object(Dompdf\FrameDecorator\Block))
+#3 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\Block.php(865): Dompdf\FrameDecorator\AbstractFrameDecorator->reflow(Object(Dompdf\FrameDecorator\Block))
+#4 C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameDecorator\AbstractFrameDecorator.php(913): Dompdf\FrameReflower\Block->reflow(Object(Dompdf\FrameDecorator\Block))
+#5 C:\l in C:\laragon\www\crm\assets\dompdf\vendor\dompdf\dompdf\src\FrameReflower\TableCell.php on line 40
+[07-May-2024 14:18:05 UTC] PHP Warning:  file_put_contents(/assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163
+[07-May-2024 14:21:06 UTC] PHP Warning:  file_put_contents(/assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163
+[07-May-2024 14:22:44 UTC] PHP Warning:  file_put_contents(../assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163

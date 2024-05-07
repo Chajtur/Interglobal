@@ -1,7 +1,7 @@
 <?php
 
-require_once('../controllers/Login.php');
-include_once '../models/Quote.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Quote.php';
 
 $quote = new Quote();
 
@@ -27,8 +27,32 @@ switch ($action) {
     case 'saveQuoteBillPlan':
         saveBillPlan();
         break;
+    case 'getById':
+        getById();
+        break;
     default:
         break;
+}
+
+/**
+ * Devuelve la cotización solicitada por el cliente
+ * 
+ * @resp object - Respuesta con código de éxito o error y su explicación
+ */
+function getById()
+{
+    global $quote;
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/models/Coverage.php";
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/models/BillPlan.php";
+    $coverage = new Coverage();
+    $billPlan = new BillPlan();
+    if (isset($_POST['id'])) {
+        $quoteData['quote'] = $quote->getById($_POST['id']);
+        $billPlanList = $billPlan->listAll($_POST['id']);
+        
+    } else {
+        echo 'No quote found';
+    }
 }
 
 /**

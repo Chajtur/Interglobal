@@ -1,5 +1,5 @@
 <?php
-include_once '../helpers/db.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/helpers/db.php';
 
 /**
  * Listado de permisos y sus códigos
@@ -38,13 +38,14 @@ class User
     private $picture;
     public $workEmail;
     private $personalEmail;
+    public $jobTitle;
     private $roles;
     private $permissions;
     private $active;
     public $workPhone;
     public $workExtension;
 
-    public function __construct($id = null, $userName = null, $password = null, $firstName = null, $lastName = null, $gender = null, $birthDate = null, $address = null, $phone = null, $mobile = null, $picture = null, $workEmail = null, $personalEmail = null, $roles = null, $permissions = null, $active = null, $workPhone = null, $workExtension = null)
+    public function __construct($id = null, $userName = null, $password = null, $firstName = null, $lastName = null, $gender = null, $birthDate = null, $address = null, $phone = null, $mobile = null, $picture = null, $workEmail = null, $personalEmail = null,$jobTitle = null, $roles = null, $permissions = null, $active = null, $workPhone = null, $workExtension = null)
     {
         $this->userName = $userName;
         $this->password = $password;
@@ -64,6 +65,7 @@ class User
         $this->workPhone = $workPhone;
         $this->workExtension = $workExtension;
         $this->id = $id;
+        $this->jobTitle = $jobTitle;
     }
 
     /**
@@ -123,6 +125,7 @@ class User
         $this->workPhone = $usuario['workPhone'];
         $this->workExtension = $usuario['workExtension'];
         $this->workEmail = $usuario['workEmail'];
+        $this->jobTitle = $usuario['jobTitle'];
     }
 
     /**

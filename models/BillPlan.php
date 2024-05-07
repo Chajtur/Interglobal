@@ -1,8 +1,23 @@
 <?php
 
-include_once '../helpers/db.php';
+/**
+ * 
+ * Bill Plan class
+ * 
+ * This class is used to manage the Bill Plans of the quotes
+ * 
+ * @package models
+ * @version 1.0
+ * @since 1.0
+ * @category classes
+ * @see components/quotes/previewQuote.php
+ * 
+ * @author Chajtur
+ * @copyright (c) 2024
+ */
 
-class BillPlan {
+class BillPlan
+{
     public $id;
     public $idQuote;
     public $downPayment;
@@ -24,9 +39,27 @@ class BillPlan {
         $this->term = $term;
     }
 
+    /**
+     * Función que lista todas las coverturas del bill plan
+     * 
+     * @return string - Lista de coberturas del bill plan
+     */
+    function listCoverages()
+    {
+        global $conn;
+        $query = "Select L.name from Coverages C, LoB L where C.idBillPlan = '$this->id' and C.idQuote = $this->idQuote and L.id = C.idCoverage order by idCoverage ASC";
+        $resp = $conn->query($query);
+        $coverages = mysqli_fetch_all($resp, MYSQLI_ASSOC);
+
+        // Create a comma-separated list
+        $coveragesList = implode(', ', array_column($coverages, 'name'));
+
+        return $coveragesList;
+    }
+
     /** Función para guardar el Bill Plan
      * 
-     * @return json - Respuesta con código de éxito o error y su explicación
+     * @return array - Respuesta con código de éxito o error y su explicación
      */
     function save()
     {
@@ -34,9 +67,11 @@ class BillPlan {
         $query = "Insert into Bill_Plans (idBillPlan, idQuote, downPayment, installments, amount, idOption, optionName, term)
         values ('$this->id', $this->idQuote, $this->downPayment, $this->installments, $this->installmentAmount, $this->idOption, '$this->optionName', $this->term)";
         $resp = $conn->query($query);
-        if ($resp) {
+        if ($resp)
+        {
             return json_encode(array('code' => 200, 'message' => 'Bill Plan created successfully'));
-        } else {
+        } else
+        {
             return json_encode(array('code' => 500, 'message' => 'Error creating Bill Plan'));
         }
     }
@@ -51,10 +86,17 @@ class BillPlan {
     function load($id, $idQuote)
     {
         global $conn;
-        $query = "Select * from Bill_Plans where id = $id and idQuote = $idQuote";
+        $query = "Select * from Bill_Plans where idBillPlan = '$id' and idQuote = $idQuote order by idQuote ASC";
         $resp = $conn->query($query);
         $billPlan = $resp->fetch_assoc();
-        return $billPlan;
+        $this->id = $billPlan['idBillPlan'];
+        $this->idQuote = $billPlan['idQuote'];
+        $this->downPayment = $billPlan['downPayment'];
+        $this->installments = $billPlan['installments'];
+        $this->installmentAmount = $billPlan['amount'];
+        $this->idOption = $billPlan['idOption'];
+        $this->optionName = $billPlan['optionName'];
+        $this->term = $billPlan['term'];
     }
 
     /** Función que lista todos los bill plans de una cotización
@@ -66,7 +108,7 @@ class BillPlan {
     function listAll($idQuote)
     {
         global $conn;
-        $query = "Select idBillPlan from Bill_Plans where idQuote = $idQuote";
+        $query = "Select idBillPlan from Bill_Plans where idQuote = $idQuote order by idOption ASC";
         $resp = $conn->query($query);
         $billPlans = mysqli_fetch_all($resp, MYSQLI_ASSOC);
         return $billPlans;

@@ -1,7 +1,7 @@
 <?php
 
-require_once('../controllers/Login.php');
-require_once('../helpers/db.php');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/helpers/db.php';
 
 startSession();
 checkActivity();
@@ -18,9 +18,6 @@ switch ($action) {
         break;
     case 'generalMC':
         queryGeneralMc();
-        break;
-    case 'hasPermission':
-        userPermission();
         break;
     case 'searchVIN':
         searchVIN();
@@ -67,14 +64,14 @@ function queryGeneralDot($dot)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, $apiBaseURL . "carriers/" . $dot . $webKey);
     curl_setopt($ch, CURLOPT_HTTPGET, true);
-    /*curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
-    ));*/
+    ));
     curl_setopt($ch, CURLOPT_HEADER, false);
     $result = curl_exec($ch);
     curl_close($ch);
     /*var_dump($apiBaseURL . "carriers/" . $dot . $webKey);*/
-    $context = stream_context_create(
+    /*$context = stream_context_create(
         array(
             "ssl" => array(
                 "verify_peer" => false,
@@ -86,11 +83,11 @@ function queryGeneralDot($dot)
         )
     );
     //var_dump($apiBaseURL . "carriers/" . $dot . $webKey);
-    //$result = file_get_contents("'" . $apiBaseURL . "carriers/" . $dot . $webKey . "'",false,$context);
-    /*$result = file_get_contents('https://mobile.fmcsa.dot.gov/qc/services/carriers/name/greyhound?webKey=5a6f85d3d2a12d1f5c7f2566a2c75d9a751f4d79', false, $context);
-    $result = json_decode($result);*/
-    var_dump($result);
-    if ($result->content != NULL) {
+    $result = file_get_contents("'" . $apiBaseURL . "carriers/" . $dot . $webKey . "'",false,$context);
+    //$result = file_get_contents('https://mobile.fmcsa.dot.gov/qc/services/carriers/name/greyhound?webKey=5a6f85d3d2a12d1f5c7f2566a2c75d9a751f4d79', false, $context);*/
+    $result = json_decode($result);
+    //var_dump($result);
+    if (isset($result->content)) {
         $result->content->carrier->mcNumber = $dot;
         return $result->content->carrier;
     } else {
@@ -143,7 +140,12 @@ function queryGeneralDotWeb()
     curl_close($ch);
 
     $response = json_decode($response);
-    return $response->content->carrier;
+    if ($response->content != NULL) {
+        $response->content->carrier->mcNumber = $_POST['dot'];
+        return $response->content->carrier;
+    } else {
+        return NULL;
+    }
 }
 
 function queryGeneralMc()

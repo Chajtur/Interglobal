@@ -205,7 +205,7 @@ if (isset($_SESSION['user']['id'])) {
         }
 
         $('#logOut').on('click', function() {
-            $.post('../controllers/Login.php', {
+            $.post('/controllers/Login.php', {
                 action: 'logout',
             }).done(function(resp) {
                 window.location.href = 'index.php';

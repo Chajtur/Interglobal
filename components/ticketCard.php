@@ -1,5 +1,5 @@
 <?php
-include_once '../models/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 
 $priority = 3;
 $createdOn = '2021-09-01';

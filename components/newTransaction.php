@@ -1,7 +1,7 @@
 <?php
-include_once '../models/Transaction.php';
-include_once '../models/User.php';
-include_once '../controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Transaction.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
 
 $id = $_POST['id'] ?? 0;
 $agent = $_POST['agent'] ?? getUser();
@@ -124,7 +124,7 @@ $agentName = $user->getAgent($agent);
                 // success
                 modalHide('infoModal');
                 $('#infoModalTitle').text('Success');
-                $('#infoModalText').parent().removeClass().addClass('modalTitle bg-green-800');
+                $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-green-800');
                 $('#infoModalText').html('Transaction saved successfully');
                 $('#infoModalButtons').html(
                     '<div id="okButton">'

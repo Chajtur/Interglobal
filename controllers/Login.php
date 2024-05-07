@@ -1,6 +1,6 @@
 <?php
 
-include_once '../models/User.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 $user = new User();
 
 $isLoggedIn = false;
@@ -76,6 +76,7 @@ function login()
                 $_SESSION['isLoggedIn'] = true;
                 $_SESSION['employeeId'] = $User['id'];
                 $_SESSION['last_activity'] = time();
+                $_SESSION['offset'] = -6;
                 $isLoggedIn = true;
                 echo 1;
                 die();
@@ -110,7 +111,7 @@ function logOut()
     session_destroy();
 }
 
-function startSession()
+/*function startSession()
 {
     if (!isset($_SESSION)) {
         session_start();
@@ -127,3 +128,4 @@ function checkActivity()
     }
     $_SESSION['last_activity'] = time();
 }
+*/

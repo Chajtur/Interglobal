@@ -1,5 +1,6 @@
 <?php
-require_once '../controllers/Login.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
 
 startSession();
 checkActivity();

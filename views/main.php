@@ -1,8 +1,11 @@
 <?php
 
-include_once '../models/User.php';
-include_once '../controllers/Login.php';
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
+
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
 startSession();
 checkActivity();
 
@@ -32,7 +35,8 @@ checkActivity();
         <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all max-w-lg w-full">
             <div class="modalTitle">
                 <h3 class="text-lg leading-6 font-medium" id="infoModalTitle"></h3>
-                <button id="modalClose" type="button" class="absolute right-0 top-0 m-3 border-2 modalClose"><i class="fa fa-solid fa-close"></i></button>
+                <button id="modalClose" type="button" class="absolute right-0 top-0 m-3 border-2 modalClose"><i
+                        class="fa fa-solid fa-close"></i></button>
             </div>
             <div class="px-4 py-5 sm:p-6" id="infoModalText">
                 <p>Your session has expired due to inactivity, you will need to log in again to continue.</p>
@@ -50,7 +54,8 @@ checkActivity();
         <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all max-w-lg w-full">
             <div class="modalTitle bg-red-800">
                 <h3 class="text-lg leading-6 font-medium" id="infoModalTitle">Session has expired</h3>
-                <button type="button" class="absolute right-0 top-0 m-3 border-2 modalClose" aria-label="Close"><i class="fa fa-solid fa-close"></i></button>
+                <button type="button" class="absolute right-0 top-0 m-3 border-2 modalClose" aria-label="Close"><i
+                        class="fa fa-solid fa-close"></i></button>
             </div>
             <div class="px-4 py-5 sm:p-6" id="infoModalText">
                 <p>Your session has expired due to inactivity, you will need to log in again to continue.</p>
@@ -63,13 +68,15 @@ checkActivity();
 </div>
 
 <!-- Modal for loading spinner -->
-<div class="fixed z-50 inset-0 overflow-y-auto hidden modal" id="spinner" tabindex="-1" role="dialog" aria-labelledby="spinnerLabel">
+<div class="fixed z-40 inset-0 overflow-y-auto modal hidden bg-gray-300" id="spinner" tabindex="-1" role="dialog"
+    aria-labelledby="spinnerLabel">
     <div class="flex items-center justify-center min-h-screen">
-        <div class="bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all max-w-lg w-full">
+        <div class="bg-white z-50 rounded-lg text-center overflow-hidden shadow-xl transform transition-all max-w-lg w-full">
             <div class="p-6">
                 <div class="animate-spin rounded-full mx-auto h-24 w-24 border-t-4 border-b-4 border-sky-950"></div>
                 <div class="text-sky-950 mt-4">
-                    <p>Please wait while we fetch your data<br><br><span class="font-bold text-sm">Interglobal Insurance / US Trucking for Hire</span></p>
+                    <p>Please wait while we fetch your data<br><br><span class="font-bold text-sm">Interglobal Insurance
+                            / US Trucking for Hire</span></p>
                 </div>
             </div>
         </div>
@@ -78,10 +85,12 @@ checkActivity();
 
 <!-- Toast for quick notifications -->
 <div id="liveToast" class="toast-container z-50 fixed top-2 left-1/2 transform -translate-x-1/2 hidden">
-    <div class="toast rounded-lg w-full text-white" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="5000" data-animation="true">
+    <div class="toast rounded-lg w-full text-white" role="alert" aria-live="assertive" aria-atomic="true"
+        data-autohide="true" data-delay="5000" data-animation="true">
         <div class="toast-header">
             <h4>Error</h4>
-            <button type="button" class="absolute py-1 px-2 m-3 right-0 top-0 border-2 toastClose" aria-label="Close"><i class="fa fa-solid fa-close"></i></button>
+            <button type="button" class="absolute py-1 px-2 m-3 right-0 top-0 border-2 toastClose" aria-label="Close"><i
+                    class="fa fa-solid fa-close"></i></button>
         </div>
         <div class="toast-body mt-2">
             Commission percentage must be between 5 and 40
@@ -90,8 +99,8 @@ checkActivity();
 </div>
 
 <script>
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
             if (mutation.attributeName === "class") {
                 var element = mutation.target;
                 if (element.classList.contains("hidden")) {

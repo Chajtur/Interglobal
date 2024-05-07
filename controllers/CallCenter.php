@@ -3,9 +3,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include_once '../controllers/Login.php';
-include_once '../models/Business.php';
-include_once '../models/Call.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Business.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Call.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
 
 startSession();
 checkActivity();

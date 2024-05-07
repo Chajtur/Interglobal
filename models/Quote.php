@@ -1,6 +1,21 @@
 <?php
+/**
+ * Path: models/Quote.php
+ * This file contains the Quote class and the pendingQuote class.
+ * The Quote class is used to manage quotes created by the user.
+ * The pendingQuote class is used to manage quotes that have been assigned to the user and generated through webpage.
+ * 
+ * @package models
+ * @version 1.0
+ * @since 1.0
+ * @category classes
+ * @see components/quotes/previewQuote.php
+ */
 
-include '../helpers/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
+startSession();
+
+include_once $_SERVER['DOCUMENT_ROOT'] . '/helpers/db.php';
 
 class Quote
 {
@@ -10,8 +25,9 @@ class Quote
     public $owner;
     public $type;
     public $status;
+    public $agent;
 
-    public function __construct($id = null, $date = null, $dot = null,  $status = null, $owner = null, $type = null)
+    public function __construct($id = null, $date = null, $dot = null, $status = 'Quoted', $owner = null, $type = null, $idUser = null)
     {
         $this->id = $id;
         $this->date = $date;
@@ -19,6 +35,56 @@ class Quote
         $this->status = $status;
         $this->type = $type;
         $this->owner = $owner;
+        $this->agent = $idUser;
+    }
+
+    /**
+     * Función que lista todas las opciones dentro de la cotización
+     * 
+     * @return array - Lista de opciones de la cotización
+     */
+    function listOptions()
+    {
+        global $conn;
+        $query = "Select distinct(idOption) from Bill_Plans where idQuote = $this->id order by idOption asc";
+        $resp = $conn->query($query);
+        $options = mysqli_fetch_all($resp, MYSQLI_ASSOC);
+        return $options;
+    }
+
+    /**
+     * Función que lista todos los bill plans de una opción de la cotización
+     * @idOption integer - El id de la opción a buscar
+     * 
+     * @return array - Lista de bill plans de la opción
+     */
+    function listBillPlans($idOption)
+    {
+        global $conn;
+        $query = "Select idBillPlan from Bill_Plans where idQuote = $this->id and idOption = $idOption order by idBillPlan asc";
+        $resp = $conn->query($query);
+        $billPlans = mysqli_fetch_all($resp, MYSQLI_ASSOC);
+        return $billPlans;
+    }
+
+    /**
+     * Función que carga una cotización al objeto
+     * @id integer - El id de la cotización a cargar
+     * 
+     * @return array - Devuelve la cotización
+     */
+    function load($id)
+    {
+        global $conn;
+        $query = "Select * from Quotes where id = $id";
+        $resp = $conn->query($query);
+        $quote = $resp->fetch_assoc();
+        $this->id = $quote['id'];
+        $this->date = $quote['date'];
+        $this->dot = $quote['dot'];
+        $this->status = $quote['status'];
+        $this->type = $quote['type'];
+        $this->owner = $quote['name'];
     }
 
     /**
@@ -62,7 +128,7 @@ class Quote
     function getAll($user)
     {
         global $conn;
-        $query = "Select id, date(`date`) as date, dot
+        $query = "Select id, date(`date`) as date, dot, name
         from Quotes q
         where q.idUser = $user
         order by q.date desc";
@@ -79,11 +145,9 @@ class Quote
     function getQuoteDetail($id)
     {
         global $conn;
-        $query = "Select id, date, name, dot, mc, address, city, state, zip, email, phone, proposedDate, driverLicense, status, owner
-        from Quotes q
-        where q.id = $id";
+        $query = "Select id, date(`date`) as date, dot, type from Quotes where id = $id";
         $resp = $conn->query($query);
-        $quote = $resp->fetch_assoc();
+        $quote = mysqli_fetch_assoc($resp);
         return $quote;
     }
 

@@ -66,6 +66,7 @@ class Business
         } else {
             $query .= " and l.Business_State not in ('CA', 'NY')";
         }
+        $query .= 'and l.DOT not in (select distinct(c.dot) from Calls c where c.status in ("Lead", "Possible Lead", "Black List"))';
         $query .= 'and l.Insurer is null 
                     order by RAND() limit 1';
         $resp = $conn->query($query);

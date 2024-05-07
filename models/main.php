@@ -1,7 +1,7 @@
 <?php
 
-include_once '../models/User.php';
-include_once '../controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
 
 startSession();
 checkActivity();
