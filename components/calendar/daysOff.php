@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/Dates.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 
 $user = $_POST['user'] ?? getUser();
 $dates = new holiday();
@@ -8,36 +9,43 @@ $vacation = new vacation();
 
 $daysOffList = $vacation->getDaysOff($user);
 $data = $daysOffList;
+$employee = new User($user);
+$employee->load($user);
 $availableDays = $vacation->getAvailableDays($user);
 
 $daysOff['requested'] = 0;
 $daysOff['available'] = 0;
 $daysOff['approved'] = 0;
 $daysOff['denied'] = 0;
+$workingDate = $vacation->getWorkingDate($employee->hireDate);
+
 if ($daysOffList == null)
 {
     $daysOffList = [];
 }
 foreach ($daysOffList as $day)
 {
-    if ($day['status'] == 'Requested')
+    if ($day['dateFrom'] >= $workingDate)
     {
-        $daysOff['requested'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
-    } elseif ($day['status'] == 'Approved')
-    {
-        $daysOff['approved'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
-        $daysOff['requested'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
-    } elseif ($day['status'] == 'Denied')
-    {
-        $daysOff['denied'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
-        $daysOff['requested'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
+        if ($day['status'] == 'Requested')
+        {
+            $daysOff['requested'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
+        } elseif ($day['status'] == 'Approved')
+        {
+            $daysOff['approved'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
+            $daysOff['requested'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
+        } elseif ($day['status'] == 'Denied')
+        {
+            $daysOff['denied'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
+            $daysOff['requested'] += $dates->getBusinessDays($day['dateFrom'], $day['dateTo']);
+        }
     }
 }
 ?>
 
 <div class="flex flex-row justify-between p-2">
     <div>Requested: <?= $daysOff['requested']; ?></div>
-    <div>Available: <?= $availableDays ?></div>
+    <div>Earned (Available): <?= $availableDays ?> (<?= ($availableDays - $daysOff['approved']) ?>)</div>
 </div>
 <div class="flex flex-row justify-between p-2">
     <div>Approved: <?= $daysOff['approved']; ?></div>

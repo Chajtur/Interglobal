@@ -86,7 +86,7 @@ if (isset($_SESSION['user']['id'])) {
                 </div>
             <?php } ?>
             <?php if ($user->hasPermission('camiones')) { ?>
-                <div class="mt-3 icon ms-4" data-module="trucks">
+                <div class="mt-3 icon ms-4" data-module="truck">
                     <div class="align-items-center" href="#">
                         <span class="fa-solid fa-truck-moving fa-xl text-white"></span>
                         <span class="sidebar-text text-white">Trucks</span>
@@ -94,10 +94,18 @@ if (isset($_SESSION['user']['id'])) {
                 </div>
             <?php } ?>
             <?php if ($user->hasPermission('conductores')) { ?>
-                <div class="mt-3 icon ms-4" data-module="drivers">
+                <div class="mt-3 icon ms-4" data-module="driver">
                     <div class="align-items-center" href="#">
                         <span class="fa-solid fa-user-tie fa-xl text-white"></span>
                         <span class="sidebar-text text-white">Drivers</span>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($user->hasPermission('negocios')) { ?>
+                <div class="mt-3 icon ms-4" data-module="business">
+                    <div class="align-items-center" href="#">
+                        <span class="fa-solid fa-shop fa-xl text-white"></span>
+                        <span class="sidebar-text text-white">Businesses</span>
                     </div>
                 </div>
             <?php } ?>
@@ -197,6 +205,9 @@ if (isset($_SESSION['user']['id'])) {
                     break;
                 case 'Dashboard':
                     $('#contenido').load('../views/dashboardAgent.php');
+                    break;
+                case 'business':
+                    $('#contenido').load('../views/business.php');
                     break;
                 default:
                     $('#contenido').load('../views/content.php');

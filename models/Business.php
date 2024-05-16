@@ -154,3 +154,154 @@ class Business
         return $data;
     }
 }
+
+class truckerBusiness 
+{
+    private $id;
+    private $dot;
+    private $name;
+    private $address;
+    private $city;
+    private $state;
+    private $zip;
+    private $phone;
+    private $email;
+    private $rep;
+    private $mailingAddress;
+    private $mailingCity;
+    private $mailingState;
+    private $mailingZip;
+    private $dotPin;
+    private $irp;
+    private $mc;
+
+
+    public function __construct($id = null, $dot = null, $name = null, $address = null, $city = null, $state = null, $zip = null, $phone = null, $email = null, $rep = null, $mailingAddress = null, $mailingCity = null, $mailingState = null, $mailingZip = null, $dotPin = null, $irp = null, $mc = null)
+    {
+        $this->id = $id;
+        $this->dot = $dot;
+        $this->name = $name;
+        $this->address = $address;
+        $this->city = $city;
+        $this->state = $state;
+        $this->zip = $zip;
+        $this->phone = $phone;
+        $this->email = $email;
+        $this->rep = $rep;
+        $this->mailingAddress = $mailingAddress;
+        $this->mailingCity = $mailingCity;
+        $this->mailingState = $mailingState;
+        $this->mailingZip = $mailingZip;
+        $this->dotPin = $dotPin;
+        $this->irp = $irp;
+        $this->mc = $mc;
+    }
+
+    /**
+     * Función que actualiza un camionero en la base de datos
+     * 
+     * @id integer - Especifica el id del camionero
+     * @dot integer - Especifica el DOT del camionero
+     * @name string - Especifica el nombre del camionero
+     * @address string - Especifica la dirección del camionero
+     * @city string - Especifica la ciudad del camionero
+     * @state string - Especifica el estado del camionero
+     * @zip integer - Especifica el código postal del camionero
+     * @phone integer - Especifica el número de teléfono del camionero
+     * @email string - Especifica el correo electrónico del camionero
+     * @rep string - Especifica el representante del camionero
+     * @mailingAddress string - Especifica la dirección de envío del camionero
+     * @mailingCity string - Especifica la ciudad de envío del camionero
+     * @mailingState string - Especifica el estado de envío del camionero
+     * @mailingZip integer - Especifica el código postal de envío del camionero
+     * @dotPin blob - Especifica el PIN del DOT del camionero
+     * @irp blob - Especifica el IRP del camionero
+     * @mc string - Especifica el MC del camionero
+     * 
+     * @return boolean - Retorna si la operación fue exitosa
+     */
+    function update($id, $dot, $name, $address, $city, $state, $zip, $phone, $email, $rep, $mailingAddress, $mailingCity, $mailingState, $mailingZip, $dotPin, $irp, $mc)
+    {
+        global $conn;
+        $query = "Update Businesses 
+        set DOT = $dot, Name = '$name', Address = '$address', City = '$city', State = '$state', Zip = $zip, Phone = $phone, Email = '$email', Rep = '$rep', Mailing_Address = '$mailingAddress', Mailing_City = '$mailingCity', Mailing_State = '$mailingState', Mailing_Zip = $mailingZip, DOT_PIN = '$dotPin', IRP = '$irp', MC = '$mc'
+        where id = $id";
+        $resp = $conn->query($query);
+        return $resp;
+    }
+
+    /**
+     * Función que guarda los datos de un camionero en la base de datos
+     * 
+     * @dot integer - Especifica el DOT del camionero
+     * @name string - Especifica el nombre del camionero
+     * @address string - Especifica la dirección del camionero
+     * @city string - Especifica la ciudad del camionero
+     * @state string - Especifica el estado del camionero
+     * @zip integer - Especifica el código postal del camionero
+     * @phone integer - Especifica el número de teléfono del camionero
+     * @email string - Especifica el correo electrónico del camionero
+     * @rep string - Especifica el representante del camionero
+     * @mailingAddress string - Especifica la dirección de envío del camionero
+     * @mailingCity string - Especifica la ciudad de envío del camionero
+     * @mailingState string - Especifica el estado de envío del camionero
+     * @mailingZip integer - Especifica el código postal de envío del camionero
+     * @dotPin blob - Especifica el PIN del DOT del camionero
+     * @irp blob - Especifica el IRP del camionero
+     * @mc string - Especifica el MC del camionero
+     * 
+     * @return boolean - Retorna si la operación fue exitosa
+     */
+    function save($dot, $name, $address, $city, $state, $zip, $phone, $email, $rep, $mailingAddress, $mailingCity, $mailingState, $mailingZip, $dotPin, $irp, $mc)
+    {
+        global $conn;
+        $query = "Insert into Businesses (DOT, Name, Address, City, State, Zip, Phone, Email, Rep, Mailing_Address, Mailing_City, Mailing_State, Mailing_Zip, DOT_PIN, IRP, MC)
+        values ($dot, '$name', '$address', '$city', '$state', $zip, $phone, '$email', '$rep', '$mailingAddress', '$mailingCity', '$mailingState', $mailingZip, '$dotPin', '$irp', '$mc')";
+        $resp = $conn->query($query);
+        if ($resp->num_rows > 0)
+        {
+            return $conn->insert_id;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Función que busca un camionero por su id
+     * 
+     * @id integer - Especifica el id del camionero
+     * 
+     * @return array - Devuelve el perfil del camionero
+     */
+    function get($id)
+    {
+        global $conn;
+        $query = "Select * 
+        from Businesses l
+        where l.id = $id";
+        $resp = $conn->query($query);
+        $data = $resp->fetch_assoc();
+        return $data;
+    }
+
+    /**
+     * Función que devuelve el perfil de un camionero basado en el DOT
+     * 
+     * @dot integer - Especifica el DOT que vamos a buscar
+     * 
+     * @return array - Devuelve el perfil del camionero
+     */
+    function getTruckerBusinessByDot($dot)
+    {
+        global $conn;
+        $query = "Select * 
+        from Businesses l
+        where l.dot = $dot";
+        $resp = $conn->query($query);
+        $data = $resp->fetch_assoc();
+        return $data;
+    }
+
+
+
+}

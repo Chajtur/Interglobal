@@ -4,12 +4,16 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/assets/dompdf/autoload.inc.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Dates.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
 
 $user = new User();
 $date = new Vacation();
 $holiday = new Holiday();
-//$date->load($_POST['id']);
-$date->load(36);
+$date->load($_POST['id']);
 $user->load(getUser());
 
 $styles = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/css/tailwind.css');
@@ -30,14 +34,6 @@ $dompdf = new Dompdf();
 
 // Load CSS files
 $dompdf->setBasePath($_SERVER['DOCUMENT_ROOT'] . "/css/");
-
-/**
- * <tr>
-        <td class="border text-center">Día</td>
-        <td class="border text-center">Mes</td>
-        <td class="border text-center">Año</td>
-    </tr>
- */
 
 // Load HTML content
 $html = '
@@ -157,7 +153,43 @@ $dompdf->stream("vacationrequest.pdf", array("Attachment" => 0));
 $pdf = $dompdf->output();
 
 // Path to save the PDF
-$filePath = '../assets/PDF/vacationRequest.pdf';  // Replace with the path where you want to save the file
+$filePath = $_SERVER['DOCUMENT_ROOT'] . '/assets/PDF/vacationRequest.pdf';  // Replace with the path where you want to save the file
 
 // Save the PDF as a file
 file_put_contents($filePath, $pdf);
+
+$mail = new PHPMailer(true);
+
+try {
+    //Server settings
+    $mail->SMTPDebug = 2;                                 
+    $mail->isSMTP();  
+    $mail->CharSet = 'UTF-8';      
+    $mail->Mailer = 'smtp';                              
+    $mail->Host = 'smtp.gmail.com';  
+    $mail->SMTPAuth = true;                               
+    $mail->Username = 'admin@ustruckingforhire.com';                 
+    $mail->Password = 'stjc tbbt mgch kmjn'; 
+    //$mail->Password = 'Partrenzado04!';                          
+    $mail->SMTPSecure = 'tls';                            
+    $mail->Port = 587;                                    
+
+    //Recipients
+    $mail->setFrom($user->workEmail, $user->firstName . " " . $user->lastName);
+    $mail->addReplyTo($user->workEmail, $user->firstName . " " . $user->lastName);
+    $mail->addAddress('admin@ustruckingforhire.com', 'Admin');
+
+    //Attachments
+    $mail->addAttachment($filePath);         
+
+    //Content
+    $mail->isHTML(true);                                  
+    $mail->Subject = 'New Vacation Request from ' . $user->firstName . " " . $user->lastName;
+    $mail->Body    = 'See attached vacation request';
+    $mail->AltBody = 'See attached vacation request';
+
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+}

@@ -39,3 +39,8 @@ Stack trace:
 [07-May-2024 14:18:05 UTC] PHP Warning:  file_put_contents(/assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163
 [07-May-2024 14:21:06 UTC] PHP Warning:  file_put_contents(/assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163
 [07-May-2024 14:22:44 UTC] PHP Warning:  file_put_contents(../assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163
+[07-May-2024 14:56:11 UTC] PHP Warning:  file_put_contents(../assets/PDF/vacationRequest.pdf): failed to open stream: No such file or directory in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 163
+[07-May-2024 15:46:27 UTC] PHP Fatal error:  Uncaught Error: Class 'PHPMailer\PHPMailer\PHPMailer' not found in C:\laragon\www\crm\components\calendar\vacationrequest.php:168
+Stack trace:
+#0 {main}
+  thrown in C:\laragon\www\crm\components\calendar\vacationrequest.php on line 168

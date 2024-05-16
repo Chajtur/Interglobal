@@ -8,12 +8,12 @@ if (!isset($_SESSION))
     <div class="flex flex-col w-full md:w-3/4 border-2 border-sky-950 p-2 rounded">
         <div class="w-full flex justify-between">
             <div class="w-3/5">
-                <div id="driverDetails">
-                    <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/drivers/driverDetails.php'; ?>
+                <div id="businessDetails">
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/business/businessDetails.php'; ?>
                 </div>
                 <hr class="border-2 mt-3">
                 <div>
-                    <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/drivers/documentUpload.php'; ?>
+                    <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/business/documentUpload.php'; ?>
                 </div>
                 <div class="flex flex-row mt-2">
                     <div class="clearfix w-full">
@@ -22,13 +22,13 @@ if (!isset($_SESSION))
                 </div>
             </div>
             <div id="documentViewer" class="w-2/5">
-                <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/drivers/documentViewer.php'; ?>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/business/documentViewer.php'; ?>
             </div>
         </div>
     </div>
     <div class="w-full md:w-1/4 px-2">
-        <div class="border-t-2 border-b-2 border-sky-950 p-2 h-full" id="driverList">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/drivers/driverList.php'; ?>
+        <div class="border-t-2 border-b-2 border-sky-950 p-2 h-full" id="businessList">
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/components/business/list.php'; ?>
         </div>
     </div>
 </div>

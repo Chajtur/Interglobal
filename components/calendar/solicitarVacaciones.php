@@ -1,7 +1,5 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/models/Dates.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 $fecha = $_POST['fecha'] ?: date('Y-m-d');
 
@@ -56,19 +54,7 @@ $nextBusinessDay = $date->getNextBusinessDay($fecha);
                         responseType: 'blob',
                     },
                     success: function (response) {
-                        /*var file = new Blob([response], {
-                            type: 'application/pdf'
-                        });
-                        var fileURL = URL.createObjectURL(file);
-
-                        // Create a new window or iframe and load the PDF into it for preview
-                        var previewWindow = window.open('', '_blank');
-                        var iframe = previewWindow.document.createElement('iframe');
-                        iframe.src = fileURL;
-                        iframe.style.width = '100%';
-                        iframe.style.height = '100%';
-                        previewWindow.document.body.appendChild(iframe);*/
-                        
+                        $('#generarBtn').click();
                         modalHide('spinner');
                     }
                 });

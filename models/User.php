@@ -37,6 +37,7 @@ class User
     private $mobile;
     private $picture;
     public $workEmail;
+    public $hireDate;
     private $personalEmail;
     public $jobTitle;
     private $roles;
@@ -118,6 +119,7 @@ class User
         $this->mobile = $usuario['mobile'];
         $this->picture = $usuario['picture'];
         $this->workEmail = $usuario['workEmail'];
+        $this->hireDate = $usuario['hireDate'];
         $this->personalEmail = $usuario['personalEmail'];
         $this->roles = $usuario['roles'];
         $this->permissions = $usuario['permissions'];

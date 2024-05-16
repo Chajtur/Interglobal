@@ -27,6 +27,24 @@ class vacation
     }
 
     /**
+     * Función que calcula desde cuando contabilizar feriados y permisos de un empleado según su fecha de contratación
+     * @date hireDate - Fecha de contratación del empleado
+     * 
+     * @return string - Fecha desde la cual se contabilizarán los feriados y permisos
+     */
+    function getWorkingDate($hireDate)
+    {
+        $today = new DateTime(date('Y-m-d'));
+        $hireDate = new DateTime($hireDate);
+        $diff = $hireDate->diff($today)->y;
+        while ($diff >= 1) {
+            $hireDate->add(new DateInterval('P1Y'));
+            $diff--;
+        }
+        return $hireDate->format('Y-m-d');
+    }
+
+    /**
      * Función que calcula cuantos días de vacaciones tiene derecho el empleado
      * @user int - El id del usuario a buscar
      * 
@@ -98,7 +116,11 @@ class vacation
     function getDaysOff($user)
     {
         global $conn;
-        $query = "Select v.id, v.idEmployee, v.dateFrom, v.dateTo, v.detail, v.status, v.approvedBy, Convert_TZ(v.approvedDate, '+00:00', '-06:00') as approvedDate, CONVERT_TZ(v.requestDate, '+00:00', '-06:00') as requestDate, concat(e.firstName, ' ', e.lastName) as approvedEmployee from Vacations v left join Employees e on v.approvedBy = e.id where idEmployee = $user order by v.dateFrom desc";
+        $query = "Select v.id, v.idEmployee, v.dateFrom, v.dateTo, v.detail, v.status, v.approvedBy, Convert_TZ(v.approvedDate, '+00:00', '-06:00') as approvedDate, CONVERT_TZ(v.requestDate, '+00:00', '-06:00') as requestDate, concat(e.firstName, ' ', e.lastName) as approvedEmployee 
+        from Vacations v 
+        left join Employees e on v.approvedBy = e.id 
+        where idEmployee = $user 
+        order by v.dateFrom desc";
         $resp = $conn->query($query);
         $daysOff = mysqli_fetch_all($resp, MYSQLI_ASSOC);
         if ($daysOff)
