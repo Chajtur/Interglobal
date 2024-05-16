@@ -27,3 +27,7 @@ if ($environment == 'development') {
 } else {
     $PATH = 'app.interglobalus.com';
 }
+
+
+$email['username'] = 'admin@ustruckingforhire.com';
+$email['password'] = 'stjc tbbt mgch kmjn';

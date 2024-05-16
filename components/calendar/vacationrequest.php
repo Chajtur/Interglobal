@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/assets/dompdf/autoload.inc.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/Dates.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/helpers/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -168,9 +169,8 @@ try {
     $mail->Mailer = 'smtp';                              
     $mail->Host = 'smtp.gmail.com';  
     $mail->SMTPAuth = true;                               
-    $mail->Username = 'admin@ustruckingforhire.com';                 
-    $mail->Password = 'stjc tbbt mgch kmjn'; 
-    //$mail->Password = 'Partrenzado04!';                          
+    $mail->Username = $email['username'];                 
+    $mail->Password = $email['password']; 
     $mail->SMTPSecure = 'tls';                            
     $mail->Port = 587;                                    
 
