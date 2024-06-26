@@ -484,6 +484,7 @@
                         '+1 (' + resp.Phone.substr(0, 3) + ') ' + resp.Phone.substr(3, 3) + '-' + resp.Phone.substr(6, 4)
                     );
                     $('#businessPhoneLink').attr('href', 'tel:+1' + resp.Phone);
+                    if (navigator.clipboard && window.isSecureContext) {
                     navigator.clipboard
                         .writeText(resp.Phone)
                         .then(() => {
@@ -492,6 +493,9 @@
                         .catch((err) => {
                             console.error('Could not copy phone number: ', err);
                         });
+                    } else {
+                    console.log('Clipboard API not available');
+                    }
                     $('#businessPhone').attr('data-phone', resp.Phone);
                     $('#listDate').html('List Date: ' + resp.Upload_Date);
                     $('#insuranceName').html('Insurer: ' + resp.Insurer);

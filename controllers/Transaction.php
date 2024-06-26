@@ -3,6 +3,7 @@
 include_once '../controllers/Login.php';
 include_once '../models/Transaction.php';
 include_once '../models/User.php';
+include_once '../common.php';
 
 $user = new User();
 
@@ -123,8 +124,9 @@ function saveTransaction() {
     $type = $_POST['type'];
     $premium = $_POST['premium'];
     $commission = $_POST['commission'];
+    $agentCommission = $_POST['agentCommission'];
     $user = getUser();
-    echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent, $user));
+    echo json_encode(insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agentCommission, $agent, $user));
 }
 
 /**
@@ -140,5 +142,6 @@ function editTransaction() {
     $type = $_POST['type'];
     $premium = $_POST['premium'];
     $commission = $_POST['commission'];
-    echo json_encode(updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $user));
+    $agentCommission = $_POST['agentCommission'];
+    echo json_encode(updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agentCommission, $user));
 }

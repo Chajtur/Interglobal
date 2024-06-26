@@ -27,7 +27,7 @@ class User
 {
     public $id;
     private $userName;
-    private $password;
+    public $password;
     public $firstName;
     public $lastName;
     private $gender;
@@ -46,7 +46,7 @@ class User
     public $workPhone;
     public $workExtension;
 
-    public function __construct($id = null, $userName = null, $password = null, $firstName = null, $lastName = null, $gender = null, $birthDate = null, $address = null, $phone = null, $mobile = null, $picture = null, $workEmail = null, $personalEmail = null,$jobTitle = null, $roles = null, $permissions = null, $active = null, $workPhone = null, $workExtension = null)
+    public function __construct($id = null, $userName = null, $password = null, $firstName = null, $lastName = null, $gender = null, $birthDate = null, $address = null, $phone = null, $mobile = null, $picture = null, $workEmail = null, $personalEmail = null, $jobTitle = null, $roles = null, $permissions = null, $active = null, $workPhone = null, $workExtension = null)
     {
         $this->userName = $userName;
         $this->password = $password;
@@ -128,6 +128,70 @@ class User
         $this->workExtension = $usuario['workExtension'];
         $this->workEmail = $usuario['workEmail'];
         $this->jobTitle = $usuario['jobTitle'];
+    }
+
+    /**
+     * Función que inhabilita un changePassword Token
+     *
+     * @passwordChange string - El token que vamos a inhabilitar
+     *  
+     * @return int - 1 si se actualizó, 0 si no
+     */
+    function disableChangePasswordToken($passwordChange)
+    {
+        global $conn;
+        $query = "Update passwordChange
+        set active = 0
+        where passwordChange = '$passwordChange'";
+        $resp = $conn->query($query);
+        return $resp;
+    }
+
+    /**
+     * Función que actualiza los datos del empleado
+     * 
+     * @return void
+     */
+    function update()
+    {
+        global $conn;
+        $query = "Update Employees
+        set userName = '$this->userName',
+        password = '$this->password',
+        firstName = '$this->firstName',
+        lastName = '$this->lastName',
+        workEmail = '$this->workEmail',
+        hireDate = '$this->hireDate',
+        jobTitle = '$this->jobTitle',
+        workPhone = '$this->workPhone',
+        workExtension = '$this->workExtension'
+        where id = $this->id";
+        $conn->query($query);
+        if ($conn->affected_rows == 0) {
+            return "Error updating user";
+        } else {
+            return "User updated";
+        }
+    }
+
+    /**
+     * Función para cargar un usuario usando passwordChange para cambiar la contraseña
+     * @passwordChange string - El identificador para encontrar el usuario
+     * 
+     * @return array - La información del usuario
+     */
+    function loadByPasswordChange($passwordChange)
+    {
+        global $conn;
+        $query = "Select idUser
+        from passwordChange
+        where passwordChange = '$passwordChange' and active = 1";
+        $resp = $conn->query($query);
+        $usuario = $resp->fetch_assoc();
+        if ($usuario) {
+            $this->load($usuario['idUser']);
+            return $this;
+        } 
     }
 
     /**
@@ -255,7 +319,10 @@ class User
     function getAgent($agent)
     {
         global $conn;
-        $query = "Select * from Employees where id = $agent";
+        $query = "Select E.*, AC.agentCommission from Employees E 
+        left join agentCommissions AC on E.id = AC.idAgent
+        left join Employees S on AC.idSupervisor = S.id
+        where E.id = $agent";
         $resp = $conn->query($query);
         $agent = $resp->fetch_assoc();
         return $agent;

@@ -6,6 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Login.php';
 $id = $_POST['id'] ?? 0;
 $agent = $_POST['agent'] ?? getUser();
 $user = new User();
+$agentName = $user->getAgent($agent);
 
 if ($id != 0) {
     $transaction = getTransaction($id);
@@ -18,6 +19,7 @@ if ($id != 0) {
     $premium = $transaction['premium'];
     $agent = $transaction['agent'];
     $commission = $transaction['commission'];
+    $agentCommission = $transaction['agentCommission'];
 } else {
     $date = date('Y-m-d');
     $insured = '';
@@ -26,8 +28,8 @@ if ($id != 0) {
     $type = 1;
     $premium = 0;
     $commission = 10;
+    $agentCommission = $agentName['agentCommission'];
 }
-$agentName = $user->getAgent($agent);
 ?>
 
 <form id='newTransactionForm' class="text-primary" data-id=<?= $id ?> data-agent=<?= $agent ?>>
@@ -68,22 +70,15 @@ $agentName = $user->getAgent($agent);
         <input name="premium" type="number" class="form-control input rounded border-primary" id="premium" value=<?= $premium ?>>
     </div>
     <div class="row">
-        <label for="commission">Commission:</label>
+        <label for="commission">Agency Commission:</label>
         <input name="commission" type="number" class="form-control input rounded border-primary" id="commission" value=<?= $commission ?> min="5.0" max="15.0" step="0.5">
     </div>
-</form>
-<!-- <div class="fixed top-0 hidden">
-    <div id="liveToast" class="bg-red-800 rounded w-full" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="5000" data-animation="true">
-        <div class="flex items-center">
-            <i class="bi-x-square"></i>
-            <strong class="ml-auto mr-3">Error</strong>
-        </div>
-        <div class="p-4">
-            Commission must be between 5% and 15%
-        </div>
+    <div class="row">
+        <label for="agentCommission">Agent Commission:</label>
+        <input name="agentCommission" type="number" class="form-control input rounded border-primary" id="agentCommission" value=<?= $agentCommission ?> min="0" max="40" step="5">
     </div>
-</div> -->
 
+</form>
 
 <script>
     if (<?= $id ?> != 0) {
@@ -119,12 +114,13 @@ $agentName = $user->getAgent($agent);
             premium: $('#premium').val(),
             date: $('#newTransactionDate').val(),
             commission: $('#commission').val(),
+            agentCommission: $('#agentCommission').val(),
         }).done(function(resp) {
             if (resp > 0) {
                 // success
                 modalHide('infoModal');
                 $('#infoModalTitle').text('Success');
-                $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-green-800');
+                $('#infoModalTitle').parent().removeClass().addClass('modalTitle bg-green-800 successMessage');
                 $('#infoModalText').html('Transaction saved successfully');
                 $('#infoModalButtons').html(
                     '<div id="okButton">'
@@ -136,7 +132,7 @@ $agentName = $user->getAgent($agent);
             } else {
                 modalHide('infoModal');
                 $('#infoModalTitle').text('Error');
-                $('#infoModalText').parent().removeClass().addClass('modalTitle bg-red-800');
+                $('#infoModalText').parent().removeClass().addClass('modalTitle bg-red-800 errorTitle');
                 $('#infoModalText').html('There was an error saving the transaction');
                 $('#infoModalButtons').html(
                     '<div id="okButton">'
@@ -160,6 +156,7 @@ $agentName = $user->getAgent($agent);
             policyNumber: $('#policyNumber').val(),
             premium: $('#premium').val(),
             commission: $('#commission').val(),
+            agentCommission: $('#agentCommission').val(),
             date: $('#newTransactionDate').val(),
             id: $('#newTransactionForm').data('id'),
             type: $('#transactionType').val(),

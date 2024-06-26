@@ -22,6 +22,9 @@ if (isset($_GET['action']) || isset($_POST['action'])) {
             case 'isLoggedIn':
                 isLoggedIn();
                 break;
+            case 'changePassword':
+                changePassword($_POST['password'], $_POST['passwordChange']);
+                break;
             default:
                 return 0;
         }
@@ -40,6 +43,11 @@ if (isset($_GET['action']) || isset($_POST['action'])) {
     }
 }
 
+/** 
+ * Function to get the list of active employees
+ * 
+ * @return JSON
+*/
 function getEmployeeList()
 {
     global $user;
@@ -53,6 +61,11 @@ function getEmployeeList()
     echo json_encode($resp);
 }
 
+/**
+ * Function to get the user id
+ * 
+ * @return int
+ */
 function getUser()
 {
     return $_SESSION['employeeId'];
@@ -63,6 +76,21 @@ function getRole()
     return $_SESSION['user']['roles'];
 }
 
+/**
+ * Function to log in the user
+ * 
+ * @return int
+ * 1 = Success
+ * 0 = Fail
+ * 
+ * @global boolean $isLoggedIn
+ * @global array $_SESSION
+ * @global User $employee
+ * @global array $User
+ * @global string $user
+ * @global string $pass
+ * @global boolean
+ */
 function login()
 {
     global $isLoggedIn;
@@ -86,11 +114,23 @@ function login()
     echo 0;
 }
 
+/**
+ * Function to get the user information
+ * 
+ * @return JSON
+ */
 function getEmployeeInfo()
 {
     echo json_encode($_SESSION['user']);
 }
 
+/**
+ * Function to check if the user is logged in
+ * 
+ * @return int
+ * 1 = Logged in
+ * 0 = Not logged in
+ */
 function isLoggedIn()
 {
     if (isset($_SESSION['isLoggedIn'])) {
@@ -104,6 +144,9 @@ function isLoggedIn()
     }
 }
 
+/**
+ * Function to log out the user
+ */
 function logOut()
 {
     $_SESSION['isLoggedIn'] = false;
@@ -111,21 +154,30 @@ function logOut()
     session_destroy();
 }
 
-/*function startSession()
+/**
+ * Function to update a user password
+ * @string $password - The new password
+ * @string $passwordChange - The password change token
+ * 
+ * @return int
+ */
+function changePassword($password, $passwordChange)
 {
-    if (!isset($_SESSION)) {
-        session_start();
+    global $user;
+    $user->loadByPasswordChange($passwordChange);
+    if ($user->id > 0) {
+        $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $updated = $user->update();
+        if ($updated) {
+             $resp['status'] = 'success';
+            $resp['message'] = 'Password updated successfully';
+        } else {
+        $resp['status'] = 'error';
+        $resp['message'] = 'Invalid password change token';
+        };
+    } else {
+        $resp['status'] = 'error';
+        $resp['message'] = 'Invalid password change token';
     }
+    echo json_encode($resp);
 }
-
-function checkActivity()
-{
-    if (isset($_SESSION['last_activity']) && time() - $_SESSION['last_activity'] > 28800 || !isset($_SESSION['last_activity'])) {
-        logOut();
-        echo "<script>
-                    modalShow('sesionExpirada');
-              </script>";
-    }
-    $_SESSION['last_activity'] = time();
-}
-*/

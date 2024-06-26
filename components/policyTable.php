@@ -39,15 +39,15 @@ $agentCommissions = $user->listAgents();
                 $date = date_format($date, 'm-d-y');
                 $type = $row['type'];
                 $premium = number_format($row['premium'], 2);
-                $rawAgentCommission = $row['premium'] * $row['commission'] / 100;
+                //$rawAgentCommission = $row['premium'] * $row['commission'] / 100;
                 $agencycommission = number_format(($row['premium'] * $row['commission'] / 100), 2);
-                $idToFind = $row['agent'];
+                $agentcommission = number_format((($row['premium'] * $row['commission'] / 100) * $row['agentCommission'] / 100), 2);
+                /*$idToFind = $row['agent'];
                 $result = array_filter($agentCommissions, function ($item) use ($idToFind) {
                     return $item['id'] == $idToFind;
                 });
                 $firstMatch = reset($result);
-                $agentPercentage = $firstMatch['agentCommission'] / 100;
-                $agentcommission = number_format(($rawAgentCommission * $agentPercentage), 2);
+                $agentPercentage = $firstMatch['agentCommission'] / 100;*/
                 $insured = $row['insured'];
                 $carrier = $row['carrier'];
                 $policyNumber = $row['policyNumber'];

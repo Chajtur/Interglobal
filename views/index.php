@@ -43,6 +43,9 @@ error_reporting(E_ALL);
 		{
 			include 'main.php';
 		}
+	} elseif (isset($_GET['passwordChange']))
+	{
+		include 'changePassword.php';
 	} else
 	{
 		include 'login.php';
@@ -55,8 +58,6 @@ error_reporting(E_ALL);
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
-		clearInterval(checkUser);
-		checkUser = setInterval(checkUser, 30000);
 	});
 
 	$(document).on('click', '.modalClose', function () {
@@ -123,16 +124,4 @@ error_reporting(E_ALL);
 		$(sidebar).toggleClass('hidden');
 	});
 
-	function checkUser() {
-		console.log('Checking if user is logged in...');
-		$.post('../controllers/Login.php', {
-			action: 'isLoggedIn',
-		}).done(function (resp) {
-			console.log(resp);
-			if (resp == 0) {
-				modalShow('sesionExpirada');
-				location.reload();
-			}
-		});
-	}
 </script>

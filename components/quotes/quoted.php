@@ -18,7 +18,7 @@ $quotes = $quote->getAll($_SESSION['user']['id']);
         <tbody>
             <?php
             foreach ($quotes as $q) { ?>
-                <tr class="border-b" data-id=<?= $q['id'] ?>>
+                <tr class="border-b cursor-pointer" data-id=<?= $q['id'] ?>>
                     <td class="p-2"><?= $q['date'] ?></td>
                     <td class='text-center'><?= $q['dot'] ?></td>
                     <td class='text-center'><?= $q['name'] ?></td>

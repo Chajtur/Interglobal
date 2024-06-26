@@ -1,9 +1,5 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
-
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/User.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/common.php';
 startSession();
@@ -99,6 +95,27 @@ checkActivity();
 </div>
 
 <script>
+    $(document).ready(function () {
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        clearInterval(checkUser);
+        checkUser = setInterval(checkUser, 30000);
+    });
+
+    function checkUser() {
+		console.log('Checking if user is logged in...');
+		$.post('../controllers/Login.php', {
+			action: 'isLoggedIn',
+		}).done(function (resp) {
+			console.log(resp);
+			if (resp == 0) {
+				modalShow('sesionExpirada');
+				location.reload();
+			}
+		});
+	}
+
     var observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             if (mutation.attributeName === "class") {

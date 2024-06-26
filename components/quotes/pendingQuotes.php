@@ -19,7 +19,7 @@ $quotes = $quote->getAll(getUser());
     <tbody id="tableQuotes">
         <?php
         foreach ($quotes as $quote) {
-            echo "<tr class='clickable border-b' data-id=" . $quote['dot'] . ">
+            echo "<tr class='clickable border-b cursor-pointer' data-id=" . $quote['dot'] . ">
             <td class='p-2'>" . $quote['date'] . "</td>
             <td>" . $quote['name'] . "</td>
             <td>" . $quote['status'] . "</td>

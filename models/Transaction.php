@@ -21,14 +21,17 @@ $transactionTypes = [
  * @policyNumber string - El número de póliza
  * @type string - El tipo de transacción
  * @agent int - El agente que está insertando la transacción
+ * @premium float - El monto de la transacción
+ * @commission float - La comisión de la transacción
+ * @agentCommission float - La comisión del agente
  * 
  * @return array - El resultado de la actualización
  */
-function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent)
+function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agentCommission, $agent)
 {
     global $conn;
     $user = getUser();
-    $query = "Update Transactions set date = '$date', insured = '$insured', carrier = '$carrier', policyNumber = '$policyNumber', type = '$type', premium = $premium, commission = '$commission', agent = $agent, updatedOn = now(), updatedBy = $user where id = $id";
+    $query = "Update Transactions set date = '$date', insured = '$insured', carrier = '$carrier', policyNumber = '$policyNumber', type = '$type', premium = $premium, commission = '$commission', agentCommission = '$agentCommission', agent = $agent, updatedOn = now(), updatedBy = $user where id = $id";
     $resp = $conn->query($query);
     if ($resp) {
         return 1;
@@ -45,14 +48,17 @@ function updateTransaction($id, $date, $insured, $carrier, $policyNumber, $type,
  * @policyNumber string - El número de póliza
  * @type string - El tipo de transacción
  * @premium float - El monto de la transacción
+ * @commission float - La comisión de la transacción
+ * @agentCommission float - La comisión del agente
+ * @agent int - El agente que está insertando la transacción
  * @user array - El usuario que está insertando la transacción
  * 
  * @return array - El resultado de la inserción
  */
-function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agent, $user)
+function insertTransaction($date, $insured, $carrier, $policyNumber, $type, $premium, $commission, $agentCommission, $agent, $user)
 {
     global $conn;
-    $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, commission, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $commission, $agent,  now(), $user)";
+    $query = "Insert into Transactions (date, insured, carrier, policyNumber, type, premium, commission, agentCommission, agent, createdOn, createdBy) values ('$date', '$insured', '$carrier', '$policyNumber', '$type', $premium, $commission, $agentCommission, $agent,  now(), $user)";
     $resp = $conn->query($query);
     if ($resp) {
         return $conn->insert_id;
@@ -137,7 +143,8 @@ function getTransactions($year, $mes, $agente, $tipo, $keyword, $page)
     $query .= " order by date, id ASC limit $page, 10";
     $resp = $conn->query($query);
     $data = $resp->fetch_all(MYSQLI_ASSOC);
-    $query = "Select count(T.id) as totalRows, sum(T.premium) as totalPremium, sum(T.premium * T.commission/100) as agencyCommission, sum(T.premium * T.commission/100 * AC.agentCommission/100) as agentCommission from Transactions T, agentCommissions AC where T.deletedOn is null and T.agent = AC.idAgent";
+    
+    $query = "Select count(T.id) as totalRows, sum(T.premium) as totalPremium, sum(T.premium * T.commission/100) as agencyCommission, sum(T.premium * T.commission/100 * T.agentCommission/100) as agentCommission from Transactions T where T.deletedOn is null";
     if ($year != 'all') {
         $query .= " and year(date) = $year";
     }
