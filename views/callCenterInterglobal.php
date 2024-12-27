@@ -15,16 +15,16 @@ checkActivity();
             <div type="button" class="text-sky-950 border-2 border-sky-950 w-28 rounded-b">Lists</div>
         </div>
         <div class="flex flex-col mt-3">
-            <div>
+            <div class="h-64 overflow-y-auto">
                 <h4 class="text-center mt-4 text-xl font-bold">
                     <span title="List of Businesses we should call again soon">Reminders</span>
                     <button class="btnCreateReminder hidden" data-toggle="tooltip" data-placement="top" title="Create a reminder for a Business you have called before">+</button>
                 </h4>
-                <table class="min-w-full">
-                    <thead class="border-t border-gray-400 border-b-2">
-                        <th class="px-6 py-3 text-center">Date</th>
-                        <th class="px-6 py-3 text-center">Company</th>
-                    </thead>
+                <table class="min-w-full border-collapse">
+                        <thead class="bg-sky-950 text-white sticky top-0">
+                            <th class="px-6 py-3 text-center">Date</th>
+                            <th class="px-6 py-3 text-center">Company</th>
+                        </thead>
                     <tbody class="clickableCalls" id="tableReminders">
 
                     </tbody>

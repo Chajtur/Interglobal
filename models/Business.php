@@ -50,10 +50,7 @@ class Business
             or (c.status = "No Answer" and c.date > date_sub(now(), interval 168 hour))
             or (c.status = "Not Interested" and c.date > date_sub(now(), interval 720 hour)))';
         } else if ($status == 1) {
-            $query .= ' where l.dot
-            not in (
-                select distinct(c.dot)
-                from Calls c)';
+            $query .= ' where l.New_Call = 1';
         } else if ($status == 2) {
             $query .= ' where l.dot
             in (
@@ -64,7 +61,7 @@ class Business
         if ($state != 'All') {
             $query .= " and l.Business_State = '$state'";
         } else {
-            $query .= " and l.Business_State not in ('CA', 'NY')";
+            $query .= " and l.Business_State not in ('CA', 'NY', 'MN')";
         }
         $query .= 'and l.DOT not in (select distinct(c.dot) from Calls c where c.status in ("Lead", "Possible Lead", "Black List"))';
         $query .= 'and l.Insurer is null 

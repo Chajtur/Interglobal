@@ -35,7 +35,7 @@
             <strong class="">Error</strong>
         </div>
         <div class="text-white text-center">
-            Change password token is invalid or expired, please request a new by clicking on the forgot password link
+            Change password token is invalid or expired, please request a new one by clicking on the forgot password link
         </div>
     </div>
 </div>

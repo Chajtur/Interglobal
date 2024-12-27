@@ -217,7 +217,7 @@ class Call
 	and ca.date is not null
     group by c.dot
 	order by ca.date, c.idCall ASC
-    limit 5";
+    limit 10";
         $resp = $conn->query($query);
         $calls = mysqli_fetch_all($resp, MYSQLI_ASSOC);
         return $calls;
