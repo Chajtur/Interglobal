@@ -136,7 +136,7 @@ class Call
     left join Employees e on c.user = e.id
     where c.dot = $dot
     group by c.idCall
-	order by `date` ASC
+	order by `date` DESC
     limit 5";
         $resp = $conn->query($query);
         $calls = mysqli_fetch_all($resp, MYSQLI_ASSOC);

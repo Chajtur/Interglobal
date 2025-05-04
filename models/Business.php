@@ -46,8 +46,7 @@ class Business
         not in (
             select c.dot 
             from Calls c
-            where (c.status in ("Lead", "Possible Lead", "Black List"))
-            or (c.status = "No Answer" and c.date > date_sub(now(), interval 168 hour))
+            where (c.status = "No Answer" and c.date > date_sub(now(), interval 168 hour))
             or (c.status = "Not Interested" and c.date > date_sub(now(), interval 720 hour)))';
         } else if ($status == 1) {
             $query .= ' where l.New_Call = 1';
@@ -63,8 +62,10 @@ class Business
         } else {
             $query .= " and l.Business_State not in ('CA', 'NY', 'MN')";
         }
-        $query .= 'and l.DOT not in (select distinct(c.dot) from Calls c where c.status in ("Lead", "Possible Lead", "Black List"))';
-        $query .= 'and l.Insurer is null 
+        if ($status != 1) {
+            $query .= ' and l.DOT not in (select distinct(c.dot) from Calls c where c.status in ("Lead", "Possible Lead", "Black List"))';
+        }
+        $query .= ' and l.Insurer is null 
                     order by RAND() limit 1';
         $resp = $conn->query($query);
         $data = $resp->fetch_assoc();
@@ -148,6 +149,29 @@ class Business
         where l.Phone = $phone";
         $resp = $conn->query($query);
         $data = $resp->fetch_assoc();
+        return $data;
+    }
+
+    /**
+     * Función que devuelve el perfil de una empresa basado en el nombre
+     * 
+     * @name string - Especifica el nombre a buscar
+     * 
+     * @return array - Devuelve el perfil de la empresa
+     */
+    function getNewBusinessByName($name)
+    {
+        global $conn;
+        $query = "Select * 
+        from Lists l
+        where l.Company_Rep1 like '%" . $name . "%'
+        or l.Legal_Name like '%" . $name . "%'
+        limit 5";
+        $resp = $conn->query($query);
+        $data = [];
+        while ($row = $resp->fetch_assoc()) {
+            $data[] = $row;
+        }
         return $data;
     }
 }

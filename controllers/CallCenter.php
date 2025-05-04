@@ -77,6 +77,7 @@ function checkIfExists()
     $param = str_replace('(', '', $param);
     $param = str_replace(')', '', $param);
     $param = str_replace('+1', '', $param);
+    if (is_numeric($param)) {
     $dot = $business->getNewBusinessByDot($param);
     if ($dot != null) {
         echo $dot['DOT'];
@@ -85,6 +86,16 @@ function checkIfExists()
         $dot = $business->getNewBusinessByPhone($param);
         if ($dot != null) {
             echo $dot['DOT'];
+            die();
+        } else {
+            echo 0;
+            die();
+        }
+    }
+} else {
+        $dot = $business->getNewBusinessByName($param);
+        if ($dot != null) {
+            echo json_encode($dot);
             die();
         } else {
             echo 0;
@@ -121,7 +132,6 @@ function getNewCall()
             echo json_encode($business->getRenewBusiness($state, $status));
         }
     }
-
 }
 
 /**
